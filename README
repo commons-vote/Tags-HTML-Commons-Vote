@@ -1,85 +1,22 @@
 NAME
-    Tags::HTML::Stars - Tags helper for stars evaluation.
+    Tags::HTML::Commons::Vote - Tags helper classes for Wikimedia Commons
+    voting.
 
-SYNOPSIS
-     use Tags::HTML::Voting::Image;
-
-     my $obj = Tags::HTML::Voting::Image->new(%params);
-     $obj->process(@images);
-
-METHODS
-  "new"
-     my $obj = Tags::HTML::Voting::Image->new(%params);
-
-    Constructor.
-
-    *       "public_image_dir"
-
-            Public image directory.
-
-            Default value is undef.
-
-    *       "tags"
-
-            'Tags::Output' object.
-
-            Default value is undef.
-
-  "process"
-     $obj->process($images_ar);
-
-    Process Tags structure for output with list of image structures. Each
-    image structure consists from: { 'alt' => __ALTERNATIVE_TEXT__
-    (optional) 'author' => __AUTHOR_NAME__ (optional) 'author_link' =>
-    __LINK_TO_AUTHOR_PAGE__ (optional) 'url' => __LINK_TO_IMAGE__ (required)
-    'title' => __TITLE__ (optional) 'width' => __IMAGE_WIDTH__ (optional) }
-
-    Returns undef.
-
-ERRORS
-     new():
-             From Class::Utils::set_params():
-                     Unknown parameter '%s'.
-
-EXAMPLE1
-     use strict;
-     use warnings;
-
-     use Tags::HTML::Voting::Image;
-     use Tags::Output::Indent;
-
-     # Object.
-     my $tags = Tags::Output::Indent->new;
-     my $obj = Tags::HTML::Voting::Image->new(
-             'tags' => $tags,
-     );
-
-     # Process stars.
-     $obj->process([{
-             'author' => 'Zuzana Zónová',
-             'url' => 'https://upload.wikimedia.org/wikipedia/commons/a/a4/Michal_from_Czechia.jpg',
-     }, {
-             'author' => 'Michal Josef Špaček',
-             'url' => 'https://upload.wikimedia.org/wikipedia/commons/f/f4/Michal_Josef_%C5%A0pa%C4%8Dek_-_self_photo.jpg',
-     }, {
-             'url' => 'https://upload.wikimedia.org/wikipedia/commons/7/76/Michal_Josef_%C5%A0pa%C4%8Dek_-_self_photo_3.jpg',
-     }]);
-
-     # Print out.
-     print $tags->flush;
-
-     # Output:
-     # TODO
-
-DEPENDENCIES
-    Class::Utils, Error::Pure, List::Utils, MIME::Base64, Readonly.
+DESCRIPTION
+    TODO
 
 SEE ALSO
-    Number::Stars
-        Class for conversion between percent number to star visualization
+    Tags::HTML::Commons::Vote::Result
+        TODO
+
+    Tags::HTML::Commons::Vote::Setting
+        TODO
+
+    Tags::HTML::Commons::Vote::Vote
+        TODO
 
 REPOSITORY
-    <https://github.com/michal-josef-spacek/Tags-HTML-Voting-Image>
+    <https://github.com/michal-josef-spacek/Tags-HTML-Commons-Vote>
 
 AUTHOR
     Michal Josef Špaček <mailto:skim@cpan.org>

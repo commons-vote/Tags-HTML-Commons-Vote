@@ -1,9 +1,10 @@
-package Tags::HTML::Voting::Image;
+package Tags::HTML::Commons::Vote::Vote;
 
+use base qw(Tags::HTML);
 use strict;
 use warnings;
 
-use Class::Utils qw(set_params);
+use Class::Utils qw(set_params split_params);
 use Error::Pure qw(err);
 
 our $VERSION = 0.01;
@@ -13,7 +14,10 @@ sub new {
 	my ($class, @params) = @_;
 
 	# Create object.
-	my $self = bless {}, $class;
+	my ($object_params_ar, $other_params_ar) = split_params(
+		['css_voting', 'css_voting_author', 'form_link', 'form_method',
+		'image_height', 'vote_button_text', 'title'], @params);
+	my $self = $class->SUPER::new(@{$other_params_ar});
 
 	# CSS classes for voting.
 	$self->{'css_voting'} = 'voting';
@@ -28,33 +32,21 @@ sub new {
 	# Image height.
 	$self->{'image_height'} = '200px';
 
-	# Public image directory.
-# TODO
-#	$self->{'public_image_dir'} = undef;
-
 	# Text for vote button.
 	$self->{'vote_button_text'} = 'Vote';
 
-	# 'Tags::Output' object.
-	$self->{'tags'} = undef;
-
-	# Voting title.
+	# Vote title.
 	$self->{'title'} = undef;
 
 	# Process params.
-	set_params($self, @params);
-
-	# Check to 'Tags' object.
-	if (! $self->{'tags'} || ! $self->{'tags'}->isa('Tags::Output')) {
-		err "Parameter 'tags' must be a 'Tags::Output::*' class.";
-	}
+	set_params($self, @{$object_params_ar});
 
 	# Object.
 	return $self;
 }
 
 # Process 'Tags'.
-sub process {
+sub _process {
 	my ($self, $images_ar) = @_;
 
 	# Main stars.
@@ -173,20 +165,20 @@ __END__
 
 =head1 NAME
 
-Tags::HTML::Voting::Image - Tags helper for image voting.
+Tags::HTML::Commons::Vote::Vote - Tags helper for image voting.
 
 =head1 SYNOPSIS
 
- use Tags::HTML::Voting::Image;
+ use Tags::HTML::Commons::Vote::Vote;
 
- my $obj = Tags::HTML::Voting::Image->new(%params);
+ my $obj = Tags::HTML::Commons::Vote::Vote->new(%params);
  $obj->process(@images);
 
 =head1 METHODS
 
 =head2 C<new>
 
- my $obj = Tags::HTML::Voting::Image->new(%params);
+ my $obj = Tags::HTML::Commons::Vote::Vote->new(%params);
 
 Constructor.
 
@@ -247,12 +239,12 @@ Returns undef.
  use strict;
  use warnings;
 
- use Tags::HTML::Voting::Image;
+ use Tags::HTML::Commons::Vote::Vote;
  use Tags::Output::Indent;
 
  # Object.
  my $tags = Tags::Output::Indent->new;
- my $obj = Tags::HTML::Voting::Image->new(
+ my $obj = Tags::HTML::Commons::Vote::Vote->new(
          'tags' => $tags,
  );
 
@@ -276,7 +268,8 @@ Returns undef.
 =head1 DEPENDENCIES
 
 L<Class::Utils>,
-L<Error::Pure>.
+L<Error::Pure>,
+L<Tags::HTML>.
 
 =head1 SEE ALSO
 
@@ -288,7 +281,7 @@ TODO
 
 =head1 REPOSITORY
 
-L<https://github.com/michal-josef-spacek/Tags-HTML-Voting-Image>
+L<https://github.com/michal-josef-spacek/Tags-HTML-Commons-Vote>
 
 =head1 AUTHOR
 

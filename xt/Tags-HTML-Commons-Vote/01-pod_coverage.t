@@ -5,4 +5,4 @@ use Test::NoWarnings;
 use Test::Pod::Coverage 'tests' => 2;
 
 # Test.
-pod_coverage_ok('Tags::HTML::Voting::Image', 'Tags::HTML::Voting::Image is covered.');
+pod_coverage_ok('Tags::HTML::Commons::Vote', 'Tags::HTML::Commons::Vote is covered.');

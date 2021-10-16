@@ -1,5 +1,5 @@
 ---
-abstract: 'Tags helper for image voting.'
+abstract: 'Tags helper classes for Wikimedia Commons voting.'
 author:
   - 'Michal Josef Spacek <skim@cpan.org>'
 build_requires:
@@ -19,7 +19,7 @@ license: bsd
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
   version: 1.4
-name: Tags-HTML-Voting-Image
+name: Tags-HTML-Commons-Vote
 no_index:
   directory:
     - inc
@@ -28,10 +28,11 @@ no_index:
 requires:
   Class::Utils: 0.02
   Error::Pure: 0.07
+  Tags::HTML: 0
   perl: 5.8.0
 resources:
-  bugtracker: https://github.com/michal-josef-spacek/Tags-HTML-Voting-Image/issues
-  homepage: https://github.com/michal-josef-spacek/Tags-HTML-Voting-Image
+  bugtracker: https://github.com/michal-josef-spacek/Tags-HTML-Commons-Vote/issues
+  homepage: https://github.com/michal-josef-spacek/Tags-HTML-Commons-Vote
   license: http://opensource.org/licenses/bsd-license.php
-  repository: git://github.com/michal-josef-spacek/Tags-HTML-Voting-Image
+  repository: git://github.com/michal-josef-spacek/Tags-HTML-Commons-Vote
 version: '0.01'
