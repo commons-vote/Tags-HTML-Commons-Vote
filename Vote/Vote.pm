@@ -49,7 +49,6 @@ sub new {
 sub _process {
 	my ($self, $images_ar) = @_;
 
-	# Main stars.
 	$self->{'tags'}->put(
 		['b', 'div'],
 		['a', 'class', $self->{'css_voting'}],
