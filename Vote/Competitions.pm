@@ -50,15 +50,15 @@ sub _process {
 		['b', 'table'],
 
 		['b', 'tr'],
-		['b', 'td'],
+		['b', 'th'],
 		['d', $self->{'text_competition_name'}],
-		['e', 'td'],
-		['b', 'td'],
+		['e', 'th'],
+		['b', 'th'],
 		['d', $self->{'text_date_from'}],
-		['e', 'td'],
-		['b', 'td'],
+		['e', 'th'],
+		['b', 'th'],
 		['d', $self->{'text_date_to'}],
-		['e', 'td'],
+		['e', 'th'],
 		['e', 'tr'],
 	);
 	if (! @{$competitions_ar}) {
