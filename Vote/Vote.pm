@@ -16,7 +16,7 @@ sub new {
 	# Create object.
 	my ($object_params_ar, $other_params_ar) = split_params(
 		['css_voting', 'css_voting_author', 'form_link', 'form_method',
-		'image_height', 'vote_button_text', 'title'], @params);
+		'image_height', 'text_vote_button', 'title'], @params);
 	my $self = $class->SUPER::new(@{$other_params_ar});
 
 	# CSS classes for voting.
@@ -33,7 +33,7 @@ sub new {
 	$self->{'image_height'} = '200px';
 
 	# Text for vote button.
-	$self->{'vote_button_text'} = 'Vote';
+	$self->{'text_vote_button'} = 'Vote';
 
 	# Vote title.
 	$self->{'title'} = undef;
@@ -143,7 +143,7 @@ sub _process {
 	$self->{'tags'}->put(
 		['b', 'button'],
 		['a', 'type', 'submit'],
-		['d', $self->{'vote_button_text'}],
+		['d', $self->{'text_vote_button'}],
 		['e', 'button'],
 
 		['e', 'fieldset'],
