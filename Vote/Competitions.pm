@@ -72,7 +72,7 @@ sub _process {
 		);
 	} else {
 		foreach my $c_hr (@{$competitions_ar}) {
-			my $uri = 'competition/'.$c_hr->{'id'};
+			my $uri = 'competition/'.$c_hr->{'competition_id'};
 			$self->{'tags'}->put(
 				['b', 'tr'],
 				['b', 'td'],
