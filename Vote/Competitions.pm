@@ -133,7 +133,7 @@ Tags::HTML::Commons::Vote::Competitions - Tags helper for list of competitions.
  use Tags::HTML::Commons::Vote::Competitions;
 
  my $obj = Tags::HTML::Commons::Vote::Competitions->new(%params);
- $obj->process(@images);
+ $obj->process($competitions_ar);
 
 =head1 METHODS
 
