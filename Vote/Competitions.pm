@@ -99,6 +99,23 @@ sub _process {
 	return;
 }
 
+sub _process_css {
+	my $self = shift;
+
+	$self->{'css'}->put(
+		['s', '.'.$self->{'css_competitions'}.' table, tr, td, th'],
+		['d', 'border', '1px solid black'],
+		['d', 'border-collapse', 'collapse'],
+		['e'],
+
+		['s', '.'.$self->{'css_competitions'}.' td, th'],
+		['d', 'padding', '0.5em'],
+		['e'],
+	);
+
+	return;
+}
+
 1;
 
 __END__
