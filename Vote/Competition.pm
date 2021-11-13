@@ -39,16 +39,16 @@ sub new {
 
 # Process 'Tags'.
 sub _process {
-	my ($self, $competition_hr) = @_;
+	my ($self, $competition) = @_;
 
 	my $competition_logo_url;
-	if (defined $competition_hr->{'logo'}) {
-		$competition_logo_url = $self->{'_commons_link'}->link($competition_hr->{'logo'});
+	if (defined $competition->logo) {
+		$competition_logo_url = $self->{'_commons_link'}->link($competition->logo);
 	}
 	my $organizer_logo_url;
-	if (defined $competition_hr->{'organizer_logo'}) {
+	if (defined $competition->organizer_logo) {
 		$organizer_logo_url = $self->{'_commons_link'}->link(
-			$competition_hr->{'organizer_logo'});
+			$competition->organizer_logo);
 	}
 
 	$self->{'tags'}->put(
@@ -70,14 +70,14 @@ sub _process {
 		) : (),
 
 		['b', 'h1'],
-		['d', $competition_hr->{'name'}],
+		['d', $competition->name],
 		['e', 'h1'],
 
 		['b', 'dl'],
 	);
-	$self->_dl_item('text_date_from', $competition_hr, 'date_from');
-	$self->_dl_item('text_date_to', $competition_hr, 'date_to');
-	$self->_dl_item('text_organizer', $competition_hr, 'organizer');
+	$self->_dl_item('text_date_from', $competition->dt_from->stringify);
+	$self->_dl_item('text_date_to', $competition->dt_to->stringify);
+	$self->_dl_item('text_organizer', $competition->organizer);
 	$self->{'tags'}->put(
 		['e', 'dl'],
 		['e', 'div'],
@@ -104,7 +104,7 @@ sub _process_css {
 }
 
 sub _dl_item {
-	my ($self, $text_key, $competition_hr, $key) = @_;
+	my ($self, $text_key, $value) = @_;
 
 	$self->{'tags'}->put(
 		['b', 'dt'],
@@ -112,7 +112,7 @@ sub _dl_item {
 		['e', 'dt'],
 
 		['b', 'dd'],
-		['d', $competition_hr->{$key}],
+		['d', $value],
 		['e', 'dd'],
 	);
 
