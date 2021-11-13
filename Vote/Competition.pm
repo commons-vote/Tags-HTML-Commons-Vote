@@ -78,6 +78,7 @@ sub _process {
 	$self->_dl_item('text_date_from', $competition->dt_from->stringify);
 	$self->_dl_item('text_date_to', $competition->dt_to->stringify);
 	$self->_dl_item('text_organizer', $competition->organizer);
+	# TODO Sections
 	$self->{'tags'}->put(
 		['e', 'dl'],
 		['e', 'div'],
