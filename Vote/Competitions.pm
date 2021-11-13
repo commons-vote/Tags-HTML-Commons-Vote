@@ -71,21 +71,21 @@ sub _process {
 			['e', 'tr'],
 		);
 	} else {
-		foreach my $c_hr (@{$competitions_ar}) {
-			my $uri = 'competition/'.$c_hr->{'competition_id'};
+		foreach my $c (@{$competitions_ar}) {
+			my $uri = '/competition/'.$c->id;
 			$self->{'tags'}->put(
 				['b', 'tr'],
 				['b', 'td'],
 				['b', 'a'],
 				['a', 'href', $uri],
-				['d', $c_hr->{'name'}],
+				['d', $c->name],
 				['e', 'a'],
 				['e', 'td'],
 				['b', 'td'],
-				['d', $c_hr->{'date_from'}],
+				['d', $c->dt_from->stringify],
 				['e', 'td'],
 				['b', 'td'],
-				['d', $c_hr->{'date_to'}],
+				['d', $c->dt_to->stringify],
 				['e', 'td'],
 				['e', 'tr'],
 			);
