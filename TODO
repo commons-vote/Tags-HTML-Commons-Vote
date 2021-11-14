@@ -3,7 +3,8 @@ TODO
 1. Vote: Javascript code pro omezeni poctu hlasovani.
 2. Vote: Tlacitko pro poslani hlasovani.
 3. Vote: Kontrolovat povinne policka a nedovolit vykreslit formular, pokud je tam chyba.
-4.
+4. Prepsat na Tags::HTML::Form
+5.
 
 Applied
 =======
