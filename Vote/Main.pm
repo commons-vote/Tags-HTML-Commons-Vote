@@ -5,7 +5,6 @@ use strict;
 use warnings;
 
 use Class::Utils qw(set_params split_params);
-use Commons::Link;
 use Error::Pure qw(err);
 
 our $VERSION = 0.01;
