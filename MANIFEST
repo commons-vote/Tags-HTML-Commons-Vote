@@ -17,6 +17,8 @@ META.yml
 README
 t/Tags-HTML-Commons-Vote-Competition/01-use.t
 t/Tags-HTML-Commons-Vote-Competition/02-version.t
+t/Tags-HTML-Commons-Vote-CompetitionForm/01-use.t
+t/Tags-HTML-Commons-Vote-CompetitionForm/02-version.t
 t/Tags-HTML-Commons-Vote-Competitions/01-use.t
 t/Tags-HTML-Commons-Vote-Competitions/02-version.t
 t/Tags-HTML-Commons-Vote-Newcomers/01-use.t
@@ -31,6 +33,7 @@ t/Tags-HTML-Commons-Vote/01-use.t
 t/Tags-HTML-Commons-Vote/02-version.t
 Vote.pm
 Vote/Competition.pm
+Vote/CompetitionForm.pm
 Vote/Competitions.pm
 Vote/Newcomers.pm
 Vote/Result.pm
@@ -38,6 +41,8 @@ Vote/Setting.pm
 Vote/Vote.pm
 xt/Tags-HTML-Commons-Vote-Competition/01-pod_coverage.t
 xt/Tags-HTML-Commons-Vote-Competition/02-pod.t
+xt/Tags-HTML-Commons-Vote-CompetitionForm/01-pod_coverage.t
+xt/Tags-HTML-Commons-Vote-CompetitionForm/02-pod.t
 xt/Tags-HTML-Commons-Vote-Competitions/01-pod_coverage.t
 xt/Tags-HTML-Commons-Vote-Competitions/02-pod.t
 xt/Tags-HTML-Commons-Vote-Newcomers/01-pod_coverage.t
