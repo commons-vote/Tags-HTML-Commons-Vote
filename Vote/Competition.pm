@@ -67,7 +67,7 @@ sub _process {
 		['a', 'class', $self->{'css_competition'}],
 
 		['b', 'a'],
-		['a', 'href', '/competition_form'],
+		['a', 'href', '/competition_form/'.$competition->id],
 		['d', text($self, 'edit_competition')],
 		['e', 'a'],
 
