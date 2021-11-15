@@ -5,6 +5,7 @@ use strict;
 use warnings;
 
 use Class::Utils qw(set_params split_params);
+use Tags::HTML::Commons::Vote::TagsUtils qw(tags_input);
 use Tags::HTML::Commons::Vote::Utils qw(dt_string text);
 
 our $VERSION = 0.01;
@@ -79,28 +80,28 @@ sub _process {
 		['d', text($self, 'title')],
 		['e', 'legend'],
 	);
-	$self->_tags_input('competition_name', 'text', {
+	tags_input($self, 'competition_name', 'text', {
 		'req' => 1,
 		'value' => $competition->name,
 	});
-	$self->_tags_input('date_from', 'text', {
+	tags_input($self, 'date_from', 'text', {
 		'req' => 1,
 		'value' => dt_string($competition->dt_from),
 	});
-	$self->_tags_input('date_to', 'text', {
+	tags_input($self, 'date_to', 'text', {
 		'req' => 1,
 		'value' => dt_string($competition->dt_to),
 	});
-	$self->_tags_input('logo', 'text', {
+	tags_input($self, 'logo', 'text', {
 		'value' => $competition->logo,
 	});
-	$self->_tags_input('organizer', 'text', {
+	tags_input($self, 'organizer', 'text', {
 		'value' => $competition->organizer,
 	});
-	$self->_tags_input('organizer_logo', 'text', {
+	tags_input($self, 'organizer_logo', 'text', {
 		'value' => $competition->organizer_logo,
 	});
-	$self->_tags_input('number_of_votes', 'text', {
+	tags_input($self, 'number_of_votes', 'text', {
 		'value' => $competition->number_of_votes,
 	});
 	$self->{'tags'}->put(
@@ -142,40 +143,6 @@ sub _process_css {
 		['s', '.req'],
 		['d', 'border', '1px solid red'],
 		['e'],
-	);
-
-	return;
-}
-
-sub _tags_input {
-	my ($self, $key, $input_type, $opts_hr) = @_;
-
-	$input_type ||= 'text';
-
-	$self->{'tags'}->put(
-		['b', 'p'],
-
-		['b', 'label'],
-		['a', 'for', $key],
-		['d', text($self, $key)],
-		['e', 'label'],
-
-		['b', 'input'],
-		['a', 'type', $input_type],
-		['a', 'id', $key],
-		['a', 'name', $key],
-		(exists $opts_hr->{'req'} && $opts_hr->{'req'}) ? (
-			['a', 'class', 'req'],
-		) : (),
-		exists $opts_hr->{'size'} ? (
-			['a', 'size', $opts_hr->{'size'}],
-		) : (),
-		(exists $opts_hr->{'value'} && defined $opts_hr->{'value'}) ? (
-			['a', 'value', $opts_hr->{'value'}],
-		) : (),
-		['e', 'input'],
-
-		['e', 'p'],
 	);
 
 	return;
