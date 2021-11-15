@@ -6,6 +6,7 @@ use warnings;
 
 use Class::Utils qw(set_params split_params);
 use Error::Pure qw(err);
+use Tags::HTML::Commons::Vote::CSSUtils qw(a_button);
 
 our $VERSION = 0.01;
 
@@ -79,27 +80,8 @@ sub _process_css {
 		['d', 'padding-bottom', '20px'],
 		['d', 'margin', '40px 0 20px 0'],
 		['e'],
-
-		['s', '.page-header a'],
-		['d', 'display', 'inline-block'],
-		['d', 'color', '#fff'],
-		['d', 'background-color', '#337ab7'],
-		['d', 'text-shadow', '0 -1px 0 rgb(0 0 0 / 20%)'],
-		['d', 'box-shadow', 'inset 0 1px 0 rgb(255 255 255 / 15%), 0 1px 1px rgb(0 0 0 / 8%)'],
-		['d', 'float', 'right'],
-		['d', 'cursor', 'pointer'],
-		['d', 'border', '1px solid transparent'],
-		['d', 'border-radius', '4px'],
-		['d', 'padding', '6px 12px'],
-		['d', 'margin-bottom', 0],
-		['d', 'font-size', '14px'],
-		['d', 'font-weight', '400'],
-		['d', 'text-align', 'center'],
-		['d', 'white-space', 'nowrap'],
-		['d', 'line-height', '1.42857143'],
-		['d', 'text-decoration', 'none'],
-		['e'],
 	);
+	a_button($self, '.page-header a');
 
 	return;
 }
