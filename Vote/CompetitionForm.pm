@@ -38,6 +38,7 @@ sub new {
 			'date_from' => 'Date from',
 			'date_to' => 'Date to',
 			'logo' => 'Competition logo from Wikimedia Commons',
+			'number_of_votes' => 'Number of votes',
 			'organizer' => 'Organizer',
 			'organizer_logo' => 'Organizer logo from Wikimedia Commons',
 			'sections' => 'Sections',
