@@ -5,8 +5,6 @@ use strict;
 use warnings;
 
 use Class::Utils qw(set_params split_params);
-use Commons::Link;
-use Error::Pure qw(err);
 use Tags::HTML::Commons::Vote::Utils qw(dt_string text);
 
 our $VERSION = 0.01;
@@ -49,8 +47,6 @@ sub new {
 
 	# Process params.
 	set_params($self, @{$object_params_ar});
-
-	$self->{'_commons_link'} = Commons::Link->new;
 
 	# Object.
 	return $self;
