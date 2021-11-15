@@ -7,6 +7,7 @@ use warnings;
 use Class::Utils qw(set_params split_params);
 use Commons::Link;
 use Error::Pure qw(err);
+use Tags::HTML::Commons::Vote::Utils qw(dt_string);
 
 our $VERSION = 0.01;
 
@@ -82,12 +83,30 @@ sub _process {
 		['d', $self->_text('title')],
 		['e', 'legend'],
 	);
-	$self->_tags_input('competition_name', 'text', {'req' => 1});
-	$self->_tags_input('date_from', 'text', {'req' => 1});
-	$self->_tags_input('date_to', 'text', {'req' => 1});
-	$self->_tags_input('logo');
-	$self->_tags_input('organizer');
-	$self->_tags_input('organizer_logo');
+	$self->_tags_input('competition_name', 'text', {
+		'req' => 1,
+		'value' => $competition->name,
+	});
+	$self->_tags_input('date_from', 'text', {
+		'req' => 1,
+		'value' => dt_string($competition->dt_from),
+	});
+	$self->_tags_input('date_to', 'text', {
+		'req' => 1,
+		'value' => dt_string($competition->dt_to),
+	});
+	$self->_tags_input('logo', 'text', {
+		'value' => $competition->logo,
+	});
+	$self->_tags_input('organizer', 'text', {
+		'value' => $competition->organizer,
+	});
+	$self->_tags_input('organizer_logo', 'text', {
+		'value' => $competition->organizer_logo,
+	});
+	$self->_tags_input('number_of_votes', 'text', {
+		'value' => $competition->number_of_votes,
+	});
 	$self->{'tags'}->put(
 		['b', 'button'],
 		['a', 'type', 'submit'],
@@ -154,6 +173,9 @@ sub _tags_input {
 		) : (),
 		exists $opts_hr->{'size'} ? (
 			['a', 'size', $opts_hr->{'size'}],
+		) : (),
+		(exists $opts_hr->{'value'} && defined $opts_hr->{'value'}) ? (
+			['a', 'value', $opts_hr->{'value'}],
 		) : (),
 		['e', 'input'],
 
