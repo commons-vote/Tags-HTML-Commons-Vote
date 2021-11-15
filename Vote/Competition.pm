@@ -8,6 +8,8 @@ use Class::Utils qw(set_params split_params);
 use Commons::Link;
 use Error::Pure qw(err);
 use Readonly;
+use Tags::HTML::Commons::Vote::CSSUtils qw(a_button);
+use Tags::HTML::Commons::Vote::Utils qw(text);
 use Unicode::UTF8 qw(decode_utf8);
 
 our $VERSION = 0.01;
@@ -18,15 +20,22 @@ sub new {
 
 	# Create object.
 	my ($object_params_ar, $other_params_ar) = split_params(
-		['css_competition', 'text_date_from', 'text_date_to',
-		'text_organizer'], @params);
+		['css_competition', 'lang', 'text'], @params);
 	my $self = $class->SUPER::new(@{$other_params_ar});
 
 	$self->{'css_competition'} = 'competition';
 
-	$self->{'text_date_from'} = 'Date from';
-	$self->{'text_date_to'} = 'Date to';
-	$self->{'text_organizer'} = 'Organizer';
+	# Language.
+	$self->{'lang'} = 'eng';
+
+	# Language texts.
+	$self->{'text'} = {
+		'eng' => {
+			'date_from' => 'Date to',
+			'date_to' => 'Date to',
+			'organizer' => 'Organizer',
+		},
+	};
 
 	# Process params.
 	set_params($self, @{$object_params_ar});
@@ -75,9 +84,9 @@ sub _process {
 
 		['b', 'dl'],
 	);
-	$self->_dl_item('text_date_from', $competition->dt_from->stringify);
-	$self->_dl_item('text_date_to', $competition->dt_to->stringify);
-	$self->_dl_item('text_organizer', $competition->organizer);
+	$self->_dl_item('date_from', $competition->dt_from->stringify);
+	$self->_dl_item('date_to', $competition->dt_to->stringify);
+	$self->_dl_item('organizer', $competition->organizer);
 	# TODO Sections
 	$self->{'tags'}->put(
 		['e', 'dl'],
@@ -113,7 +122,7 @@ sub _dl_item {
 
 	$self->{'tags'}->put(
 		['b', 'dt'],
-		['d', $self->{$text_key}],
+		['d', text($self, $text_key)],
 		['e', 'dt'],
 
 		['b', 'dd'],
