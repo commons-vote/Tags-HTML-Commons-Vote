@@ -27,6 +27,8 @@ t/Tags-HTML-Commons-Vote-Newcomers/01-use.t
 t/Tags-HTML-Commons-Vote-Newcomers/02-version.t
 t/Tags-HTML-Commons-Vote-Result/01-use.t
 t/Tags-HTML-Commons-Vote-Result/02-version.t
+t/Tags-HTML-Commons-Vote-SectionForm/01-use.t
+t/Tags-HTML-Commons-Vote-SectionForm/02-version.t
 t/Tags-HTML-Commons-Vote-Setting/01-use.t
 t/Tags-HTML-Commons-Vote-Setting/02-version.t
 t/Tags-HTML-Commons-Vote-Vote/01-use.t
@@ -40,6 +42,7 @@ Vote/Competitions.pm
 Vote/Main.pm
 Vote/Newcomers.pm
 Vote/Result.pm
+Vote/SectionForm.pm
 Vote/Setting.pm
 Vote/Vote.pm
 xt/Tags-HTML-Commons-Vote-Competition/01-pod_coverage.t
@@ -54,6 +57,8 @@ xt/Tags-HTML-Commons-Vote-Newcomers/01-pod_coverage.t
 xt/Tags-HTML-Commons-Vote-Newcomers/02-pod.t
 xt/Tags-HTML-Commons-Vote-Result/01-pod_coverage.t
 xt/Tags-HTML-Commons-Vote-Result/02-pod.t
+xt/Tags-HTML-Commons-Vote-SectionForm/01-pod_coverage.t
+xt/Tags-HTML-Commons-Vote-SectionForm/02-pod.t
 xt/Tags-HTML-Commons-Vote-Setting/01-pod_coverage.t
 xt/Tags-HTML-Commons-Vote-Setting/02-pod.t
 xt/Tags-HTML-Commons-Vote-Vote/01-pod_coverage.t
