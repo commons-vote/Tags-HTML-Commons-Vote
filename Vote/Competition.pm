@@ -42,11 +42,11 @@ sub _process {
 	my ($self, $competition) = @_;
 
 	my $competition_logo_url;
-	if (defined $competition->logo) {
+	if ($competition->logo) {
 		$competition_logo_url = $self->{'_commons_link'}->link($competition->logo);
 	}
 	my $organizer_logo_url;
-	if (defined $competition->organizer_logo) {
+	if ($competition->organizer_logo) {
 		$organizer_logo_url = $self->{'_commons_link'}->link(
 			$competition->organizer_logo);
 	}
@@ -106,6 +106,10 @@ sub _process_css {
 
 sub _dl_item {
 	my ($self, $text_key, $value) = @_;
+
+	if (! $value) {
+		return;
+	}
 
 	$self->{'tags'}->put(
 		['b', 'dt'],
