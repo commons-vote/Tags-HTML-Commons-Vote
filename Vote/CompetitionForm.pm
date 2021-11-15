@@ -82,13 +82,13 @@ sub _process {
 		['d', $self->_text('title')],
 		['e', 'legend'],
 	);
-	$self->_tags_input('competition_name');
-	$self->_tags_input('date_from');
-	$self->_tags_input('date_to');
+	$self->_tags_input('competition_name', 'text', {'req' => 1});
+	$self->_tags_input('date_from', 'text', {'req' => 1});
+	$self->_tags_input('date_to', 'text', {'req' => 1});
 	$self->_tags_input('logo');
 	$self->_tags_input('organizer');
 	$self->_tags_input('organizer_logo');
-	$self->_tags_textarea('sections');
+	$self->_tags_textarea('sections', {'req' => 1});
 	$self->{'tags'}->put(
 		['b', 'button'],
 		['a', 'type', 'submit'],
@@ -124,6 +124,10 @@ sub _process_css {
 		['d', 'float', 'right'],
 		['d', 'width', '75%'],
 		['e'],
+
+		['s', '.req'],
+		['d', 'border', '1px solid red'],
+		['e'],
 	);
 
 	return;
@@ -146,6 +150,9 @@ sub _tags_input {
 		['a', 'type', $input_type],
 		['a', 'id', $key],
 		['a', 'name', $key],
+		(exists $opts_hr->{'req'} && $opts_hr->{'req'}) ? (
+			['a', 'class', 'req'],
+		) : (),
 		exists $opts_hr->{'size'} ? (
 			['a', 'size', $opts_hr->{'size'}],
 		) : (),
@@ -171,6 +178,9 @@ sub _tags_textarea {
 		['b', 'textarea'],
 		['a', 'id', $key],
 		['a', 'name', $key],
+		(exists $opts_hr->{'req'} && $opts_hr->{'req'}) ? (
+			['a', 'class', 'req'],
+		) : (),
 		exists $opts_hr->{'cols'} ? (
 			['a', 'cols', $opts_hr->{'cols'}],
 		) : (),
