@@ -34,6 +34,7 @@ sub new {
 			'date_from' => 'Date from',
 			'date_to' => 'Date to',
 			'edit_competition' => 'Edit competition',
+			'number_of_votes' => 'Number of votes',
 			'organizer' => 'Organizer',
 		},
 	};
@@ -93,6 +94,7 @@ sub _process {
 	$self->_dl_item('date_from', $competition->dt_from->stringify);
 	$self->_dl_item('date_to', $competition->dt_to->stringify);
 	$self->_dl_item('organizer', $competition->organizer);
+	$self->_dl_item('number_of_votes', $competition->number_of_votes);
 	# TODO Sections
 	$self->{'tags'}->put(
 		['e', 'dl'],
