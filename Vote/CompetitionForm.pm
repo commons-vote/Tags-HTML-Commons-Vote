@@ -41,7 +41,6 @@ sub new {
 			'number_of_votes' => 'Number of votes',
 			'organizer' => 'Organizer',
 			'organizer_logo' => 'Organizer logo from Wikimedia Commons',
-			'sections' => 'Sections',
 			'submit' => 'Save',
 			'title' => 'Create competition',
 		},
@@ -89,7 +88,6 @@ sub _process {
 	$self->_tags_input('logo');
 	$self->_tags_input('organizer');
 	$self->_tags_input('organizer_logo');
-	$self->_tags_textarea('sections', {'req' => 1});
 	$self->{'tags'}->put(
 		['b', 'button'],
 		['a', 'type', 'submit'],
@@ -159,36 +157,6 @@ sub _tags_input {
 		) : (),
 		['e', 'input'],
 
-		['e', 'p'],
-	);
-
-	return;
-}
-
-sub _tags_textarea {
-	my ($self, $key, $opts_hr) = @_;
-
-	$self->{'tags'}->put(
-		['b', 'p'],
-
-		['b', 'label'],
-		['a', 'for', $key],
-		['d', $self->_text($key)],
-		['e', 'label'],
-
-		['b', 'textarea'],
-		['a', 'id', $key],
-		['a', 'name', $key],
-		(exists $opts_hr->{'req'} && $opts_hr->{'req'}) ? (
-			['a', 'class', 'req'],
-		) : (),
-		exists $opts_hr->{'cols'} ? (
-			['a', 'cols', $opts_hr->{'cols'}],
-		) : (),
-		exists $opts_hr->{'rows'} ? (
-			['a', 'rows', $opts_hr->{'rows'}],
-		) : (),
-		['e', 'textarea'],
 		['e', 'p'],
 	);
 
