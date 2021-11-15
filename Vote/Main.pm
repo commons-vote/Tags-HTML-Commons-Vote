@@ -7,6 +7,7 @@ use warnings;
 use Class::Utils qw(set_params split_params);
 use Error::Pure qw(err);
 use Tags::HTML::Commons::Vote::CSSUtils qw(a_button);
+use Tags::HTML::Commons::Vote::Utils qw(text);
 
 our $VERSION = 0.01;
 
@@ -52,11 +53,11 @@ sub _process {
 
 		['b', 'a'],
 		['a', 'href', '/competition_form'],
-		['d', $self->_text('create_competition')],
+		['d', text($self, 'create_competition')],
 		['e', 'a'],
 
 		['b', 'h1'],
-		['d', $self->_text('my_competitions')],
+		['d', text($self, 'my_competitions')],
 		['e', 'h1'],
 
 		['e', 'div'],
@@ -84,16 +85,6 @@ sub _process_css {
 	a_button($self, '.page-header a');
 
 	return;
-}
-
-sub _text {
-	my ($self, $key) = @_;
-
-	if (! exists $self->{'text'}->{$self->{'lang'}}->{$key}) {
-		err "Text for lang '$self->{'lang'}' and key '$key' doesn't exist.";
-	}
-
-	return $self->{'text'}->{$self->{'lang'}}->{$key};
 }
 
 1;
