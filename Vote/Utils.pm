@@ -7,9 +7,15 @@ use warnings;
 use Error::Pure qw(err);
 use Readonly;
 
-Readonly::Array our @EXPORT_OK => qw(text);
+Readonly::Array our @EXPORT_OK => qw(dt_string text);
 
 our $VERSION = 0.01;
+
+sub dt_string {
+	my $dt = shift;
+
+	return $dt->year.'-'.$dt->month.'-'.$dt->day;
+}
 
 sub text {
 	my ($self, $key) = @_;
