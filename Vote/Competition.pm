@@ -31,7 +31,7 @@ sub new {
 	# Language texts.
 	$self->{'text'} = {
 		'eng' => {
-			'date_from' => 'Date to',
+			'date_from' => 'Date from',
 			'date_to' => 'Date to',
 			'edit_competition' => 'Edit competition',
 			'organizer' => 'Organizer',
