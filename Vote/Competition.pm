@@ -33,6 +33,7 @@ sub new {
 		'eng' => {
 			'date_from' => 'Date to',
 			'date_to' => 'Date to',
+			'edit_competition' => 'Edit competition',
 			'organizer' => 'Organizer',
 		},
 	};
@@ -63,6 +64,11 @@ sub _process {
 	$self->{'tags'}->put(
 		['b', 'div'],
 		['a', 'class', $self->{'css_competition'}],
+
+		['b', 'a'],
+		['a', 'href', '/competition_form'],
+		['d', text($self, 'edit_competition')],
+		['e', 'a'],
 
 		$competition_logo_url ? (
 			['b', 'img'],
@@ -109,6 +115,7 @@ sub _process_css {
 		['d', 'width', '20%'],
 		['e'],
 	);
+	a_button($self, '.'.$self->{'css_competition'}.'> a');
 
 	return;
 }
