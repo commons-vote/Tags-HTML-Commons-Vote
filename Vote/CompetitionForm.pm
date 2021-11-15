@@ -7,7 +7,7 @@ use warnings;
 use Class::Utils qw(set_params split_params);
 use Commons::Link;
 use Error::Pure qw(err);
-use Tags::HTML::Commons::Vote::Utils qw(dt_string);
+use Tags::HTML::Commons::Vote::Utils qw(dt_string text);
 
 our $VERSION = 0.01;
 
@@ -80,7 +80,7 @@ sub _process {
 		['b', 'fieldset'],
 
 		['b', 'legend'],
-		['d', $self->_text('title')],
+		['d', text($self, 'title')],
 		['e', 'legend'],
 	);
 	$self->_tags_input('competition_name', 'text', {
@@ -110,7 +110,7 @@ sub _process {
 	$self->{'tags'}->put(
 		['b', 'button'],
 		['a', 'type', 'submit'],
-		['d', $self->_text('submit')],
+		['d', text($self, 'submit')],
 		['e', 'button'],
 
 		['e', 'fieldset'],
@@ -161,7 +161,7 @@ sub _tags_input {
 
 		['b', 'label'],
 		['a', 'for', $key],
-		['d', $self->_text($key)],
+		['d', text($self, $key)],
 		['e', 'label'],
 
 		['b', 'input'],
@@ -183,16 +183,6 @@ sub _tags_input {
 	);
 
 	return;
-}
-
-sub _text {
-	my ($self, $key) = @_;
-
-	if (! exists $self->{'text'}->{$self->{'lang'}}->{$key}) {
-		err "Text for lang '$self->{'lang'}' and key '$key' doesn't exist.";
-	}
-
-	return $self->{'text'}->{$self->{'lang'}}->{$key};
 }
 
 1;
