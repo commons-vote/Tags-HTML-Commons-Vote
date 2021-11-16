@@ -49,8 +49,8 @@ sub tags_input {
 		['a', 'type', $input_type],
 		['a', 'id', $key],
 		['a', 'name', $key],
-		(exists $opts_hr->{'req'} && $opts_hr->{'req'}) ? (
-			['a', 'class', 'req'],
+		(exists $opts_hr->{'class'}) ? (
+			['a', 'class', $opts_hr->{'class'}],
 		) : (),
 		exists $opts_hr->{'size'} ? (
 			['a', 'size', $opts_hr->{'size'}],
@@ -80,8 +80,8 @@ sub tags_textarea {
 		['b', 'textarea'],
 		['a', 'id', $key],
 		['a', 'name', $key],
-		(exists $opts_hr->{'req'} && $opts_hr->{'req'}) ? (
-			['a', 'class', 'req'],
+		(exists $opts_hr->{'class'}) ? (
+			['a', 'class', $opts_hr->{'class'}],
 		) : (),
 		exists $opts_hr->{'cols'} ? (
 			['a', 'cols', $opts_hr->{'cols'}],
