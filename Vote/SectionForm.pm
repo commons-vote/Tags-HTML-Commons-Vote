@@ -7,6 +7,8 @@ use warnings;
 use Class::Utils qw(set_params split_params);
 use Commons::Link;
 use Error::Pure qw(err);
+use Tags::HTML::Commons::Vote::TagsUtils qw(tags_input tags_textarea);
+use Tags::HTML::Commons::Vote::Utils qw(text value);
 
 our $VERSION = 0.01;
 
@@ -35,7 +37,9 @@ sub new {
 	$self->{'text'} = {
 		'eng' => {
 			'categories' => 'Wikimedia Commons categories',
+			'competition' => 'Competition',
 			'number_of_votes' => 'Number of votes',
+			'logo' => 'Section logo from Wikimedia Commons',
 			'section_name' => 'Section name',
 			'submit' => 'Save',
 			'title' => 'Create section',
@@ -53,7 +57,7 @@ sub new {
 
 # Process 'Tags'.
 sub _process {
-	my ($self, $competition) = @_;
+	my ($self, $section) = @_;
 
 	$self->{'tags'}->put(
 		['b', 'div'],
@@ -75,16 +79,41 @@ sub _process {
 		['b', 'fieldset'],
 
 		['b', 'legend'],
-		['d', $self->_text('title')],
+		['d', text($self, 'title')],
 		['e', 'legend'],
+
+		['b', 'p'],
+		['b', 'label'],
+		['a', 'for', 'competition'],
+		['d', text($self, 'competition')],
+		['e', 'label'],
+		['b', 'span'],
+		['a', 'id', 'competition'],
+		['a', 'class', 'value'],
+		['d', value($self, $section, 'competition_id')."TODO"],
+		['e', 'span'],
+		['e', 'p'],
 	);
-	$self->_tags_input('section_name', 'text', {'req' => 1});
-	$self->_tags_input('number_of_votes');
-	$self->_tags_textarea('categories', {'req' => 1});
+	tags_input($self, 'section_name', 'text', {
+		'class' => 'value req',
+		value($self, $section, 'name'),
+	});
+	tags_input($self, 'logo', 'text', {
+		'class' => 'value',
+		value($self, $section, 'logo'),
+	});
+	tags_input($self, 'number_of_votes', 'text', {
+		'class' => 'value',
+		value($self, $section, 'number_of_votes'),
+	});
+	tags_textarea($self, 'categories', {
+		'class' => 'value req',
+		'rows' => 6,
+	});
 	$self->{'tags'}->put(
 		['b', 'button'],
 		['a', 'type', 'submit'],
-		['d', $self->_text('submit')],
+		['d', text($self, 'submit')],
 		['e', 'button'],
 
 		['e', 'fieldset'],
@@ -107,12 +136,7 @@ sub _process_css {
 		['d', 'width', '20%'],
 		['e'],
 
-		['s', '.'.$self->{'css_section'}.' input'],
-		['d', 'float', 'right'],
-		['d', 'width', '75%'],
-		['e'],
-
-		['s', '.'.$self->{'css_section'}.' textarea'],
+		['s', '.'.$self->{'css_section'}.' .value'],
 		['d', 'float', 'right'],
 		['d', 'width', '75%'],
 		['e'],
@@ -123,77 +147,6 @@ sub _process_css {
 	);
 
 	return;
-}
-
-sub _tags_input {
-	my ($self, $key, $input_type, $opts_hr) = @_;
-
-	$input_type ||= 'text';
-
-	$self->{'tags'}->put(
-		['b', 'p'],
-
-		['b', 'label'],
-		['a', 'for', $key],
-		['d', $self->_text($key)],
-		['e', 'label'],
-
-		['b', 'input'],
-		['a', 'type', $input_type],
-		['a', 'id', $key],
-		['a', 'name', $key],
-		(exists $opts_hr->{'req'} && $opts_hr->{'req'}) ? (
-			['a', 'class', 'req'],
-		) : (),
-		exists $opts_hr->{'size'} ? (
-			['a', 'size', $opts_hr->{'size'}],
-		) : (),
-		['e', 'input'],
-
-		['e', 'p'],
-	);
-
-	return;
-}
-
-sub _tags_textarea {
-	my ($self, $key, $opts_hr) = @_;
-
-	$self->{'tags'}->put(
-		['b', 'p'],
-
-		['b', 'label'],
-		['a', 'for', $key],
-		['d', $self->_text($key)],
-		['e', 'label'],
-
-		['b', 'textarea'],
-		['a', 'id', $key],
-		['a', 'name', $key],
-		(exists $opts_hr->{'req'} && $opts_hr->{'req'}) ? (
-			['a', 'class', 'req'],
-		) : (),
-		exists $opts_hr->{'cols'} ? (
-			['a', 'cols', $opts_hr->{'cols'}],
-		) : (),
-		exists $opts_hr->{'rows'} ? (
-			['a', 'rows', $opts_hr->{'rows'}],
-		) : (),
-		['e', 'textarea'],
-		['e', 'p'],
-	);
-
-	return;
-}
-
-sub _text {
-	my ($self, $key) = @_;
-
-	if (! exists $self->{'text'}->{$self->{'lang'}}->{$key}) {
-		err "Text for lang '$self->{'lang'}' and key '$key' doesn't exist.";
-	}
-
-	return $self->{'text'}->{$self->{'lang'}}->{$key};
 }
 
 1;

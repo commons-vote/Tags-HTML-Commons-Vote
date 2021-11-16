@@ -8,8 +8,9 @@ use Class::Utils qw(set_params split_params);
 use Commons::Link;
 use Error::Pure qw(err);
 use Readonly;
-use Tags::HTML::Commons::Vote::CSSUtils qw(a_button);
-use Tags::HTML::Commons::Vote::Utils qw(text);
+use Tags::HTML::Commons::Vote::CSSUtils qw(a_button float_right);
+use Tags::HTML::Commons::Vote::TagsUtils qw(tags_dl_item);
+use Tags::HTML::Commons::Vote::Utils qw(text value);
 use Unicode::UTF8 qw(decode_utf8);
 
 our $VERSION = 0.01;
@@ -31,11 +32,13 @@ sub new {
 	# Language texts.
 	$self->{'text'} = {
 		'eng' => {
+			'add_section' => 'Add section',
 			'date_from' => 'Date from',
 			'date_to' => 'Date to',
 			'edit_competition' => 'Edit competition',
 			'number_of_votes' => 'Number of votes',
 			'organizer' => 'Organizer',
+			'sections' => 'Sections',
 			'competition_not_exists' => "Competition doesn't exist.",
 		},
 	};
@@ -76,6 +79,7 @@ sub _process {
 		['a', 'class', $self->{'css_competition'}],
 
 		['b', 'a'],
+		['a', 'class', 'button right'],
 		['a', 'href', '/competition_form/'.$competition->id],
 		['d', text($self, 'edit_competition')],
 		['e', 'a'],
@@ -100,12 +104,48 @@ sub _process {
 
 		['b', 'dl'],
 	);
-	$self->_dl_item('date_from', $competition->dt_from->stringify);
-	$self->_dl_item('date_to', $competition->dt_to->stringify);
-	$self->_dl_item('organizer', $competition->organizer);
-	$self->_dl_item('number_of_votes', $competition->number_of_votes);
-	# TODO Sections
+	tags_dl_item($self, 'date_from', $competition->dt_from->stringify);
+	tags_dl_item($self, 'date_to', $competition->dt_to->stringify);
+	tags_dl_item($self, 'organizer', $competition->organizer);
+	tags_dl_item($self, 'number_of_votes', $competition->number_of_votes);
 	$self->{'tags'}->put(
+		['b', 'dt'],
+		['d', text($self, 'sections')],
+		['e', 'dt'],
+
+		['b', 'dd'],
+	);
+	my $num = 0;
+	foreach my $section (@{$competition->sections}) {
+		if (! $num) {
+			$self->{'tags'}->put(
+				['b', 'ul'],
+			);
+			$num = 1;
+		}
+		$self->{'tags'}->put(
+			['b', 'li'],
+			['b', 'a'],
+			['a', 'href', '/section/'.$section->id],
+			['d', $section->name],
+			['e', 'a'],
+			['e', 'li'],
+		);
+	}
+	if ($num) {
+		$self->{'tags'}->put(
+			['e', 'ul'],
+		);
+	}
+	$self->{'tags'}->put(
+		['b', 'a'],
+		['a', 'class', 'button'],
+		['a', 'href', '/section_form/?action=add&competition_id='.$competition->id],
+		['d', text($self, 'add_section')],
+		['e', 'a'],
+
+		['e', 'dd'],
+
 		['e', 'dl'],
 		['e', 'div'],
 	);
@@ -126,27 +166,8 @@ sub _process_css {
 		['d', 'width', '20%'],
 		['e'],
 	);
-	a_button($self, '.'.$self->{'css_competition'}.'> a');
-
-	return;
-}
-
-sub _dl_item {
-	my ($self, $text_key, $value) = @_;
-
-	if (! $value) {
-		return;
-	}
-
-	$self->{'tags'}->put(
-		['b', 'dt'],
-		['d', text($self, $text_key)],
-		['e', 'dt'],
-
-		['b', 'dd'],
-		['d', $value],
-		['e', 'dd'],
-	);
+	a_button($self, '.button');
+	float_right($self, '.right');
 
 	return;
 }
