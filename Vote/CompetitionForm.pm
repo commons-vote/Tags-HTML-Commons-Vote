@@ -6,7 +6,7 @@ use warnings;
 
 use Class::Utils qw(set_params split_params);
 use Tags::HTML::Commons::Vote::TagsUtils qw(tags_input);
-use Tags::HTML::Commons::Vote::Utils qw(dt_string text);
+use Tags::HTML::Commons::Vote::Utils qw(dt_string text value);
 
 our $VERSION = 0.01;
 
@@ -82,27 +82,27 @@ sub _process {
 	);
 	tags_input($self, 'competition_name', 'text', {
 		'req' => 1,
-		'value' => $competition->name,
+		value($self, $competition, 'name'),
 	});
 	tags_input($self, 'date_from', 'text', {
 		'req' => 1,
-		'value' => dt_string($competition->dt_from),
+		value($self, $competition, 'dt_from', \&dt_string),
 	});
 	tags_input($self, 'date_to', 'text', {
 		'req' => 1,
-		'value' => dt_string($competition->dt_to),
+		value($self, $competition, 'dt_to', \&dt_string),
 	});
 	tags_input($self, 'logo', 'text', {
-		'value' => $competition->logo,
+		value($self, $competition, 'logo'),
 	});
 	tags_input($self, 'organizer', 'text', {
-		'value' => $competition->organizer,
+		value($self, $competition, 'organizer'),
 	});
 	tags_input($self, 'organizer_logo', 'text', {
-		'value' => $competition->organizer_logo,
+		value($self, $competition, 'organizer_logo'),
 	});
 	tags_input($self, 'number_of_votes', 'text', {
-		'value' => $competition->number_of_votes,
+		value($self, $competition, 'number_of_votes'),
 	});
 	$self->{'tags'}->put(
 		['b', 'button'],
