@@ -8,9 +8,29 @@ use Error::Pure qw(err);
 use Readonly;
 use Tags::HTML::Commons::Vote::Utils qw(text);
 
-Readonly::Array our @EXPORT_OK => qw(tags_input tags_textarea);
+Readonly::Array our @EXPORT_OK => qw(tags_dl_item tags_input tags_textarea);
 
 our $VERSION = 0.01;
+
+sub tags_dl_item {
+	my ($self, $text_key, $value) = @_;
+
+	if (! $value) {
+		return;
+	}
+
+	$self->{'tags'}->put(
+		['b', 'dt'],
+		['d', text($self, $text_key)],
+		['e', 'dt'],
+
+		['b', 'dd'],
+		['d', $value],
+		['e', 'dd'],
+	);
+
+	return;
+}
 
 sub tags_input {
 	my ($self, $key, $input_type, $opts_hr) = @_;
