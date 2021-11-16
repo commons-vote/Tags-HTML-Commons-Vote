@@ -6,7 +6,7 @@ use warnings;
 
 use Readonly;
 
-Readonly::Array our @EXPORT_OK => qw(a_button);
+Readonly::Array our @EXPORT_OK => qw(a_button float_right);
 
 our $VERSION = 0.01;
 
@@ -20,7 +20,6 @@ sub a_button {
 		['d', 'background-color', '#337ab7'],
 		['d', 'text-shadow', '0 -1px 0 rgb(0 0 0 / 20%)'],
 		['d', 'box-shadow', 'inset 0 1px 0 rgb(255 255 255 / 15%), 0 1px 1px rgb(0 0 0 / 8%)'],
-		['d', 'float', 'right'],
 		['d', 'cursor', 'pointer'],
 		['d', 'border', '1px solid transparent'],
 		['d', 'border-radius', '4px'],
@@ -36,6 +35,16 @@ sub a_button {
 	);
 
 	return;
+}
+
+sub float_right {
+	my ($self, $selector) = @_;
+
+	$self->{'css'}->put(
+		['s', $selector],
+		['d', 'float', 'right'],
+		['e'],
+	);
 }
 
 1;
