@@ -6,7 +6,7 @@ use warnings;
 
 use Class::Utils qw(set_params split_params);
 use Error::Pure qw(err);
-use Tags::HTML::Commons::Vote::CSSUtils qw(a_button);
+use Tags::HTML::Commons::Vote::CSSUtils qw(a_button float_right);
 use Tags::HTML::Commons::Vote::Utils qw(text);
 
 our $VERSION = 0.01;
@@ -52,6 +52,7 @@ sub _process {
 		['a', 'class', 'page-header'],
 
 		['b', 'a'],
+		['a', 'class', 'button right'],
 		['a', 'href', '/competition_form'],
 		['d', text($self, 'create_competition')],
 		['e', 'a'],
@@ -82,7 +83,8 @@ sub _process_css {
 		['d', 'margin', '40px 0 20px 0'],
 		['e'],
 	);
-	a_button($self, '.page-header a');
+	a_button($self, '.button');
+	float_right($self, '.right');
 
 	return;
 }
