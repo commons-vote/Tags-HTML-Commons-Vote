@@ -36,6 +36,7 @@ sub new {
 			'edit_competition' => 'Edit competition',
 			'number_of_votes' => 'Number of votes',
 			'organizer' => 'Organizer',
+			'competition_not_exists' => "Competition doesn't exist.",
 		},
 	};
 
@@ -51,6 +52,14 @@ sub new {
 # Process 'Tags'.
 sub _process {
 	my ($self, $competition) = @_;
+
+	if (! defined $competition) {
+		$self->{'tags'}->put(
+			['d', text($self, 'competition_not_exists')],
+		);
+
+		return;
+	}
 
 	my $competition_logo_url;
 	if ($competition->logo) {
