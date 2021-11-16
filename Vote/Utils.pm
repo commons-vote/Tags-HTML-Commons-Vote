@@ -7,7 +7,7 @@ use warnings;
 use Error::Pure qw(err);
 use Readonly;
 
-Readonly::Array our @EXPORT_OK => qw(dt_string text);
+Readonly::Array our @EXPORT_OK => qw(dt_string text value);
 
 our $VERSION = 0.01;
 
@@ -25,6 +25,22 @@ sub text {
 	}
 
 	return $self->{'text'}->{$self->{'lang'}}->{$key};
+}
+
+sub value {
+	my ($self, $object, $method, $callback) = @_;
+
+	if (! defined $object
+		|| ! defined $object->$method) {
+
+		return ();
+	} else {
+		if (defined $callback) {
+			return ('value' => &$callback($object->$method));
+		} else {
+			return ('value' => $object->$method);
+		}
+	}
 }
 
 1;
