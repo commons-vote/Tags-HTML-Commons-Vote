@@ -38,9 +38,7 @@ sub new {
 	# Language texts.
 	$self->{'text'} = {
 		'eng' => {
-			'login_name' => 'Login name',
 			'logout' => 'Log out',
-			'section' => 'Section',
 		},
 	};
 
@@ -82,31 +80,35 @@ sub _process {
 		['e', 'img'],
 
 		# Actual section.
-		['b', 'span'],
-		['a', 'id', 'section'],
-		['d', $data_hr->{'section'} || text($self, 'section')],
-		['e', 'span'],
+		defined $data_hr->{'section'} ? (
+			['b', 'span'],
+			['a', 'id', 'section'],
+			['d', $data_hr->{'section'}],
+			['e', 'span'],
+		) : (),
 
 		['e', 'span'],
 
 		# Right menu part.
-		['b', 'span'],
-		['a', 'id', 'menu-right'],
+		defined $data_hr->{'login_name'} ? (
+			['b', 'span'],
+			['a', 'id', 'menu-right'],
 
-		['b', 'span'],
-		['a', 'id', 'login'],
-		# Login name
-		['d', $data_hr->{'login_name'} || text($self, 'login_name')],
-		# Logout link
-		['d', '('],
-		['b', 'a'],
-		['a', 'href', $self->{'logout_url'}],
-		['d', text($self, 'logout')],
-		['e', 'a'],
-		['d', ')'],
-		['e', 'span'],
+			['b', 'span'],
+			['a', 'id', 'login'],
+			# Login name
+			['d', $data_hr->{'login_name'}],
+			# Logout link
+			['d', '('],
+			['b', 'a'],
+			['a', 'href', $self->{'logout_url'}],
+			['d', text($self, 'logout')],
+			['e', 'a'],
+			['d', ')'],
+			['e', 'span'],
 
-		['e', 'span'],
+			['e', 'span'],
+		) : (),
 
 		['e', 'div'],
 
