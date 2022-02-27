@@ -18,6 +18,7 @@ name 'Tags-HTML-Commons-Vote';
 readme_from 'Vote.pm';
 recursive_author_tests('xt');
 requires 'Class::Utils' => 0.02;
+requires 'Commons::Link' => 0;
 requires 'Error::Pure' => 0.07;
 requires 'Tags::HTML' => 0;
 requires 'perl' => '5.8.0';
