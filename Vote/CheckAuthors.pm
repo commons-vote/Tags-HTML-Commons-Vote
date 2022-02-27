@@ -38,7 +38,7 @@ sub new {
 
 # Process 'Tags'.
 sub _process {
-	my ($self, $newcomers_ar) = @_;
+	my ($self, $authors_ar) = @_;
 
 	$self->{'tags'}->put(
 		['b', 'div'],
@@ -50,7 +50,7 @@ sub _process {
 
 		['b', 'ul'],
 	);
-	foreach my $newcomer (@{$newcomers_ar}) {
+	foreach my $newcomer (@{$authors_ar}) {
 		my $uri = $self->{'_commons_link'}->mw_user_link($newcomer->wm_username);
 		$self->{'tags'}->put(
 			['b', 'li'],
@@ -98,7 +98,7 @@ Tags::HTML::Commons::Vote::CheckAuthors - Tags helper for newcomers list.
  use Tags::HTML::Commons::Vote::CheckAuthors;
 
  my $obj = Tags::HTML::Commons::Vote::CheckAuthors->new(%params);
- $obj->process($newcomers_ar);
+ $obj->process($authors_ar);
 
 =head1 METHODS
 
@@ -147,7 +147,7 @@ Default value is undef.
 
 =head2 C<process>
 
- $obj->process($newcomers_ar);
+ $obj->process($authors_ar);
 
 TODO
 Process Tags structure for output with competition structure.
