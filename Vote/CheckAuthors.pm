@@ -21,8 +21,10 @@ sub new {
 		['css_check_authors', 'text_check_authors'], @params);
 	my $self = $class->SUPER::new(@{$other_params_ar});
 
+	# CSS class.
 	$self->{'css_check_authors'} = 'check_authors';
 
+	# Title.
 	$self->{'text_check_authors'} = 'Authors and their images which are not valid';
 
 	# Process params.
@@ -36,7 +38,7 @@ sub new {
 
 # Process 'Tags'.
 sub _process {
-	my ($self, $authors_hr) = @_;
+	my ($self, $newcomers_ar) = @_;
 
 	$self->{'tags'}->put(
 		['b', 'div'],
@@ -48,7 +50,6 @@ sub _process {
 
 		['b', 'ul'],
 	);
-	# TODO
 	foreach my $newcomer (@{$newcomers_ar}) {
 		my $uri = $self->{'_commons_link'}->mw_user_link($newcomer->wm_username);
 		$self->{'tags'}->put(
@@ -107,17 +108,34 @@ Tags::HTML::Commons::Vote::CheckAuthors - Tags helper for newcomers list.
 
 Constructor.
 
+Returns instance of object.
+
 =over 8
 
-=item * C<css_competition>
+=item * C<css>
+
+'CSS::Struct::Output' object for L<process_css> processing.
+
+Default value is undef.
+
+=item * C<css_check_authors>
 
 CSS class for root div element.
 
-Default value is 'competition'.
+Default value is 'check_authors'.
 
-=item * C<TODO>
+=item * C<no_css>
 
-TODO
+No CSS support flag.
+If this flag is set to 1, L<process_css()> returns undef.
+
+Default value is 0.
+
+=item * C<text_check_authors>
+
+Title for check authors.
+
+Default value is 'Authors and their images which are not valid'.
 
 =item * C<tags>
 
@@ -129,8 +147,9 @@ Default value is undef.
 
 =head2 C<process>
 
- $obj->process($competition_hr);
+ $obj->process($newcomers_ar);
 
+TODO
 Process Tags structure for output with competition structure.
 Structure consists from:
  {
