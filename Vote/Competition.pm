@@ -8,6 +8,7 @@ use Class::Utils qw(set_params split_params);
 use Commons::Link;
 use Error::Pure qw(err);
 use Readonly;
+use Scalar::Util qw(blessed);
 use Tags::HTML::Commons::Vote::CSSUtils qw(a_button float_right);
 use Tags::HTML::Commons::Vote::TagsUtils qw(tags_dl_item);
 use Tags::HTML::Commons::Vote::Utils qw(text value);
@@ -65,6 +66,11 @@ sub _process {
 		);
 
 		return;
+	}
+	if (! blessed($competition)
+		&& ! $competition->isa('Data::Commons::Vote::Competition')) {
+
+		err 'Bad competition object.';
 	}
 
 	my $competition_logo_url;
