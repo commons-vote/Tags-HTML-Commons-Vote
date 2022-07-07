@@ -31,6 +31,8 @@ t/Tags-HTML-Commons-Vote-CheckAuthors/01-use.t
 t/Tags-HTML-Commons-Vote-CheckAuthors/02-version.t
 t/Tags-HTML-Commons-Vote-Competition/01-use.t
 t/Tags-HTML-Commons-Vote-Competition/02-version.t
+t/Tags-HTML-Commons-Vote-Competition/03-new.t
+t/Tags-HTML-Commons-Vote-Competition/04-process.t
 t/Tags-HTML-Commons-Vote-CompetitionForm/01-use.t
 t/Tags-HTML-Commons-Vote-CompetitionForm/02-version.t
 t/Tags-HTML-Commons-Vote-Competitions/01-use.t
