@@ -6,6 +6,7 @@ use warnings;
 
 use Class::Utils qw(set_params split_params);
 use Error::Pure qw(err);
+use Scalar::Util qw(blessed);
 
 our $VERSION = 0.01;
 
@@ -38,6 +39,14 @@ sub new {
 # Process 'Tags'.
 sub _process {
 	my ($self, $competitions_ar) = @_;
+
+	foreach my $competition (@{$competitions_ar}) {
+		if (! blessed($competition)
+			&& ! $competition->isa('Data::Commons::Vote::Competition')) {
+
+			err 'Bad competition object.';
+		}
+	}
 
 	$self->{'tags'}->put(
 		['b', 'div'],
