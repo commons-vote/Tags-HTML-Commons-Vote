@@ -4,7 +4,8 @@ TODO
 2. Vote: Tlacitko pro poslani hlasovani.
 3. Vote: Kontrolovat povinne policka a nedovolit vykreslit formular, pokud je tam chyba.
 4. Prepsat na Tags::HTML::Form
-5.
+5. Add url callbacks to Competition
+6.
 
 Applied
 =======
