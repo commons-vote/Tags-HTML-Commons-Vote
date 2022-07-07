@@ -254,6 +254,8 @@ Returns undef.
  use strict;
  use warnings;
 
+ use Data::Commons::Vote::Competition;
+ use DateTime;
  use Tags::HTML::Commons::Vote::Competition;
  use Tags::Output::Indent;
 
@@ -264,12 +266,22 @@ Returns undef.
  );
 
  # Process list of competitions.
- $obj->process({
-         'id' => 1,
-         'name' => 'Czech Wiki Photo',
-         'date_from' => '10.10.2021',
-         'date_to' => '20.11.2021',
- }]);
+ $obj->process(
+         Data::Commons::Vote::Competition->new(
+                 'id' => 1,
+                 'name' => 'Czech Wiki Photo',
+                 'dt_from' => DateTime->new(
+                         'day' => 10,
+                         'month' => 10,
+                         'year' => 2021,
+                 ),
+                 'dt_to' => DateTime->new(
+                         'day' => 20,
+                         'month' => 11,
+                         'year' => 2021,
+                 ),
+         ),
+ );
 
  # Print out.
  print $tags->flush;
