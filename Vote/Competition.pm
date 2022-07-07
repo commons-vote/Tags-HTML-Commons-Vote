@@ -21,13 +21,16 @@ sub new {
 
 	# Create object.
 	my ($object_params_ar, $other_params_ar) = split_params(
-		['css_competition', 'lang', 'text'], @params);
+		['css_competition', 'lang', 'logo_width', 'text'], @params);
 	my $self = $class->SUPER::new(@{$other_params_ar});
 
 	$self->{'css_competition'} = 'competition';
 
 	# Language.
 	$self->{'lang'} = 'eng';
+
+	# logo width.
+	$self->{'logo_width'} = '130px',
 
 	# Language texts.
 	$self->{'text'} = {
@@ -163,7 +166,7 @@ sub _process_css {
 
 		['s', '.logo'],
 		['d', 'float', 'right'],
-		['d', 'width', '20%'],
+		['d', 'width', $self->{'logo_width'}],
 		['e'],
 	);
 	a_button($self, '.button');
