@@ -37,10 +37,13 @@ sub new {
 			'competition_name' => 'Competition name',
 			'date_from' => 'Date from',
 			'date_to' => 'Date to',
+			'jury_voting' => 'Jury voting',
+			'jury_max_marking_number' => 'Jury maximum number for marking',
 			'logo' => 'Competition logo from Wikimedia Commons',
 			'number_of_votes' => 'Number of votes',
 			'organizer' => 'Organizer',
 			'organizer_logo' => 'Organizer logo from Wikimedia Commons',
+			'public_voting' => 'Public voting',
 			'submit' => 'Save',
 			'title' => 'Create competition',
 		},
@@ -101,8 +104,19 @@ sub _process {
 	tags_input($self, 'organizer_logo', 'text', {
 		value($self, $competition, 'organizer_logo'),
 	});
+	tags_input($self, 'public_voting', 'checkbox', {
+		value($self, $competition, 'public_voting'),
+		$competition->public_voting ? ('checked' => 1) : (),
+	});
 	tags_input($self, 'number_of_votes', 'text', {
 		value($self, $competition, 'number_of_votes'),
+	});
+	tags_input($self, 'jury_voting', 'checkbox', {
+		value($self, $competition, 'jury_voting'),
+		$competition->jury_voting ? ('checked' => 1) : (),
+	});
+	tags_input($self, 'jury_max_marking_number', 'text', {
+		value($self, $competition, 'jury_max_marking_number'),
 	});
 	$self->{'tags'}->put(
 		['b', 'button'],
