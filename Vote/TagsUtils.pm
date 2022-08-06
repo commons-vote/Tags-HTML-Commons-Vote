@@ -58,6 +58,9 @@ sub tags_input {
 		(exists $opts_hr->{'value'} && defined $opts_hr->{'value'}) ? (
 			['a', 'value', $opts_hr->{'value'}],
 		) : (),
+		(exists $opts_hr->{'checked'}) ? (
+			['a', 'checked', 'checked'],
+		) : (),
 		['e', 'input'],
 
 		['e', 'p'],
