@@ -45,6 +45,8 @@ $obj->process(
 			'month' => 11,
 			'year' => 2021,
 		),
+		'jury_voting' => 1,
+		'public_voting' => 1,
 	),
 );
 $ret_ar = $tags->flush(1);
