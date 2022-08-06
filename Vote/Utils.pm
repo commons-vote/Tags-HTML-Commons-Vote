@@ -6,6 +6,7 @@ use warnings;
 
 use Error::Pure qw(err);
 use Readonly;
+use Scalar::Util qw(blessed);
 
 Readonly::Array our @EXPORT_OK => qw(dt_string text value);
 
@@ -31,6 +32,7 @@ sub value {
 	my ($self, $object, $method, $callback) = @_;
 
 	if (! defined $object
+		|| ! blessed($object)
 		|| ! defined $object->$method) {
 
 		return ();
