@@ -6,7 +6,11 @@ use warnings;
 
 use Class::Utils qw(set_params split_params);
 use Commons::Link;
+use Data::HTML::Form;
+use Data::HTML::Form::Input;
+use Data::HTML::Textarea;
 use Error::Pure qw(err);
+use Tags::HTML::Form;
 use Tags::HTML::Commons::Vote::TagsUtils qw(tags_input tags_textarea);
 use Tags::HTML::Commons::Vote::Utils qw(text value);
 
@@ -37,6 +41,7 @@ sub new {
 	$self->{'text'} = {
 		'eng' => {
 			'categories' => 'Wikimedia Commons categories',
+			'categories_placeholder' => 'List of Wikimedia Commons categories one per line',
 			'competition' => 'Competition',
 			'number_of_votes' => 'Number of votes',
 			'logo' => 'Section logo from Wikimedia Commons',
@@ -51,6 +56,24 @@ sub new {
 
 	$self->{'_commons_link'} = Commons::Link->new;
 
+	my $form = Data::HTML::Form->new(
+		'action' => $self->{'form_link'},
+		'css_class' => $self->{'css_section'},
+		'enctype' => 'application/x-www-form-urlencoded',
+		'method' => $self->{'form_method'},
+		'label' => text($self, 'title'),
+	);
+	my $submit = Data::HTML::Form::Input->new(
+		'value' => text($self, 'submit'),
+		'type' => 'submit',
+	);
+	$self->{'_tags_form'} = Tags::HTML::Form->new(
+		'css' => $self->{'css'},
+		'form' => $form,
+		'submit' => $submit,
+		'tags' => $self->{'tags'},
+	);
+
 	# Object.
 	return $self;
 }
@@ -59,67 +82,46 @@ sub new {
 sub _process {
 	my ($self, $section) = @_;
 
-	$self->{'tags'}->put(
-		['b', 'div'],
-		['a', 'class', $self->{'css_section'}],
-		['b', 'form'],
-		['a', 'enctype', 'application/x-www-form-urlencoded'],
+	my @fields = (
+		defined $section->competition ? (
+			# TODO Rewrite to printable form. Add link to competition page.
+			Data::HTML::Form::Input->new(
+				'id' => 'competition',
+				'label' => text($self, 'competition'),
+				'disabled' => 1,
+				'type' => 'text',
+				'value' => $section->competition->name,
+			),
+		) : (),
+		Data::HTML::Form::Input->new(
+			'id' => 'section_name',
+			'label' => text($self, 'section_name'),
+			'type' => 'text',
+			'required' => 1,
+			value($self, $section, 'name'),
+		),
+		Data::HTML::Form::Input->new(
+			'id' => 'logo',
+			'label' => text($self, 'logo'),
+			'type' => 'text',
+			value($self, $section, 'logo'),
+		),
+		Data::HTML::Form::Input->new(
+			'id' => 'number_of_votes',
+			'label' => text($self, 'number_of_votes'),
+			'type' => 'text',
+			value($self, $section, 'number_of_votes'),
+		),
+		Data::HTML::Textarea->new(
+			'id' => 'categories',
+			'label' => text($self, 'categories'),
+			'placeholder' => text($self, 'categories_placeholder'),
+			'requires' => 1,
+			'rows' => 6,
+		),
 	);
-	if (defined $self->{'form_link'}) {
-		$self->{'tags'}->put(
-			['a', 'action', $self->{'form_link'}],
-		);
-	}
-	if (defined $self->{'form_method'}) {
-		$self->{'tags'}->put(
-			['a', 'method', $self->{'form_method'}],
-		);
-	}
-	$self->{'tags'}->put(
-		['b', 'fieldset'],
 
-		['b', 'legend'],
-		['d', text($self, 'title')],
-		['e', 'legend'],
-
-		['b', 'p'],
-		['b', 'label'],
-		['a', 'for', 'competition'],
-		['d', text($self, 'competition')],
-		['e', 'label'],
-		['b', 'span'],
-		['a', 'id', 'competition'],
-		['a', 'class', 'value'],
-		['d', value($self, $section, 'competition_id')."TODO"],
-		['e', 'span'],
-		['e', 'p'],
-	);
-	tags_input($self, 'section_name', 'text', {
-		'class' => 'value req',
-		value($self, $section, 'name'),
-	});
-	tags_input($self, 'logo', 'text', {
-		'class' => 'value',
-		value($self, $section, 'logo'),
-	});
-	tags_input($self, 'number_of_votes', 'text', {
-		'class' => 'value',
-		value($self, $section, 'number_of_votes'),
-	});
-	tags_textarea($self, 'categories', {
-		'class' => 'value req',
-		'rows' => 6,
-	});
-	$self->{'tags'}->put(
-		['b', 'button'],
-		['a', 'type', 'submit'],
-		['d', text($self, 'submit')],
-		['e', 'button'],
-
-		['e', 'fieldset'],
-		['e', 'form'],
-		['e', 'div'],
-	);
+	$self->{'_tags_form'}->process(@fields);
 
 	return;
 }
@@ -127,24 +129,7 @@ sub _process {
 sub _process_css {
 	my $self = shift;
 
-	$self->{'css'}->put(
-		['s', '.'.$self->{'css_section'}],
-		['d', 'background-color', '#f2f2f2'],
-		['e'],
-
-		['s', '.'.$self->{'css_section'}.' label'],
-		['d', 'width', '20%'],
-		['e'],
-
-		['s', '.'.$self->{'css_section'}.' .value'],
-		['d', 'float', 'right'],
-		['d', 'width', '75%'],
-		['e'],
-
-		['s', '.req'],
-		['d', 'border', '1px solid red'],
-		['e'],
-	);
+	$self->{'_tags_form'}->process_css;
 
 	return;
 }
@@ -248,6 +233,9 @@ Returns undef.
 =head1 DEPENDENCIES
 
 L<Class::Utils>,
+L<Data::HTML::Form>,
+L<Data::HTML::Form::Input>,
+L<Data::HTML::Textarea>,
 L<Error::Pure>,
 L<Tags::HTML>.
 
