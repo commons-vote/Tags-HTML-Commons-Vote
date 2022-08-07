@@ -94,7 +94,7 @@ sub _process {
 			'label' => text($self, 'date_from'),
 			'placeholder' => 'YYYY-MM-DD',
 			'required' => 1,
-			'type' => 'text',
+			'type' => 'date',
 			value($self, $competition, 'dt_from', \&dt_string),
 		),
 		Data::HTML::Form::Input->new(
@@ -102,7 +102,7 @@ sub _process {
 			'label' => text($self, 'date_to'),
 			'placeholder' => 'YYYY-MM-DD',
 			'required' => 1,
-			'type' => 'text',
+			'type' => 'date',
 			value($self, $competition, 'dt_to', \&dt_string),
 		),
 		Data::HTML::Form::Input->new(
