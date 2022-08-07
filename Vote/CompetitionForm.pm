@@ -133,7 +133,8 @@ sub _process {
 		Data::HTML::Form::Input->new(
 			'id' => 'number_of_votes',
 			'label' => text($self, 'number_of_votes'),
-			'type' => 'text',
+			'min' => 0,
+			'type' => 'number',
 			value($self, $competition, 'number_of_votes')
 		),
 		Data::HTML::Form::Input->new(
@@ -146,7 +147,8 @@ sub _process {
 		Data::HTML::Form::Input->new(
 			'id' => 'jury_max_marking_number',
 			'label' => text($self, 'jury_max_marking_number'),
-			'type' => 'text',
+			'type' => 'number',
+			'min' => 1,
 			value($self, $competition, 'jury_max_marking_number'),
 		),
 	);
