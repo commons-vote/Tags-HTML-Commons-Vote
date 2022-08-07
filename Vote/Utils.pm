@@ -15,7 +15,7 @@ our $VERSION = 0.01;
 sub dt_string {
 	my $dt = shift;
 
-	return $dt->year.'-'.$dt->month.'-'.$dt->day;
+	return $dt->year.'-'.sprintf('%02d', $dt->month).'-'.sprintf('%02d', $dt->day);
 }
 
 sub text {
