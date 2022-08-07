@@ -5,8 +5,11 @@ use strict;
 use warnings;
 
 use Class::Utils qw(set_params split_params);
+use Data::HTML::Form;
+use Data::HTML::Form::Input;
 use Tags::HTML::Commons::Vote::TagsUtils qw(tags_input);
 use Tags::HTML::Commons::Vote::Utils qw(dt_string text value);
+use Tags::HTML::Form;
 
 our $VERSION = 0.01;
 
@@ -52,6 +55,24 @@ sub new {
 	# Process params.
 	set_params($self, @{$object_params_ar});
 
+	my $form = Data::HTML::Form->new(
+		'action' => $self->{'form_link'},
+		'css_class' => $self->{'css_competition'},
+		'enctype' => 'application/x-www-form-urlencoded',
+		'method' => $self->{'form_method'},
+		'title' => text($self, 'title'),
+	);
+	my $submit = Data::HTML::Form::Input->new(
+		'value' => text($self, 'submit'),
+		'type' => 'submit',
+	);
+	$self->{'_tags_form'} = Tags::HTML::Form->new(
+		'css' => $self->{'css'},
+		'form' => $form,
+		'submit' => $submit,
+		'tags' => $self->{'tags'},
+	);
+
 	# Object.
 	return $self;
 }
@@ -60,74 +81,77 @@ sub new {
 sub _process {
 	my ($self, $competition) = @_;
 
-	$self->{'tags'}->put(
-		['b', 'div'],
-		['a', 'class', $self->{'css_competition'}],
-		['b', 'form'],
-		['a', 'enctype', 'application/x-www-form-urlencoded'],
+	my @fields = (
+		Data::HTML::Form::Input->new(
+			'id' => 'competition_name',
+			'label' => text($self, 'competition_name'),
+			'required' => 1,
+			'type' => 'text',
+			value($self, $competition, 'name'),
+		),
+		Data::HTML::Form::Input->new(
+			'id' => 'date_from',
+			'label' => text($self, 'date_from'),
+			'placeholder' => 'YYYY-MM-DD',
+			'required' => 1,
+			'type' => 'text',
+			value($self, $competition, 'dt_from', \&dt_string),
+		),
+		Data::HTML::Form::Input->new(
+			'id' => 'date_to',
+			'label' => text($self, 'date_to'),
+			'placeholder' => 'YYYY-MM-DD',
+			'required' => 1,
+			'type' => 'text',
+			value($self, $competition, 'dt_to', \&dt_string),
+		),
+		Data::HTML::Form::Input->new(
+			'id' => 'logo',
+			'label' => text($self, 'logo'),
+			'type' => 'text',
+			value($self, $competition, 'logo'),
+		),
+		Data::HTML::Form::Input->new(
+			'id' => 'organizer',
+			'label' => text($self, 'organizer'),
+			'type' => 'text',
+			value($self, $competition, 'organizer'),
+		),
+		Data::HTML::Form::Input->new(
+			'id' => 'organizer_logo',
+			'label' => text($self, 'organizer_logo'),
+			'type' => 'text',
+			value($self, $competition, 'organizer_logo'),
+		),
+		Data::HTML::Form::Input->new(
+			'checked' => $competition->public_voting ? 1 : 0,
+			'id' => 'public_voting',
+			'label' => text($self, 'public_voting'),
+			'type' => 'checkbox',
+			value($self, $competition, 'public_voting'),
+		),
+		Data::HTML::Form::Input->new(
+			'id' => 'number_of_votes',
+			'label' => text($self, 'number_of_votes'),
+			'type' => 'text',
+			value($self, $competition, 'number_of_votes')
+		),
+		Data::HTML::Form::Input->new(
+			'checked' => $competition->jury_voting ? 1 : 0,
+			'id' => 'jury_voting',
+			'label' => text($self, 'jury_voting'),
+			'type' => 'checkbox',
+			value($self, $competition, 'jury_voting'),
+		),
+		Data::HTML::Form::Input->new(
+			'id' => 'jury_max_marking_number',
+			'label' => text($self, 'jury_max_marking_number'),
+			'type' => 'text',
+			value($self, $competition, 'jury_max_marking_number'),
+		),
 	);
-	if (defined $self->{'form_link'}) {
-		$self->{'tags'}->put(
-			['a', 'action', $self->{'form_link'}],
-		);
-	}
-	if (defined $self->{'form_method'}) {
-		$self->{'tags'}->put(
-			['a', 'method', $self->{'form_method'}],
-		);
-	}
-	$self->{'tags'}->put(
-		['b', 'fieldset'],
 
-		['b', 'legend'],
-		['d', text($self, 'title')],
-		['e', 'legend'],
-	);
-	tags_input($self, 'competition_name', 'text', {
-		'req' => 1,
-		value($self, $competition, 'name'),
-	});
-	tags_input($self, 'date_from', 'text', {
-		'req' => 1,
-		value($self, $competition, 'dt_from', \&dt_string),
-	});
-	tags_input($self, 'date_to', 'text', {
-		'req' => 1,
-		value($self, $competition, 'dt_to', \&dt_string),
-	});
-	tags_input($self, 'logo', 'text', {
-		value($self, $competition, 'logo'),
-	});
-	tags_input($self, 'organizer', 'text', {
-		value($self, $competition, 'organizer'),
-	});
-	tags_input($self, 'organizer_logo', 'text', {
-		value($self, $competition, 'organizer_logo'),
-	});
-	tags_input($self, 'public_voting', 'checkbox', {
-		value($self, $competition, 'public_voting'),
-		$competition->public_voting ? ('checked' => 1) : (),
-	});
-	tags_input($self, 'number_of_votes', 'text', {
-		value($self, $competition, 'number_of_votes'),
-	});
-	tags_input($self, 'jury_voting', 'checkbox', {
-		value($self, $competition, 'jury_voting'),
-		$competition->jury_voting ? ('checked' => 1) : (),
-	});
-	tags_input($self, 'jury_max_marking_number', 'text', {
-		value($self, $competition, 'jury_max_marking_number'),
-	});
-	$self->{'tags'}->put(
-		['b', 'button'],
-		['a', 'type', 'submit'],
-		['d', text($self, 'submit')],
-		['e', 'button'],
-
-		['e', 'fieldset'],
-		['e', 'form'],
-		['e', 'div'],
-	);
+	$self->{'_tags_form'}->process(@fields);
 
 	return;
 }
@@ -135,29 +159,7 @@ sub _process {
 sub _process_css {
 	my $self = shift;
 
-	$self->{'css'}->put(
-		['s', '.'.$self->{'css_competition'}],
-		['d', 'background-color', '#f2f2f2'],
-		['e'],
-
-		['s', '.'.$self->{'css_competition'}.' label'],
-		['d', 'width', '20%'],
-		['e'],
-
-		['s', '.'.$self->{'css_competition'}.' input'],
-		['d', 'float', 'right'],
-		['d', 'width', '75%'],
-		['e'],
-
-		['s', '.'.$self->{'css_competition'}.' textarea'],
-		['d', 'float', 'right'],
-		['d', 'width', '75%'],
-		['e'],
-
-		['s', '.req'],
-		['d', 'border', '1px solid red'],
-		['e'],
-	);
+	$self->{'_tags_form'}->process_css;
 
 	return;
 }
