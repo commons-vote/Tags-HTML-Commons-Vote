@@ -124,7 +124,7 @@ sub _process {
 			value($self, $competition, 'organizer_logo'),
 		),
 		Data::HTML::Form::Input->new(
-			'checked' => $competition->public_voting ? 1 : 0,
+			defined $competition ? ('checked' => $competition->public_voting ? 1 : 0) : (),
 			'id' => 'public_voting',
 			'label' => text($self, 'public_voting'),
 			'type' => 'checkbox',
@@ -135,10 +135,10 @@ sub _process {
 			'label' => text($self, 'number_of_votes'),
 			'min' => 0,
 			'type' => 'number',
-			value($self, $competition, 'number_of_votes')
+			value($self, $competition, 'number_of_votes', undef, 0)
 		),
 		Data::HTML::Form::Input->new(
-			'checked' => $competition->jury_voting ? 1 : 0,
+			defined $competition ? ('checked' => $competition->jury_voting ? 1 : 0) : (),
 			'id' => 'jury_voting',
 			'label' => text($self, 'jury_voting'),
 			'type' => 'checkbox',
@@ -149,7 +149,7 @@ sub _process {
 			'label' => text($self, 'jury_max_marking_number'),
 			'type' => 'number',
 			'min' => 1,
-			value($self, $competition, 'jury_max_marking_number'),
+			value($self, $competition, 'jury_max_marking_number', undef, 1),
 		),
 	);
 

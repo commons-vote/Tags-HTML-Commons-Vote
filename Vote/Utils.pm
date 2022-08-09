@@ -29,13 +29,17 @@ sub text {
 }
 
 sub value {
-	my ($self, $object, $method, $callback) = @_;
+	my ($self, $object, $method, $callback, $default) = @_;
 
 	if (! defined $object
 		|| ! blessed($object)
 		|| ! defined $object->$method) {
 
-		return ();
+		if (defined $default) {
+			return ('value' => $default);
+		} else {
+			return ();
+		}
 	} else {
 		if (defined $callback) {
 			return ('value' => &$callback($object->$method));
