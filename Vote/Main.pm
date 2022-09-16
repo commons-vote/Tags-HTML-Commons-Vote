@@ -30,6 +30,10 @@ sub new {
 		'eng' => {
 			'create_competition' => 'Create competition',
 			'my_competitions' => 'My competitions',
+			'text_competition_name' => 'Competition name',
+			'text_date_from' => 'Date from',
+			'text_date_to' => 'Date to',
+			'text_no_competitions' => 'There is no competitions.',
 		},
 	};
 
@@ -42,7 +46,15 @@ sub new {
 
 # Process 'Tags'.
 sub _process {
-	my ($self, $competition) = @_;
+	my ($self, $competitions_ar) = @_;
+
+	foreach my $competition (@{$competitions_ar}) {
+		if (! blessed($competition)
+			&& ! $competition->isa('Data::Commons::Vote::Competition')) {
+
+			err 'Bad competition object.';
+		}
+	}
 
 	$self->{'tags'}->put(
 		['b', 'div'],
@@ -63,6 +75,52 @@ sub _process {
 
 		['e', 'div'],
 
+		['b', 'table'],
+
+		['b', 'tr'],
+		['b', 'th'],
+		['d', text($self, 'text_competition_name')],
+		['e', 'th'],
+		['b', 'th'],
+		['d', text($self, 'text_date_from')],
+		['e', 'th'],
+		['b', 'th'],
+		['d', text($self, 'text_date_to')],
+		['e', 'th'],
+		['e', 'tr'],
+	);
+	if (! @{$competitions_ar}) {
+		$self->{'tags'}->put(
+			['b', 'tr'],
+			['b', 'td'],
+			['a', 'colspan', 3],
+			['d', text($self, 'text_no_competitions')],
+			['e', 'td'],
+			['e', 'tr'],
+		);
+	} else {
+		foreach my $c (@{$competitions_ar}) {
+			my $uri = '/competition/'.$c->id;
+			$self->{'tags'}->put(
+				['b', 'tr'],
+				['b', 'td'],
+				['b', 'a'],
+				['a', 'href', $uri],
+				['d', $c->name],
+				['e', 'a'],
+				['e', 'td'],
+				['b', 'td'],
+				['d', $c->dt_from->stringify],
+				['e', 'td'],
+				['b', 'td'],
+				['d', $c->dt_to->stringify],
+				['e', 'td'],
+				['e', 'tr'],
+			);
+		}
+	}
+	$self->{'tags'}->put(
+		['e', 'table'],
 		['e', 'div'],
 	);
 
@@ -81,6 +139,15 @@ sub _process_css {
 		['d', 'border-bottom', '1px solid #eee'],
 		['d', 'padding-bottom', '20px'],
 		['d', 'margin', '40px 0 20px 0'],
+		['e'],
+
+		['s', '.'.$self->{'css_main'}.' table, tr, td, th'],
+		['d', 'border', '1px solid black'],
+		['d', 'border-collapse', 'collapse'],
+		['e'],
+
+		['s', '.'.$self->{'css_main'}.' td, th'],
+		['d', 'padding', '0.5em'],
 		['e'],
 	);
 	a_button($self, '.button');
