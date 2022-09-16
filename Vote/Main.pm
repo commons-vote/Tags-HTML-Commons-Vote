@@ -8,7 +8,7 @@ use Class::Utils qw(set_params split_params);
 use DateTime::Format::Strptime;
 use Error::Pure qw(err);
 use Scalar::Util qw(blessed);
-use Tags::HTML::Commons::Vote::Utils qw(text);
+use Tags::HTML::Commons::Vote::Utils qw(d_format text);
 use Tags::HTML::Commons::Vote::Utils::CSS qw(a_button float_right);
 
 our $VERSION = 0.01;
@@ -19,13 +19,13 @@ sub new {
 
 	# Create object.
 	my ($object_params_ar, $other_params_ar) = split_params(
-		['css_main', 'dt_formatter', 'lang', 'text'], @params);
+		['css_main', 'dt_formatter_d', 'lang', 'text'], @params);
 	my $self = $class->SUPER::new(@{$other_params_ar});
 
 	$self->{'css_main'} = 'main';
 
 	# DateTime format.
-	$self->{'dt_formatter'} = DateTime::Format::Strptime->new(
+	$self->{'dt_formatter_d'} = DateTime::Format::Strptime->new(
 		pattern => "%Y/%m/%d",
 		time_zone => 'UTC',
 	);
@@ -118,10 +118,10 @@ sub _process {
 				['e', 'a'],
 				['e', 'td'],
 				['b', 'td'],
-				['d', $self->{'dt_formatter'}->format_datetime($c->dt_from)],
+				['d', d_format($self, $c->dt_from)],
 				['e', 'td'],
 				['b', 'td'],
-				['d', $self->{'dt_formatter'}->format_datetime($c->dt_to)],
+				['d', d_format($self, $c->dt_to)],
 				['e', 'td'],
 				['e', 'tr'],
 			);
