@@ -8,9 +8,29 @@ use Error::Pure qw(err);
 use Readonly;
 use Scalar::Util qw(blessed);
 
-Readonly::Array our @EXPORT_OK => qw(dt_string text value);
+Readonly::Array our @EXPORT_OK => qw(d_format dt_format dt_string text value);
 
 our $VERSION = 0.01;
+
+sub d_format {
+	my ($self, $date) = @_;
+
+	if (defined $date) {
+		return $self->{'dt_formatter_d'}->format_datetime($date);
+	} else {
+		return '';
+	}
+}
+
+sub dt_format {
+	my ($self, $datetime) = @_;
+
+	if (defined $datetime) {
+		return $self->{'dt_formatter_dt'}->format_datetime($datetime);
+	} else {
+		return '';
+	}
+}
 
 sub dt_string {
 	my $dt = shift;
