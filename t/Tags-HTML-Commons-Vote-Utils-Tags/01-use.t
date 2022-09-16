@@ -7,8 +7,8 @@ use Test::NoWarnings;
 BEGIN {
 
 	# Test.
-	use_ok('Tags::HTML::Commons::Vote::CSSUtils');
+	use_ok('Tags::HTML::Commons::Vote::Utils::Tags');
 }
 
 # Test.
-require_ok('Tags::HTML::Commons::Vote::CSSUtils');
+require_ok('Tags::HTML::Commons::Vote::Utils::Tags');

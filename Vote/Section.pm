@@ -8,9 +8,9 @@ use Class::Utils qw(set_params split_params);
 use Commons::Link;
 use Error::Pure qw(err);
 use Readonly;
-use Tags::HTML::Commons::Vote::CSSUtils qw(a_button float_right);
-use Tags::HTML::Commons::Vote::TagsUtils qw(tags_dl_item);
 use Tags::HTML::Commons::Vote::Utils qw(text);
+use Tags::HTML::Commons::Vote::Utils::CSS qw(a_button float_right);
+use Tags::HTML::Commons::Vote::Utils::Tags qw(tags_dl_item);
 use Unicode::UTF8 qw(decode_utf8);
 
 our $VERSION = 0.01;

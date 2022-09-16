@@ -1,4 +1,4 @@
-package Tags::HTML::Commons::Vote::TagsUtils;
+package Tags::HTML::Commons::Vote::Utils::Tags;
 
 use base qw(Exporter);
 use strict;

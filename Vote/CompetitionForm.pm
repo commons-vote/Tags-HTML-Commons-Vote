@@ -7,8 +7,8 @@ use warnings;
 use Class::Utils qw(set_params split_params);
 use Data::HTML::Form;
 use Data::HTML::Form::Input;
-use Tags::HTML::Commons::Vote::TagsUtils qw(tags_input);
 use Tags::HTML::Commons::Vote::Utils qw(dt_string text value);
+use Tags::HTML::Commons::Vote::Utils::Tags qw(tags_input);
 use Tags::HTML::Form;
 
 our $VERSION = 0.01;

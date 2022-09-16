@@ -8,8 +8,8 @@ use Class::Utils qw(set_params split_params);
 use DateTime::Format::Strptime;
 use Error::Pure qw(err);
 use Scalar::Util qw(blessed);
-use Tags::HTML::Commons::Vote::CSSUtils qw(a_button float_right);
 use Tags::HTML::Commons::Vote::Utils qw(text);
+use Tags::HTML::Commons::Vote::Utils::CSS qw(a_button float_right);
 
 our $VERSION = 0.01;
 

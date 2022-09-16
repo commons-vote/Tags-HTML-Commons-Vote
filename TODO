@@ -5,9 +5,10 @@ TODO
 3. Vote: Kontrolovat povinne policka a nedovolit vykreslit formular, pokud je tam chyba.
 4. Prepsat na Tags::HTML::Form
 5. Add url callbacks to Competition
-6. Prejmenovat TagsUtils a CSSUtils na Utils::Tags, Utils::CSS
 7. V Competitions a Main je stejny kod pro vykreslovani tabulky soutezi.
 8.
 
 Applied
 =======
+6. Prejmenovat TagsUtils a CSSUtils na Utils::Tags, Utils::CSS
+OK [20220917] skim

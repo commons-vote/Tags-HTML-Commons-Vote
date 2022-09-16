@@ -1,4 +1,4 @@
-package Tags::HTML::Commons::Vote::CSSUtils;
+package Tags::HTML::Commons::Vote::Utils::CSS;
 
 use base qw(Exporter);
 use strict;

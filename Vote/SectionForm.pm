@@ -11,8 +11,8 @@ use Data::HTML::Form::Input;
 use Data::HTML::Textarea;
 use Error::Pure qw(err);
 use Tags::HTML::Form;
-use Tags::HTML::Commons::Vote::TagsUtils qw(tags_input tags_textarea);
 use Tags::HTML::Commons::Vote::Utils qw(text value);
+use Tags::HTML::Commons::Vote::Utils::Tags qw(tags_input tags_textarea);
 
 our $VERSION = 0.01;
 
