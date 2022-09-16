@@ -5,6 +5,7 @@ use strict;
 use warnings;
 
 use Class::Utils qw(set_params split_params);
+use DateTime::Format::Strptime;
 use Error::Pure qw(err);
 use Scalar::Util qw(blessed);
 
@@ -16,12 +17,18 @@ sub new {
 
 	# Create object.
 	my ($object_params_ar, $other_params_ar) = split_params(
-		['css_competitions', 'text_competitions',
+		['css_competitions', 'dt_formatter', 'text_competitions',
 		'text_competition_name', 'text_date_from', 'text_date_to',
 		'text_no_competitions'], @params);
 	my $self = $class->SUPER::new(@{$other_params_ar});
 
 	$self->{'css_competitions'} = 'competitions';
+
+	# DateTime format.
+	$self->{'dt_formatter'} = DateTime::Format::Strptime->new(
+		pattern => "%Y-%m-%d",
+		time_zone => 'UTC',
+	);
 
 	$self->{'text_competitions'} = 'Competitions';
 	$self->{'text_competition_name'} = 'Competition name';
@@ -91,10 +98,10 @@ sub _process {
 				['e', 'a'],
 				['e', 'td'],
 				['b', 'td'],
-				['d', $c->dt_from->stringify],
+				['d', $self->{'dt_formatter'}->format_datetime($c->dt_from)],
 				['e', 'td'],
 				['b', 'td'],
-				['d', $c->dt_to->stringify],
+				['d', $self->{'dt_formatter'}->format_datetime($c->dt_to)],
 				['e', 'td'],
 				['e', 'tr'],
 			);

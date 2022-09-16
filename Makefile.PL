@@ -19,6 +19,7 @@ readme_from 'Vote.pm';
 recursive_author_tests('xt');
 requires 'Class::Utils' => 0.02;
 requires 'Commons::Link' => 0;
+requires 'DateTime::Format::Strptime' => 0;
 requires 'Error::Pure' => 0.07;
 requires 'Scalar::Util' => 0;
 requires 'Tags::HTML' => 0.02;

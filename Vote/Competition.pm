@@ -6,6 +6,7 @@ use warnings;
 
 use Class::Utils qw(set_params split_params);
 use Commons::Link;
+use DateTime::Format::Strptime;
 use Error::Pure qw(err);
 use Readonly;
 use Scalar::Util qw(blessed);
@@ -22,10 +23,16 @@ sub new {
 
 	# Create object.
 	my ($object_params_ar, $other_params_ar) = split_params(
-		['css_competition', 'lang', 'logo_width', 'text'], @params);
+		['css_competition', 'dt_formatter', 'lang', 'logo_width', 'text'], @params);
 	my $self = $class->SUPER::new(@{$other_params_ar});
 
 	$self->{'css_competition'} = 'competition';
+
+	# DateTime format.
+	$self->{'dt_formatter'} = DateTime::Format::Strptime->new(
+		pattern => "%Y-%m-%d",
+		time_zone => 'UTC',
+	);
 
 	# Language.
 	$self->{'lang'} = 'eng';
@@ -113,8 +120,10 @@ sub _process {
 
 		['b', 'dl'],
 	);
-	tags_dl_item($self, 'date_from', $competition->dt_from->stringify);
-	tags_dl_item($self, 'date_to', $competition->dt_to->stringify);
+	tags_dl_item($self, 'date_from',
+		$self->{'dt_formatter'}->format_datetime($competition->dt_from));
+	tags_dl_item($self, 'date_to',
+		$self->{'dt_formatter'}->format_datetime($competition->dt_to));
 	tags_dl_item($self, 'organizer', $competition->organizer);
 	tags_dl_item($self, 'number_of_votes', $competition->number_of_votes);
 	$self->{'tags'}->put(

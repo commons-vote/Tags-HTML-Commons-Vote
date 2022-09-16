@@ -5,6 +5,7 @@ use strict;
 use warnings;
 
 use Class::Utils qw(set_params split_params);
+use DateTime::Format::Strptime;
 use Error::Pure qw(err);
 use Scalar::Util qw(blessed);
 use Tags::HTML::Commons::Vote::CSSUtils qw(a_button float_right);
@@ -18,10 +19,16 @@ sub new {
 
 	# Create object.
 	my ($object_params_ar, $other_params_ar) = split_params(
-		['css_main', 'lang', 'text'], @params);
+		['css_main', 'dt_formatter', 'lang', 'text'], @params);
 	my $self = $class->SUPER::new(@{$other_params_ar});
 
 	$self->{'css_main'} = 'main';
+
+	# DateTime format.
+	$self->{'dt_formatter'} = DateTime::Format::Strptime->new(
+		pattern => "%Y-%m-%d",
+		time_zone => 'UTC',
+	);
 
 	# Language.
 	$self->{'lang'} = 'eng';
@@ -111,10 +118,10 @@ sub _process {
 				['e', 'a'],
 				['e', 'td'],
 				['b', 'td'],
-				['d', $c->dt_from->stringify],
+				['d', $self->{'dt_formatter'}->format_datetime($c->dt_from)],
 				['e', 'td'],
 				['b', 'td'],
-				['d', $c->dt_to->stringify],
+				['d', $self->{'dt_formatter'}->format_datetime($c->dt_to)],
 				['e', 'td'],
 				['e', 'tr'],
 			);
