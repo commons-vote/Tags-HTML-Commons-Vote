@@ -10,7 +10,7 @@ use DateTime::Format::Strptime;
 use Error::Pure qw(err);
 use Readonly;
 use Scalar::Util qw(blessed);
-use Tags::HTML::Commons::Vote::Utils qw(text value);
+use Tags::HTML::Commons::Vote::Utils qw(d_format dt_format text value);
 use Tags::HTML::Commons::Vote::Utils::CSS qw(a_button float_right);
 use Tags::HTML::Commons::Vote::Utils::Tags qw(tags_dl_item);
 use Unicode::UTF8 qw(decode_utf8);
@@ -67,26 +67,6 @@ sub new {
 
 	# Object.
 	return $self;
-}
-
-sub _date {
-	my ($self, $date) = @_;
-
-	if (defined $date) {
-		return $self->{'dt_formatter_d'}->format_datetime($date);
-	} else {
-		return '';
-	}
-}
-
-sub _datetime {
-	my ($self, $datetime) = @_;
-
-	if (defined $datetime) {
-		return $self->{'dt_formatter_dt'}->format_datetime($datetime);
-	} else {
-		return '';
-	}
 }
 
 # Process 'Tags'.
@@ -147,13 +127,13 @@ sub _process {
 		['b', 'dl'],
 	);
 	tags_dl_item($self, 'date_from',
-		$self->_date($competition->dt_from));
+		d_format($self, $competition->dt_from));
 	tags_dl_item($self, 'date_to',
-		$self->_date($competition->dt_to));
+		d_format($self, $competition->dt_to));
 	tags_dl_item($self, 'organizer', $competition->organizer);
 	tags_dl_item($self, 'number_of_votes', $competition->number_of_votes);
 	tags_dl_item($self, 'date_image_loaded',
-		$self->_datetime($competition->dt_images_loaded));
+		dt_format($self, $competition->dt_images_loaded));
 	$self->{'tags'}->put(
 		['b', 'dt'],
 		['d', text($self, 'sections')],
