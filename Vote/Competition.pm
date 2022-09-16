@@ -23,14 +23,19 @@ sub new {
 
 	# Create object.
 	my ($object_params_ar, $other_params_ar) = split_params(
-		['css_competition', 'dt_formatter', 'lang', 'logo_width', 'text'], @params);
+		['css_competition', 'dt_formatter_d', 'dt_formatter_dt',
+		'lang', 'logo_width', 'text'], @params);
 	my $self = $class->SUPER::new(@{$other_params_ar});
 
 	$self->{'css_competition'} = 'competition';
 
 	# DateTime format.
-	$self->{'dt_formatter'} = DateTime::Format::Strptime->new(
+	$self->{'dt_formatter_d'} = DateTime::Format::Strptime->new(
 		pattern => "%Y/%m/%d",
+		time_zone => 'UTC',
+	);
+	$self->{'dt_formatter_dt'} = DateTime::Format::Strptime->new(
+		pattern => "%Y/%m/%d %H:%M",
 		time_zone => 'UTC',
 	);
 
@@ -45,6 +50,7 @@ sub new {
 		'eng' => {
 			'add_section' => 'Add section',
 			'date_from' => 'Date from',
+			'date_image_loaded' => 'Date and time of situation when images were downloaded',
 			'date_to' => 'Date to',
 			'edit_competition' => 'Edit competition',
 			'number_of_votes' => 'Number of votes',
@@ -121,11 +127,13 @@ sub _process {
 		['b', 'dl'],
 	);
 	tags_dl_item($self, 'date_from',
-		$self->{'dt_formatter'}->format_datetime($competition->dt_from));
+		$self->{'dt_formatter_d'}->format_datetime($competition->dt_from));
 	tags_dl_item($self, 'date_to',
-		$self->{'dt_formatter'}->format_datetime($competition->dt_to));
+		$self->{'dt_formatter_d'}->format_datetime($competition->dt_to));
 	tags_dl_item($self, 'organizer', $competition->organizer);
 	tags_dl_item($self, 'number_of_votes', $competition->number_of_votes);
+	tags_dl_item($self, 'date_image_loaded',
+		$self->{'dt_formatter_dt'}->format_datetime($competition->dt_images_loaded));
 	$self->{'tags'}->put(
 		['b', 'dt'],
 		['d', text($self, 'sections')],
