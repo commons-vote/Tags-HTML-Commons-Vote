@@ -8,7 +8,7 @@ use Class::Utils qw(set_params split_params);
 use DateTime::Format::Strptime;
 use Error::Pure qw(err);
 use Scalar::Util qw(blessed);
-use Tags::HTML::Commons::Vote::Utils qw(d_format text);
+use Tags::HTML::Commons::Vote::Utils qw(d_format dt_format text);
 use Tags::HTML::Commons::Vote::Utils::CSS qw(a_button float_right);
 
 our $VERSION = 0.01;
@@ -19,14 +19,21 @@ sub new {
 
 	# Create object.
 	my ($object_params_ar, $other_params_ar) = split_params(
-		['css_main', 'dt_formatter_d', 'lang', 'text'], @params);
+		['css_main', 'dt_formatter_d', 'dt_formatter_dt', 'lang',
+		'text'], @params);
 	my $self = $class->SUPER::new(@{$other_params_ar});
 
 	$self->{'css_main'} = 'main';
 
-	# DateTime format.
+	# Date format.
 	$self->{'dt_formatter_d'} = DateTime::Format::Strptime->new(
 		pattern => "%Y/%m/%d",
+		time_zone => 'UTC',
+	);
+
+	# Datetime format.
+	$self->{'dt_formatter_dt'} = DateTime::Format::Strptime->new(
+		pattern => "%Y/%m/%d %H:%M",
 		time_zone => 'UTC',
 	);
 
@@ -37,10 +44,12 @@ sub new {
 	$self->{'text'} = {
 		'eng' => {
 			'create_competition' => 'Create competition',
+			'load_competition' => 'Load competition',
 			'my_competitions' => 'My competitions',
 			'text_competition_name' => 'Competition name',
 			'text_date_from' => 'Date from',
 			'text_date_to' => 'Date to',
+			'text_loaded' => 'Images loaded at',
 			'text_no_competitions' => 'There is no competitions.',
 		},
 	};
@@ -95,6 +104,9 @@ sub _process {
 		['b', 'th'],
 		['d', text($self, 'text_date_to')],
 		['e', 'th'],
+		['b', 'th'],
+		['d', text($self, 'text_loaded')],
+		['e', 'th'],
 		['e', 'tr'],
 	);
 	if (! @{$competitions_ar}) {
@@ -122,6 +134,9 @@ sub _process {
 				['e', 'td'],
 				['b', 'td'],
 				['d', d_format($self, $c->dt_to)],
+				['e', 'td'],
+				['b', 'td'],
+				$self->_tags_images_loaded($c),
 				['e', 'td'],
 				['e', 'tr'],
 			);
@@ -162,6 +177,25 @@ sub _process_css {
 	float_right($self, '.right');
 
 	return;
+}
+
+sub _tags_images_loaded {
+	my ($self, $competition) = @_;
+
+	my @tags;
+	if (defined $competition->dt_images_loaded) {
+		push @tags, ['d', dt_format($self, $competition->dt_images_loaded)];
+	} else {
+		push @tags, (
+			['b', 'a'],
+			['a', 'class', 'button right'],
+			['a', 'href', '/load/'.$competition->id],
+			['d', text($self, 'load_competition')],
+			['e', 'a'],
+		);
+	}
+
+	return @tags;
 }
 
 1;
