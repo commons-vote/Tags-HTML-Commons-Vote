@@ -69,6 +69,26 @@ sub new {
 	return $self;
 }
 
+sub _date {
+	my ($self, $date) = @_;
+
+	if (defined $date) {
+		return $self->{'dt_formatter_d'}->format_datetime($date);
+	} else {
+		return '';
+	}
+}
+
+sub _datetime {
+	my ($self, $datetime) = @_;
+
+	if (defined $datetime) {
+		return $self->{'dt_formatter_dt'}->format_datetime($datetime);
+	} else {
+		return '';
+	}
+}
+
 # Process 'Tags'.
 sub _process {
 	my ($self, $competition) = @_;
@@ -127,13 +147,13 @@ sub _process {
 		['b', 'dl'],
 	);
 	tags_dl_item($self, 'date_from',
-		$self->{'dt_formatter_d'}->format_datetime($competition->dt_from));
+		$self->_date($competition->dt_from));
 	tags_dl_item($self, 'date_to',
-		$self->{'dt_formatter_d'}->format_datetime($competition->dt_to));
+		$self->_date($competition->dt_to));
 	tags_dl_item($self, 'organizer', $competition->organizer);
 	tags_dl_item($self, 'number_of_votes', $competition->number_of_votes);
 	tags_dl_item($self, 'date_image_loaded',
-		$self->{'dt_formatter_dt'}->format_datetime($competition->dt_images_loaded));
+		$self->_datetime($competition->dt_images_loaded));
 	$self->{'tags'}->put(
 		['b', 'dt'],
 		['d', text($self, 'sections')],
