@@ -6,6 +6,7 @@ use warnings;
 
 use Class::Utils qw(set_params split_params);
 use Error::Pure qw(err);
+use Scalar::Util qw(blessed);
 use Tags::HTML::Commons::Vote::CSSUtils qw(a_button float_right);
 use Tags::HTML::Commons::Vote::Utils qw(text);
 
