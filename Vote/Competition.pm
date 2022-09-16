@@ -30,7 +30,7 @@ sub new {
 
 	# DateTime format.
 	$self->{'dt_formatter'} = DateTime::Format::Strptime->new(
-		pattern => "%Y-%m-%d",
+		pattern => "%Y/%m/%d",
 		time_zone => 'UTC',
 	);
 
