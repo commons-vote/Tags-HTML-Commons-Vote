@@ -53,12 +53,14 @@ sub new {
 			'date_image_loaded' => 'Date and time of situation when images were downloaded',
 			'date_to' => 'Date to',
 			'edit_competition' => 'Edit competition',
+			'jury_voting' => 'Jury voting',
 			'jury_voting_date_from' => 'Jury voting date from',
 			'jury_voting_date_to' => 'Jury voting date to',
 			'number_of_votes' => 'Number of votes',
 			'organizer' => 'Organizer',
 			'sections' => 'Sections',
 			'competition_not_exists' => "Competition doesn't exist.",
+			'public_voting' => 'Public voting',
 			'public_voting_date_from' => 'Public voting date from',
 			'public_voting_date_to' => 'Public voting date to',
 		},
@@ -138,6 +140,16 @@ sub _process {
 	tags_dl_item($self, 'number_of_votes', $competition->number_of_votes);
 	tags_dl_item($self, 'date_image_loaded',
 		dt_format($self, $competition->dt_images_loaded));
+	tags_dl_item($self, 'jury_voting', $competition->jury_voting);
+	tags_dl_item($self, 'jury_voting_date_from',
+		d_format($self, $competition->dt_jury_voting_from));
+	tags_dl_item($self, 'jury_voting_date_to',
+		d_format($self, $competition->dt_jury_voting_to));
+	tags_dl_item($self, 'public_voting', $competition->public_voting);
+	tags_dl_item($self, 'public_voting_date_from',
+		d_format($self, $competition->dt_public_voting_from));
+	tags_dl_item($self, 'public_voting_date_to',
+		d_format($self, $competition->dt_public_voting_to));
 	$self->{'tags'}->put(
 		['b', 'dt'],
 		['d', text($self, 'sections')],
