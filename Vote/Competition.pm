@@ -53,10 +53,14 @@ sub new {
 			'date_image_loaded' => 'Date and time of situation when images were downloaded',
 			'date_to' => 'Date to',
 			'edit_competition' => 'Edit competition',
+			'jury_voting_date_from' => 'Jury voting date from',
+			'jury_voting_date_to' => 'Jury voting date to',
 			'number_of_votes' => 'Number of votes',
 			'organizer' => 'Organizer',
 			'sections' => 'Sections',
 			'competition_not_exists' => "Competition doesn't exist.",
+			'public_voting_date_from' => 'Public voting date from',
+			'public_voting_date_to' => 'Public voting date to',
 		},
 	};
 
