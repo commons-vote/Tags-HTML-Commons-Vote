@@ -5,7 +5,8 @@ TODO
 3. Vote: Kontrolovat povinne policka a nedovolit vykreslit formular, pokud je tam chyba.
 5. Add url callbacks to Competition
 7. V Competitions a Main je stejny kod pro vykreslovani tabulky soutezi.
-8.
+8. Add endpoint for delete of competition.
+9.
 
 Applied
 =======
