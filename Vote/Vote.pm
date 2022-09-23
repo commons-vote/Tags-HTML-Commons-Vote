@@ -5,7 +5,13 @@ use strict;
 use warnings;
 
 use Class::Utils qw(set_params split_params);
+use Data::HTML::Form;
+use Data::HTML::Form::Input;
 use Error::Pure qw(err);
+use Scalar::Util qw(blessed);
+use Tags::HTML::Commons::Vote::Utils qw(text value);
+use Tags::HTML::Form;
+use Tags::HTML::Image;
 
 our $VERSION = 0.01;
 
@@ -15,13 +21,12 @@ sub new {
 
 	# Create object.
 	my ($object_params_ar, $other_params_ar) = split_params(
-		['css_voting', 'css_voting_author', 'form_link', 'form_method',
-		'image_height', 'text_vote_button', 'title'], @params);
+		['css_voting', 'form_link', 'form_method', 'img_src_cb',
+		'img_width', 'lang', 'text'], @params);
 	my $self = $class->SUPER::new(@{$other_params_ar});
 
-	# CSS classes for voting.
+	# CSS class.
 	$self->{'css_voting'} = 'voting';
-	$self->{'css_voting_author'} = 'author';
 
 	# Form link.
 	$self->{'form_link'} = undef;
@@ -29,17 +34,52 @@ sub new {
 	# Form method.
 	$self->{'form_method'} = 'get';
 
-	# Image height.
-	$self->{'image_height'} = '200px';
+	# Image src callback across data object.
+	$self->{'img_src_cb'} = undef;
 
-	# Text for vote button.
-	$self->{'text_vote_button'} = 'Vote';
+	# Image width in pixels.
+	$self->{'img_width'} = undef;
 
-	# Vote title.
-	$self->{'title'} = undef;
+	# Language.
+	$self->{'lang'} = 'eng';
+
+	# Language texts.
+	$self->{'text'} = {
+		'eng' => {
+			'submit' => 'Vote',
+			'title' => 'Vote',
+			'voted_no' => 'Not voted',
+			'voted_yes' => 'Voted',
+		},
+	};
 
 	# Process params.
 	set_params($self, @{$object_params_ar});
+
+	my $form = Data::HTML::Form->new(
+		'action' => $self->{'form_link'},
+		'css_class' => $self->{'css_voting'}.'-form',
+		'enctype' => 'application/x-www-form-urlencoded',
+		'method' => $self->{'form_method'},
+		'title' => text($self, 'title'),
+	);
+	my $submit = Data::HTML::Form::Input->new(
+		'value' => text($self, 'submit'),
+		'type' => 'submit',
+	);
+	$self->{'_tags_form'} = Tags::HTML::Form->new(
+		'css' => $self->{'css'},
+		'form' => $form,
+		'submit' => $submit,
+		'tags' => $self->{'tags'},
+	);
+
+	$self->{'_tags_image'} = Tags::HTML::Image->new(
+		'css' => $self->{'css'},
+		'img_src_cb' => $self->{'img_src_cb'},
+		'img_width' => $self->{'img_width'},
+		'tags' => $self->{'tags'},
+	);
 
 	# Object.
 	return $self;
@@ -47,107 +87,44 @@ sub new {
 
 # Process 'Tags'.
 sub _process {
-	my ($self, $images_ar) = @_;
+	my ($self, $vote) = @_;
+
+	if (! defined $vote) {
+		err 'Image object is required.';
+	}
+	if (! blessed($vote) || ! $vote->isa('Data::Commons::Vote::Vote')) {
+		err "Vote must be a 'Data::Commons::Vote::Vote' vote object.";
+	}
+
+	my $hidden = Data::HTML::Form::Input->new(
+		'id' => 'image_id',
+		'required' => 1,
+		'type' => 'hidden',
+		value($self, $vote->image, 'id'),
+	),
 
 	$self->{'tags'}->put(
 		['b', 'div'],
 		['a', 'class', $self->{'css_voting'}],
-		['b', 'form'],
-		['a', 'enctype', 'application/x-www-form-urlencoded'],
 	);
-	if (defined $self->{'form_link'}) {
-		$self->{'tags'}->put(
-			['a', 'action', $self->{'form_link'}],
-		);
-	}
-	if (defined $self->{'form_method'}) {
-		$self->{'tags'}->put(
-			['a', 'method', $self->{'form_method'}],
-		);
-	}
+
+	# Information about voting.
 	$self->{'tags'}->put(
-		['b', 'fieldset'],
+		['b', 'div'],
+		['a', 'class', $self->{'css_voting'}.'-info'],
+		$vote->vote_value ? (
+			['d', text($self, 'voted_yes')],
+		) : (
+			['d', text($self, 'voted_no')],
+		),
+		['e', 'div'],
 	);
-	if (defined $self->{'title'}) {
-		$self->{'tags'}->put(
-			['b', 'legend'],
-			['d', $self->{'title'}],
-			['e', 'legend'],
-		);
-	}
-	foreach my $image_hr (@{$images_ar}) {
-		$self->{'tags'}->put(
-			['b', 'div'],
-			['a', 'class', 'voting-item'],
-			['b', 'img'],
-		);
-		my $css_values_hr;
-		if (exists $image_hr->{'width'}) {
-			$css_values_hr->{'width'} = $image_hr->{'width'};
-		}
-		if (defined $self->{'image_height'}) {
-			$css_values_hr->{'height'} = $self->{'image_height'};
-		}
-		if (exists $image_hr->{'height'}) {
-			$css_values_hr->{'height'} = $image_hr->{'height'};
-		}
-		my $image_style = join ';', map { $_.': '.$css_values_hr->{$_} }
-			keys %{$css_values_hr};
-		$self->{'tags'}->put(
-			['a', 'style', $image_style],
-		);
-		$self->{'tags'}->put(
-			['a', 'src', $image_hr->{'url'}],
-		);
-		if (exists $image_hr->{'alt'}) {
-			$self->{'tags'}->put(
-				['a', 'alt', $image_hr->{'alt'}],
-			);
-		}
-		$self->{'tags'}->put(
-			['e', 'img'],
 
-			['b', 'input'],
-			['a', 'type', 'checkbox'],
-			['a', 'id', $image_hr->{'id'}],
-			['a', 'value', $image_hr->{'id'}],
-			['e', 'input'],
-		);
-		if (exists $image_hr->{'author'}) {
-			$self->{'tags'}->put(
-				['b', 'div'],
-				['a', 'class', $self->{'css_voting_author'}],
-			);
-			if ($image_hr->{'author_link'}) {
-				$self->{'tags'}->put(
-					['b', 'a'],
-					['a', 'href', $image_hr->{'author_link'}],
-				);
-			}
-			$self->{'tags'}->put(
-				['d', $image_hr->{'author'}],
-			);
-			if ($image_hr->{'author_link'}) {
-				$self->{'tags'}->put(
-					['e', 'a'],
-				);
-			}
-			$self->{'tags'}->put(
-				['e', 'div'],
-			);
-		}
-		$self->{'tags'}->put(
-			['e', 'div'],
-		);
-	}
+	$self->{'_tags_image'}->process($vote->image);
+
+	$self->{'_tags_form'}->process($hidden);
+
 	$self->{'tags'}->put(
-		['b', 'button'],
-		['a', 'type', 'submit'],
-		['d', $self->{'text_vote_button'}],
-		['e', 'button'],
-
-		['e', 'fieldset'],
-		['e', 'form'],
 		['e', 'div'],
 	);
 
@@ -156,6 +133,19 @@ sub _process {
 
 sub _process_css {
 	my $self = shift;
+
+	$self->{'css'}->put(
+		['s', '.'.$self->{'css_voting'}.'-info'],
+		['d', 'text-align', 'center'],
+		['d', 'color', 'green'],
+		['d', 'font-size', '2em'],
+		['d', 'margin', '1em'],
+		['e'],
+	);
+
+	$self->{'_tags_image'}->process_css;
+
+	$self->{'_tags_form'}->process_css;
 
 	return;
 }
@@ -187,7 +177,15 @@ Tags::HTML::Commons::Vote::Vote - Tags helper for image voting.
 
 Constructor.
 
+Returns instance of object.
+
 =over 8
+
+=item * C<css>
+
+'CSS::Struct::Output' object for process_css processing.
+
+Default value is undef.
 
 =item * C<css_voting>
 
@@ -195,17 +193,35 @@ CSS class for root div element.
 
 Default value is 'voting'.
 
-=item * C<css_voting_author>
+=item * C<form_link>
 
-CSS class for author div element.
-
-Default value is 'author'.
-
-=item * C<public_image_dir>
-
-Public image directory.
+Form action link.
 
 Default value is undef.
+
+=item * C<form_method>
+
+Form method.
+
+Default value is 'get'.
+
+=item * C<img_src_cb>
+
+Image src callback across data object.
+
+Default value is undef.
+
+=item * C<img_width>
+
+Image width in pixels.
+
+Default value is undef, which mean 100% to page.
+
+=item * C<lang>
+
+Language for output texts.
+
+Default value is 'eng'.
 
 =item * C<tags>
 
@@ -213,25 +229,40 @@ Default value is undef.
 
 Default value is undef.
 
+=item * C<text>
+
+Data structure which has texts for module.
+Keys are language keys.
+Values are hash structures with texts.
+Text keys are: submit, title, voted_no and voted_yes.
+
+Default value is:
+
+ {
+         'eng' => {
+                 'submit' => 'Vote',
+                 'title' => 'Vote',
+                 'voted_no' => 'Not voted',
+                 'voted_yes' => 'Voted',
+         },
+ }
+
 =back
 
 =head2 C<process>
 
- $obj->process($images_ar);
+ $obj->process($vote);
 
-Process Tags structure for output with list of image structures.
-Each image structure consists from:
- {
-         'alt' => __ALTERNATIVE_TEXT__ (optional)
-         'author' => __AUTHOR_NAME__ (optional)
-         'author_link' => __LINK_TO_AUTHOR_PAGE__ (optional)
-         'id' => __VOTING_ID__ (required)
-         'url' => __LINK_TO_IMAGE__ (required)
-         'title' => __TITLE__ (optional)
-         'width' => __IMAGE_WIDTH__ (optional)
- }
+Process Tags structure for C<$vote>, which is instance of
+L<Data::Commons::Vote::Vote>.
 
 Returns undef.
+
+=head2 C<process_css>
+
+ $obj->process_css();
+
+Process CSS structure.
 
 =head1 ERRORS
 
@@ -241,48 +272,139 @@ Returns undef.
 
 =head1 EXAMPLE1
 
+=for comment filename=create_and_print_vote.pl
+
  use strict;
  use warnings;
 
+ use Commons::Link;
+ use CSS::Struct::Output::Indent;
+ use Data::Commons::Vote::Image;
+ use Data::Commons::Vote::Person;
+ use Data::Commons::Vote::Vote;
+ use Data::Commons::Vote::VoteType;
  use Tags::HTML::Commons::Vote::Vote;
  use Tags::Output::Indent;
 
  # Object.
+ my $css = CSS::Struct::Output::Indent->new;
  my $tags = Tags::Output::Indent->new;
  my $obj = Tags::HTML::Commons::Vote::Vote->new(
+         'css' => $css,
          'tags' => $tags,
  );
 
- # Process stars.
- $obj->process([{
-         'author' => 'Zuzana Zónová',
-         'url' => 'https://upload.wikimedia.org/wikipedia/commons/a/a4/Michal_from_Czechia.jpg',
- }, {
-         'author' => 'Michal Josef Špaček',
-         'url' => 'https://upload.wikimedia.org/wikipedia/commons/f/f4/Michal_Josef_%C5%A0pa%C4%8Dek_-_self_photo.jpg',
- }, {
-         'url' => 'https://upload.wikimedia.org/wikipedia/commons/7/76/Michal_Josef_%C5%A0pa%C4%8Dek_-_self_photo_3.jpg',
- }]);
+ # Vote object.
+ my $db_creator = Data::Commons::Vote::Person->new(
+         'name' => 'Michal Josef Spacek',
+ );
+ my $uploader = Data::Commons::Vote::Person->new(
+         'name' => 'Zuzana Zonova',
+ );
+ my $voter = Data::Commons::Vote::Person->new(
+         'name' => 'Jan Novak',
+ );
+ my $image = Data::Commons::Vote::Image->new(
+         'comment' => 'Michal from Czechia',
+         'id' => 1,
+         'image' => 'Michal from Czechia.jpg',
+         'uploader' => $uploader,
+ );
+ my $vote_type = Data::Commons::Vote::VoteType->new(
+         'created_by' => $db_creator,
+         'type' => 'public_voting',
+ );
+ my $vote = Data::Commons::Vote::Vote->new(
+         'image' => $image,
+         'person' => $voter,
+         'vote_type' => $vote_type,
+ );
+
+ # Process vote.
+ $obj->process_css;
+ $obj->process($vote);
 
  # Print out.
+ print "CSS\n";
+ print $css->flush;
+ print "\n\n";
+ print "HTML\n";
  print $tags->flush;
 
  # Output:
- # TODO
+ # CSS
+ # .voting-info {
+ #         text-align: center;
+ #         color: green;
+ #         font-size: 2em;
+ #         margin: 1em;
+ # }
+ # .image img {
+ #         width: 100%;
+ # }
+ # .voting-form {
+ #         border-radius: 5px;
+ #         background-color: #f2f2f2;
+ #         padding: 20px;
+ # }
+ # .voting-form input[type=submit]:hover {
+ #         background-color: #45a049;
+ # }
+ # .voting-form input[type=submit] {
+ #         width: 100%;
+ #         background-color: #4CAF50;
+ #         color: white;
+ #         padding: 14px 20px;
+ #         margin: 8px 0;
+ #         border: none;
+ #         border-radius: 4px;
+ #         cursor: pointer;
+ # }
+ # .voting-form input, select, textarea {
+ #         width: 100%;
+ #         padding: 12px 20px;
+ #         margin: 8px 0;
+ #         display: inline-block;
+ #         border: 1px solid #ccc;
+ #         border-radius: 4px;
+ #         box-sizing: border-box;
+ # }
+ # .voting-form-required {
+ #         color: red;
+ # }
+ # 
+ # HTML
+ # <div class="voting">
+ #   <div class="voting-info">
+ #     Not voted
+ #   </div>
+ #   <div class="image">
+ #     <img src="Michal from Czechia.jpg">
+ #     </img>
+ #   </div>
+ #   <form class="voting-form" method="get">
+ #     <p>
+ #       <input type="hidden" name="image_id" id="image_id" value="1">
+ #       </input>
+ #     </p>
+ #     <p>
+ #       <input type="submit" value="Vote">
+ #       </input>
+ #     </p>
+ #   </form>
+ # </div>
 
 =head1 DEPENDENCIES
 
 L<Class::Utils>,
+L<Data::HTML::Form>,
+L<Data::HTML::Form::Input>,
 L<Error::Pure>,
-L<Tags::HTML>.
-
-=head1 SEE ALSO
-
-=over
-
-TODO
-
-=back
+L<Scalar::Util>,
+L<Tags::HTML>,
+L<Tags::HTML::Commons::Vote::Utils>,
+L<Tags::HTML::Form>,
+L<Tags::HTML::Image>.
 
 =head1 REPOSITORY
 
