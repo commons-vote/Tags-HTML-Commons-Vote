@@ -43,6 +43,8 @@ sub new {
 	# Language texts.
 	$self->{'text'} = {
 		'eng' => {
+			'competitions_for_public_voting' => 'Competitions for public voting',
+			'competitions_for_jury_voting' => 'Competitions for jury voting',
 			'create_competition' => 'Create competition',
 			'load_competition' => 'Load competition',
 			'my_competitions' => 'My competitions',
@@ -61,8 +63,7 @@ sub new {
 	return $self;
 }
 
-# Process 'Tags'.
-sub _process {
+sub _check_competitions {
 	my ($self, $competitions_ar) = @_;
 
 	foreach my $competition (@{$competitions_ar}) {
@@ -72,6 +73,147 @@ sub _process {
 			err 'Bad competition object.';
 		}
 	}
+
+	return;
+}
+
+sub _jury_voting {
+	my ($self, $jury_competitions_ar) = @_;
+
+	$self->_check_competitions($jury_competitions_ar);
+
+	$self->{'tags'}->put(
+		['b', 'div'],
+		['a', 'class', 'page-header'],
+
+		['b', 'h1'],
+		['d', text($self, 'competitions_for_jury_voting')],
+		['e', 'h1'],
+
+		['e', 'div'],
+
+		['b', 'table'],
+
+		['b', 'tr'],
+		['b', 'th'],
+		['d', text($self, 'text_competition_name')],
+		['e', 'th'],
+		['b', 'th'],
+		['d', text($self, 'text_date_from')],
+		['e', 'th'],
+		['b', 'th'],
+		['d', text($self, 'text_date_to')],
+		['e', 'th'],
+		['e', 'tr'],
+	);
+	if (! defined $jury_competitions_ar || ! @{$jury_competitions_ar}) {
+		$self->{'tags'}->put(
+			['b', 'tr'],
+			['b', 'td'],
+			['a', 'colspan', 3],
+			['d', text($self, 'text_no_competitions')],
+			['e', 'td'],
+			['e', 'tr'],
+		);
+	} else {
+		foreach my $c (@{$jury_competitions_ar}) {
+			my $uri = '/competition/jury_vote/'.$c->id;
+			$self->{'tags'}->put(
+				['b', 'tr'],
+				['b', 'td'],
+				['b', 'a'],
+				['a', 'href', $uri],
+				['d', $c->name],
+				['e', 'a'],
+				['e', 'td'],
+				['b', 'td'],
+				['d', d_format($self, $c->dt_jury_voting_from)],
+				['e', 'td'],
+				['b', 'td'],
+				['d', d_format($self, $c->dt_jury_voting_to)],
+				['e', 'td'],
+				['e', 'tr'],
+			);
+		}
+	}
+	$self->{'tags'}->put(
+		['e', 'table'],
+	);
+
+	return;
+}
+
+sub _public_voting {
+	my ($self, $public_competitions_ar) = @_;
+
+	$self->_check_competitions($public_competitions_ar);
+
+	$self->{'tags'}->put(
+		['b', 'div'],
+		['a', 'class', 'page-header'],
+
+		['b', 'h1'],
+		['d', text($self, 'competitions_for_public_voting')],
+		['e', 'h1'],
+
+		['e', 'div'],
+
+		['b', 'table'],
+
+		['b', 'tr'],
+		['b', 'th'],
+		['d', text($self, 'text_competition_name')],
+		['e', 'th'],
+		['b', 'th'],
+		['d', text($self, 'text_date_from')],
+		['e', 'th'],
+		['b', 'th'],
+		['d', text($self, 'text_date_to')],
+		['e', 'th'],
+		['e', 'tr'],
+	);
+	if (! defined $public_competitions_ar || ! @{$public_competitions_ar}) {
+		$self->{'tags'}->put(
+			['b', 'tr'],
+			['b', 'td'],
+			['a', 'colspan', 3],
+			['d', text($self, 'text_no_competitions')],
+			['e', 'td'],
+			['e', 'tr'],
+		);
+	} else {
+		foreach my $c (@{$public_competitions_ar}) {
+			my $uri = '/competition/public_vote/'.$c->id;
+			$self->{'tags'}->put(
+				['b', 'tr'],
+				['b', 'td'],
+				['b', 'a'],
+				['a', 'href', $uri],
+				['d', $c->name],
+				['e', 'a'],
+				['e', 'td'],
+				['b', 'td'],
+				['d', d_format($self, $c->dt_public_voting_from)],
+				['e', 'td'],
+				['b', 'td'],
+				['d', d_format($self, $c->dt_public_voting_to)],
+				['e', 'td'],
+				['e', 'tr'],
+			);
+		}
+	}
+	$self->{'tags'}->put(
+		['e', 'table'],
+	);
+
+	return;
+}
+
+# Process 'Tags'.
+sub _process {
+	my ($self, $competitions_ar, $jury_competitions_ar, $public_competitions_ar) = @_;
+
+	$self->_check_competitions($competitions_ar);
 
 	$self->{'tags'}->put(
 		['b', 'div'],
@@ -109,11 +251,11 @@ sub _process {
 		['e', 'th'],
 		['e', 'tr'],
 	);
-	if (! @{$competitions_ar}) {
+	if (! defined $competitions_ar || ! @{$competitions_ar}) {
 		$self->{'tags'}->put(
 			['b', 'tr'],
 			['b', 'td'],
-			['a', 'colspan', 3],
+			['a', 'colspan', 4],
 			['d', text($self, 'text_no_competitions')],
 			['e', 'td'],
 			['e', 'tr'],
@@ -144,6 +286,12 @@ sub _process {
 	}
 	$self->{'tags'}->put(
 		['e', 'table'],
+	);
+
+	$self->_jury_voting($jury_competitions_ar);
+	$self->_public_voting($public_competitions_ar);
+
+	$self->{'tags'}->put(
 		['e', 'div'],
 	);
 
