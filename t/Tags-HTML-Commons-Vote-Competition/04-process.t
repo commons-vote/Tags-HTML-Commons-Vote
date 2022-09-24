@@ -2,6 +2,7 @@ use strict;
 use warnings;
 
 use Data::Commons::Vote::Competition;
+use Data::Commons::Vote::Person;
 use DateTime;
 use English;
 use Error::Pure::Utils qw(clean);
@@ -10,6 +11,11 @@ use Tags::Output::Structure;
 use Test::More 'tests' => 4;
 use Test::NoWarnings;
 use Unicode::UTF8 qw(decode_utf8);
+
+# Common.
+my $creator = Data::Commons::Vote::Person->new(
+	'name' => decode_utf8('Michal Josef Špaček'),
+);
 
 # Test.
 my $tags = Tags::Output::Structure->new;
@@ -33,10 +39,31 @@ $obj = Tags::HTML::Commons::Vote::Competition->new(
 );
 $obj->process(
 	Data::Commons::Vote::Competition->new(
+		'created_by' => $creator,
 		'id' => 1,
 		'name' => 'Czech Wiki Photo',
 		'dt_from' => DateTime->new(
 			'day' => 10,
+			'month' => 10,
+			'year' => 2021,
+		),
+		'dt_jury_voting_from' => DateTime->new(
+			'day' => 11,
+			'month' => 10,
+			'year' => 2021,
+		),
+		'dt_jury_voting_to' => DateTime->new(
+			'day' => 15,
+			'month' => 10,
+			'year' => 2021,
+		),
+		'dt_public_voting_from' => DateTime->new(
+			'day' => 11,
+			'month' => 10,
+			'year' => 2021,
+		),
+		'dt_public_voting_to' => DateTime->new(
+			'day' => 15,
 			'month' => 10,
 			'year' => 2021,
 		),
@@ -68,13 +95,49 @@ is_deeply(
 		['d', 'Date from'],
 		['e', 'dt'],
 		['b', 'dd'],
-		['d', '2021-10-10T00:00:00'],
+		['d', '2021/10/10'],
 		['e', 'dd'],
 		['b', 'dt'],
 		['d', 'Date to'],
 		['e', 'dt'],
 		['b', 'dd'],
-		['d', '2021-11-20T00:00:00'],
+		['d', '2021/11/20'],
+		['e', 'dd'],
+		['b', 'dt'],
+		['d', 'Jury voting'],
+		['e', 'dt'],
+		['b', 'dd'],
+		['d', 1],
+		['e', 'dd'],
+		['b', 'dt'],
+		['d', 'Jury voting date from'],
+		['e', 'dt'],
+		['b', 'dd'],
+		['d', '2021/10/11'],
+		['e', 'dd'],
+		['b', 'dt'],
+		['d', 'Jury voting date to'],
+		['e', 'dt'],
+		['b', 'dd'],
+		['d', '2021/10/15'],
+		['e', 'dd'],
+		['b', 'dt'],
+		['d', 'Public voting'],
+		['e', 'dt'],
+		['b', 'dd'],
+		['d', 1],
+		['e', 'dd'],
+		['b', 'dt'],
+		['d', 'Public voting date from'],
+		['e', 'dt'],
+		['b', 'dd'],
+		['d', '2021/10/11'],
+		['e', 'dd'],
+		['b', 'dt'],
+		['d', 'Public voting date to'],
+		['e', 'dt'],
+		['b', 'dd'],
+		['d', '2021/10/15'],
 		['e', 'dd'],
 		['b', 'dt'],
 		['d', 'Sections'],
