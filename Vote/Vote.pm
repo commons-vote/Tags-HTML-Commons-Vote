@@ -315,10 +315,12 @@ Process CSS structure.
 
  use Commons::Link;
  use CSS::Struct::Output::Indent;
+ use Data::Commons::Vote::Competition;
  use Data::Commons::Vote::Image;
  use Data::Commons::Vote::Person;
  use Data::Commons::Vote::Vote;
  use Data::Commons::Vote::VoteType;
+ use DateTime;
  use Tags::HTML::Commons::Vote::Vote;
  use Tags::Output::Indent;
 
@@ -340,6 +342,20 @@ Process CSS structure.
  my $voter = Data::Commons::Vote::Person->new(
          'name' => 'Jan Novak',
  );
+ my $competition = Data::Commons::Vote::Competition->new(
+         'created_by' => $db_creator,
+         'dt_from' => DateTime->new(
+                  'day' => 14,
+                  'month' => 7,
+                  'year' => 2009,
+         ),
+         'dt_to' => DateTime->new(
+                  'day' => 24,
+                  'month' => 7,
+                  'year' => 2009,
+         ),
+         'name' => 'Example competition',
+ );
  my $image = Data::Commons::Vote::Image->new(
          'comment' => 'Michal from Czechia',
          'id' => 1,
@@ -351,6 +367,7 @@ Process CSS structure.
          'type' => 'public_voting',
  );
  my $vote = Data::Commons::Vote::Vote->new(
+         'competition' => $competition,
          'image' => $image,
          'person' => $voter,
          'vote_type' => $vote_type,
@@ -420,7 +437,11 @@ Process CSS structure.
  #   </div>
  #   <form class="voting-form" method="get">
  #     <p>
+ #       <input type="hidden" name="competition_id" id="competition_id">
+ #       </input>
  #       <input type="hidden" name="image_id" id="image_id" value="1">
+ #       </input>
+ #       <input type="hidden" name="vote_type_id" id="vote_type_id">
  #       </input>
  #     </p>
  #     <p>
