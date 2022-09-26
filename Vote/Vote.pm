@@ -277,6 +277,12 @@ Default value is:
          },
  }
 
+=item * C<voting_text_cb>
+
+Voting text callback.
+Arguments are: C<$self> and C<$vote> L<Data::Commons::Vote::Vote> object.
+If is this callback undefined, it's used 'voted_no' and 'voted_yes' texts.
+
 =back
 
 =head2 C<process>
