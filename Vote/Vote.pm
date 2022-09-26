@@ -104,12 +104,26 @@ sub _process {
 		err "Vote must be a 'Data::Commons::Vote::Vote' vote object.";
 	}
 
-	my $hidden = Data::HTML::Form::Input->new(
-		'id' => 'image_id',
-		'required' => 1,
-		'type' => 'hidden',
-		value($self, $vote->image, 'id'),
-	),
+	my @hidden = (
+		Data::HTML::Form::Input->new(
+			'id' => 'competition_id',
+			'required' => 1,
+			'type' => 'hidden',
+			value($self, $vote->competition, 'id'),
+		),
+		Data::HTML::Form::Input->new(
+			'id' => 'image_id',
+			'required' => 1,
+			'type' => 'hidden',
+			value($self, $vote->image, 'id'),
+		),
+		Data::HTML::Form::Input->new(
+			'id' => 'vote_type_id',
+			'required' => 1,
+			'type' => 'hidden',
+			value($self, $vote->vote_type, 'id'),
+		),
+	);
 
 	$self->{'tags'}->put(
 		['b', 'div'],
@@ -138,7 +152,7 @@ sub _process {
 
 	$self->{'_tags_image'}->process($vote->image);
 
-	$self->{'_tags_form'}->process($hidden);
+	$self->{'_tags_form'}->process(@hidden);
 
 	$self->{'tags'}->put(
 		['e', 'div'],
