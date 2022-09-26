@@ -22,7 +22,7 @@ sub new {
 	# Create object.
 	my ($object_params_ar, $other_params_ar) = split_params(
 		['css_voting', 'form_link', 'form_method', 'img_src_cb',
-		'img_width', 'lang', 'text'], @params);
+		'img_width', 'lang', 'text', 'voting_text_cb'], @params);
 	my $self = $class->SUPER::new(@{$other_params_ar});
 
 	# CSS class.
@@ -53,6 +53,9 @@ sub new {
 		},
 	};
 
+	# Voting text callback.
+	$self->{'voting_text_cb'} = undef;
+
 	# Process params.
 	set_params($self, @{$object_params_ar});
 
@@ -81,6 +84,11 @@ sub new {
 		'tags' => $self->{'tags'},
 	);
 
+	# Check voting text callback.
+	if (defined $self->{'voting_text_cb'} && ref $self->{'voting_text_cb'} ne 'CODE') {
+		err "Parameter 'voting_text_cb' must be a callback.";
+	}
+
 	# Object.
 	return $self;
 }
@@ -108,15 +116,23 @@ sub _process {
 		['a', 'class', $self->{'css_voting'}],
 	);
 
+	# Voting text.
+	my $voting_text;
+	if (defined $self->{'voting_text_cb'}) {
+		$voting_text = $self->{'voting_text_cb'}->($self, $vote);
+	} else {
+		if ($vote->vote_value) {
+			$voting_text = text($self, 'voted_yes');
+		} else {
+			$voting_text = text($self, 'voted_no');
+		};
+	}
+
 	# Information about voting.
 	$self->{'tags'}->put(
 		['b', 'div'],
 		['a', 'class', $self->{'css_voting'}.'-info'],
-		$vote->vote_value ? (
-			['d', text($self, 'voted_yes')],
-		) : (
-			['d', text($self, 'voted_no')],
-		),
+		['d', $voting_text],
 		['e', 'div'],
 	);
 
