@@ -29,10 +29,17 @@ no_index:
 requires:
   Class::Utils: 0.02
   Commons::Link: 0
+  Data::HTML::Form: 0
+  Data::HTML::Form::Input: 0
+  Data::HTML::Textarea: 0
   DateTime::Format::Strptime: 0
   Error::Pure: 0.07
+  Readonly: 0
   Scalar::Util: 0
   Tags::HTML: 0.02
+  Tags::HTML::Form: 0
+  Tags::HTML::Image: 0
+  Unicode::UTF8: 0
   perl: 5.8.0
 resources:
   bugtracker: https://github.com/michal-josef-spacek/Tags-HTML-Commons-Vote/issues
