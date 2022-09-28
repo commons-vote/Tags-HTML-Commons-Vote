@@ -132,7 +132,6 @@ sub _process {
 			'id' => 'public_voting',
 			'label' => text($self, 'public_voting'),
 			'type' => 'checkbox',
-			value($self, $competition, 'public_voting'),
 		),
 		Data::HTML::Form::Input->new(
 			'id' => 'public_voting_date_from',
@@ -160,7 +159,6 @@ sub _process {
 			'id' => 'jury_voting',
 			'label' => text($self, 'jury_voting'),
 			'type' => 'checkbox',
-			value($self, $competition, 'jury_voting'),
 		),
 		Data::HTML::Form::Input->new(
 			'id' => 'jury_voting_date_from',
