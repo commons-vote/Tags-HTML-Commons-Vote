@@ -80,19 +80,31 @@ sub new {
 
 # Process 'Tags'.
 sub _process {
-	my ($self, $section) = @_;
+	my ($self, $section, $competition) = @_;
 
+	my ($competition_id, $competition_name);
+	if (defined $competition) {
+		$competition_id = $competition->id;
+		$competition_name = $competition->name;
+	} elsif (defined $section && defined $section->competition) {
+		$competition_id = $section->competition->id;
+		$competition_name = $section->competition->name;
+	} else {
+		err "Bad section form.";
+	}
 	my @fields = (
-		defined $section->competition ? (
-			# TODO Rewrite to printable form. Add link to competition page.
-			Data::HTML::Form::Input->new(
-				'id' => 'competition',
-				'label' => text($self, 'competition'),
-				'disabled' => 1,
-				'type' => 'text',
-				'value' => $section->competition->name,
-			),
-		) : (),
+		# TODO Rewrite to printable form. Add link to competition page.
+		Data::HTML::Form::Input->new(
+			'label' => text($self, 'competition'),
+			'disabled' => 1,
+			'type' => 'text',
+			'value' => $competition_name,
+		),
+		Data::HTML::Form::Input->new(
+			'id' => 'competition_id',
+			'type' => 'hidden',
+			'value' => $competition_id,
+		),
 		Data::HTML::Form::Input->new(
 			'id' => 'section_name',
 			'label' => text($self, 'section_name'),
