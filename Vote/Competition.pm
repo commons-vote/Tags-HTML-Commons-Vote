@@ -182,7 +182,7 @@ sub _process {
 	$self->{'tags'}->put(
 		['b', 'a'],
 		['a', 'class', 'button'],
-		['a', 'href', '/section_form/?action=add&competition_id='.$competition->id],
+		['a', 'href', '/section_form/?competition_id='.$competition->id],
 		['d', text($self, 'add_section')],
 		['e', 'a'],
 
