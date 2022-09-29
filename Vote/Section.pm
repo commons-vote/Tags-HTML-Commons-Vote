@@ -8,7 +8,7 @@ use Class::Utils qw(set_params split_params);
 use Commons::Link;
 use Error::Pure qw(err);
 use Readonly;
-use Tags::HTML::Commons::Vote::Utils qw(text);
+use Tags::HTML::Commons::Vote::Utils qw(text value);
 use Tags::HTML::Commons::Vote::Utils::CSS qw(a_button float_right);
 use Tags::HTML::Commons::Vote::Utils::Tags qw(tags_dl_item);
 use Unicode::UTF8 qw(decode_utf8);
@@ -32,6 +32,7 @@ sub new {
 	# Language texts.
 	$self->{'text'} = {
 		'eng' => {
+			'categories' => 'Categories',
 			'competition' => 'Competition',
 			'edit_section' => 'Edit section',
 			'number_of_votes' => 'Number of votes',
@@ -90,6 +91,37 @@ sub _process {
 	);
 	tags_dl_item($self, 'number_of_votes', $section->number_of_votes);
 	$self->{'tags'}->put(
+		['b', 'dt'],
+		['d', text($self, 'categories')],
+		['e', 'dt'],
+
+		['b', 'dd'],
+	);
+	my $num = 0;
+	foreach my $category (@{$section->categories}) {
+		if (! $num) {
+			$self->{'tags'}->put(
+				['b', 'ul'],
+			);
+			$num = 1;
+		}
+		$self->{'tags'}->put(
+			['b', 'li'],
+			['b', 'a'],
+			['a', 'href', 'https://commons.wikimedia.org/wiki/Category:'.$category->category],
+			['d', $category->category],
+			['e', 'a'],
+			['e', 'li'],
+		);
+	}
+	if ($num) {
+		$self->{'tags'}->put(
+			['e', 'ul'],
+		);
+	}
+	$self->{'tags'}->put(
+		['e', 'dd'],
+
 		['e', 'dl'],
 		['e', 'div'],
 	);
