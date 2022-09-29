@@ -88,6 +88,16 @@ sub _process {
 		['e', 'h1'],
 
 		['b', 'dl'],
+
+		['b', 'dt'],
+		['d', text($self, 'competition')],
+		['e', 'dt'],
+		['b', 'dd'],
+		['b', 'a'],
+		['a', 'href', '/competition/'.$section->competition->id],
+		['d', $section->competition->name],
+		['e', 'a'],
+		['e', 'dd'],
 	);
 	tags_dl_item($self, 'number_of_votes', $section->number_of_votes);
 	$self->{'tags'}->put(
