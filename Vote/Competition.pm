@@ -10,7 +10,7 @@ use DateTime::Format::Strptime;
 use Error::Pure qw(err);
 use Readonly;
 use Scalar::Util qw(blessed);
-use Tags::HTML::Commons::Vote::Utils qw(d_format dt_format text value);
+use Tags::HTML::Commons::Vote::Utils qw(d_format dt_format text);
 use Tags::HTML::Commons::Vote::Utils::CSS qw(a_button float_right);
 use Tags::HTML::Commons::Vote::Utils::Tags qw(tags_dl_item);
 use Unicode::UTF8 qw(decode_utf8);
