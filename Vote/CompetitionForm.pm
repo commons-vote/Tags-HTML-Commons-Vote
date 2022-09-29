@@ -87,6 +87,11 @@ sub _process {
 
 	my @fields = (
 		Data::HTML::Form::Input->new(
+			'id' => 'competition_id',
+			'type' => 'hidden',
+			value($self, $competition, 'id'),
+		),
+		Data::HTML::Form::Input->new(
 			'id' => 'competition_name',
 			'label' => text($self, 'competition_name'),
 			'required' => 1,
