@@ -145,7 +145,7 @@ is_deeply(
 		['b', 'dd'],
 		['b', 'a'],
 		['a', 'class', 'button'],
-		['a', 'href', '/section_form/?action=add&competition_id=1'],
+		['a', 'href', '/section_form/?competition_id=1'],
 		['d', 'Add section'],
 		['e', 'a'],
 		['e', 'dd'],
