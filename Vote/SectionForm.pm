@@ -130,6 +130,10 @@ sub _process {
 			'placeholder' => text($self, 'categories_placeholder'),
 			'requires' => 1,
 			'rows' => 6,
+			value($self, $section, 'categories', sub {
+				my $categories_ar = shift;
+				return join "\r\n", map { $_->category } @{$categories_ar};
+			}),
 		),
 	);
 
