@@ -41,6 +41,7 @@ sub new {
 			'competition' => 'Competition',
 			'edit_section' => 'Edit section',
 			'number_of_votes' => 'Number of votes',
+			'remove_section' => 'Remove section',
 			'section_logo' => 'Logo',
 			'section_not_exists' => "Section doesn't exist.",
 		},
@@ -76,11 +77,20 @@ sub _process {
 		['b', 'div'],
 		['a', 'class', $self->{'css_section'}],
 
+		['b', 'div'],
+		['a', 'class', 'right'],
 		['b', 'a'],
-		['a', 'class', 'button right'],
+		['a', 'class', 'button'],
 		['a', 'href', '/section_form/'.$section->id],
 		['d', text($self, 'edit_section')],
 		['e', 'a'],
+
+		['b', 'a'],
+		['a', 'class', 'button'],
+		['a', 'href', '/section_remove/'.$section->id],
+		['d', text($self, 'remove_section')],
+		['e', 'a'],
+		['e', 'div'],
 
 		$section_logo_url ? (
 			['b', 'figure'],
