@@ -17,7 +17,7 @@ sub new {
 
 	# Create object.
 	my ($object_params_ar, $other_params_ar) = split_params(
-		['css_main', 'lang', 'logo', 'logout_url', 'text'], @params);
+		['css_main', 'lang', 'logo', 'logo_url', 'logout_url', 'text'], @params);
 	my $self = $class->SUPER::new(@{$other_params_ar});
 
 	$self->{'css_main'} = 'menu';
@@ -31,6 +31,9 @@ sub new {
 
 	# Logo width in pixels.
 	$self->{'logo_width'} = 100;
+
+	# Logo URL.
+	$self->{'logo_url'} = undef;
 
 	# Logout URL.
 	$self->{'logout_url'} = undef;
@@ -73,11 +76,18 @@ sub _process {
 		['a', 'id', 'menu-left'],
 
 		# Logo.
+		defined $self->{'logo_url'} ? (
+			['b', 'a'],
+			['a', 'href', $self->{'logo_url'}],
+		) : (),
 		['b', 'img'],
 		['a', 'id', 'logo'],
 		['a', 'src', $self->{'commons_link'}->thumb_link($self->{'logo'}, $self->{'logo_width'})],
 		['a', 'alt', 'logo'],
 		['e', 'img'],
+		defined $self->{'logo_url'} ? (
+			['e', 'a'],
+		) : (),
 
 		# Actual section.
 		defined $data_hr->{'section'} ? (
