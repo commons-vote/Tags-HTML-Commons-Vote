@@ -121,7 +121,8 @@ sub _process {
 		Data::HTML::Form::Input->new(
 			'id' => 'number_of_votes',
 			'label' => text($self, 'number_of_votes'),
-			'type' => 'text',
+			'min' => 0,
+			'type' => 'number',
 			value($self, $section, 'number_of_votes'),
 		),
 		Data::HTML::Textarea->new(
