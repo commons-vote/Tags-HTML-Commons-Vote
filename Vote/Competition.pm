@@ -15,6 +15,8 @@ use Tags::HTML::Commons::Vote::Utils::CSS qw(a_button float_right);
 use Tags::HTML::Commons::Vote::Utils::Tags qw(tags_dl_item);
 use Unicode::UTF8 qw(decode_utf8);
 
+Readonly::Scalar our $PREVIEW_WIDTH => 250;
+
 our $VERSION = 0.01;
 
 # Constructor.
@@ -94,12 +96,12 @@ sub _process {
 
 	my $competition_logo_url;
 	if ($competition->logo) {
-		$competition_logo_url = $self->{'_commons_link'}->link($competition->logo);
+		$competition_logo_url = $self->{'_commons_link'}->thumb_link($competition->logo, $PREVIEW_WIDTH);
 	}
 	my $organizer_logo_url;
 	if ($competition->organizer_logo) {
-		$organizer_logo_url = $self->{'_commons_link'}->link(
-			$competition->organizer_logo);
+		$organizer_logo_url = $self->{'_commons_link'}->thumb_link(
+			$competition->organizer_logo, $PREVIEW_WIDTH);
 	}
 
 	$self->{'tags'}->put(
