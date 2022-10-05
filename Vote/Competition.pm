@@ -51,6 +51,7 @@ sub new {
 	$self->{'text'} = {
 		'eng' => {
 			'add_section' => 'Add section',
+			'competition_logo' => 'Logo',
 			'date_from' => 'Date from',
 			'date_image_loaded' => 'Date and time of situation when images were downloaded',
 			'date_to' => 'Date to',
@@ -60,6 +61,7 @@ sub new {
 			'jury_voting_date_to' => 'Jury voting date to',
 			'number_of_votes' => 'Number of votes',
 			'organizer' => 'Organizer',
+			'organizer_logo' => 'Organizer logo',
 			'sections' => 'Sections',
 			'competition_not_exists' => "Competition doesn't exist.",
 			'public_voting' => 'Public voting',
@@ -115,17 +117,27 @@ sub _process {
 		['e', 'a'],
 
 		$competition_logo_url ? (
-			['b', 'img'],
+			['b', 'figure'],
 			['a', 'class', 'logo'],
+			['b', 'img'],
 			['a', 'src', $competition_logo_url],
 			['e', 'img'],
+			['b', 'figcaption'],
+			['d', text($self, 'competition_logo')],
+			['e', 'figcaption'],
+			['e', 'figure'],
 		) : (),
 
 		$organizer_logo_url ? (
-			['b', 'img'],
+			['b', 'figure'],
 			['a', 'class', 'logo'],
+			['b', 'img'],
 			['a', 'src', $organizer_logo_url],
 			['e', 'img'],
+			['b', 'figcaption'],
+			['d', text($self, 'organizer_logo')],
+			['e', 'figcaption'],
+			['e', 'figure'],
 		) : (),
 
 		['b', 'h1'],
@@ -206,8 +218,20 @@ sub _process_css {
 		['e'],
 
 		['s', '.logo'],
+		['s', '.logo img'],
+		['d', 'padding', 0],
+		['d', 'margin', 0],
 		['d', 'float', 'right'],
 		['d', 'width', $self->{'logo_width'}],
+		['e'],
+
+		['s', '.logo'],
+		['d', 'margin', '0 1em 1em 1em'],
+		['d', 'border', '1px solid black'],
+		['e'],
+
+		['s', '.logo figcaption'],
+		['d', 'text-align', 'center'],
 		['e'],
 	);
 	a_button($self, '.button');
