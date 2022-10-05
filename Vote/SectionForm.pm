@@ -93,6 +93,11 @@ sub _process {
 		err "Bad section form.";
 	}
 	my @fields = (
+		Data::HTML::Form::Input->new(
+			'id' => 'section_id',
+			'type' => 'hidden',
+			value($self, $section, 'id'),
+		),
 		# TODO Rewrite to printable form. Add link to competition page.
 		Data::HTML::Form::Input->new(
 			'label' => text($self, 'competition'),
