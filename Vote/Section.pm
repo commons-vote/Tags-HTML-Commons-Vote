@@ -23,13 +23,16 @@ sub new {
 
 	# Create object.
 	my ($object_params_ar, $other_params_ar) = split_params(
-		['css_section', 'lang', 'text'], @params);
+		['css_section', 'lang', 'logo_width', 'text'], @params);
 	my $self = $class->SUPER::new(@{$other_params_ar});
 
 	$self->{'css_section'} = 'section';
 
 	# Language.
 	$self->{'lang'} = 'eng';
+
+	# logo width.
+	$self->{'logo_width'} = '130px',
 
 	# Language texts.
 	$self->{'text'} = {
@@ -38,6 +41,7 @@ sub new {
 			'competition' => 'Competition',
 			'edit_section' => 'Edit section',
 			'number_of_votes' => 'Number of votes',
+			'section_logo' => 'Logo',
 			'section_not_exists' => "Section doesn't exist.",
 		},
 	};
@@ -79,10 +83,15 @@ sub _process {
 		['e', 'a'],
 
 		$section_logo_url ? (
-			['b', 'img'],
+			['b', 'figure'],
 			['a', 'class', 'logo'],
+			['b', 'img'],
 			['a', 'src', $section_logo_url],
 			['e', 'img'],
+			['b', 'figcaption'],
+			['d', text($self, 'section_logo')],
+			['e', 'figcaption'],
+			['e', 'figure'],
 		) : (),
 
 		['b', 'h1'],
@@ -150,8 +159,20 @@ sub _process_css {
 		['e'],
 
 		['s', '.logo'],
+		['s', '.logo img'],
+		['d', 'padding', 0],
+		['d', 'margin', 0],
 		['d', 'float', 'right'],
-		['d', 'width', '20%'],
+		['d', 'width', $self->{'logo_width'}],
+		['e'],
+
+		['s', '.logo'],
+		['d', 'margin', '0 1em 1em 1em'],
+		['d', 'border', '1px solid black'],
+		['e'],
+
+		['s', '.logo figcaption'],
+		['d', 'text-align', 'center'],
 		['e'],
 	);
 	a_button($self, '.button');
