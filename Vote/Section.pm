@@ -44,6 +44,7 @@ sub new {
 			'remove_section' => 'Remove section',
 			'section_logo' => 'Logo',
 			'section_not_exists' => "Section doesn't exist.",
+			'view_images' => 'View images',
 		},
 	};
 
@@ -89,6 +90,12 @@ sub _process {
 		['a', 'class', 'button'],
 		['a', 'href', '/section_remove/'.$section->id],
 		['d', text($self, 'remove_section')],
+		['e', 'a'],
+
+		['b', 'a'],
+		['a', 'class', 'button'],
+		['a', 'href', '/images/'.$section->id],
+		['d', text($self, 'view_images')],
 		['e', 'a'],
 		['e', 'div'],
 
