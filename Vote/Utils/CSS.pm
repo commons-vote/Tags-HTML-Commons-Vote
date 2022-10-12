@@ -24,7 +24,7 @@ sub a_button {
 		['d', 'border', '1px solid transparent'],
 		['d', 'border-radius', '4px'],
 		['d', 'padding', '6px 12px'],
-		['d', 'margin-bottom', 0],
+		['d', 'margin', '2px'],
 		['d', 'font-size', '14px'],
 		['d', 'font-weight', '400'],
 		['d', 'text-align', 'center'],
