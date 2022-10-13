@@ -108,6 +108,7 @@ sub _process {
 			['a', 'id', 'login'],
 			# Login name
 			['d', $data_hr->{'login_name'}],
+			['d', '&nbsp;'],
 			# Logout link
 			['d', '('],
 			['b', 'a'],
