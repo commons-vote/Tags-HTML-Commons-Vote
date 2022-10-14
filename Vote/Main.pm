@@ -363,7 +363,8 @@ Tags::HTML::Commons::Vote::Main - Tags helper for main page.
  use Tags::HTML::Commons::Vote::Main;
 
  my $obj = Tags::HTML::Commons::Vote::Main->new(%params);
- $obj->process($competition_hr);
+ $obj->process($competitions_ar, $jury_competitions_ar, $public_competitions_ar);
+ $obj->process_css;
 
 =head1 METHODS
 
@@ -395,9 +396,10 @@ Default value is undef.
 
 =head2 C<process>
 
- $obj->process($competition_hr);
+ $obj->process($competitions_ar, $jury_competitions_ar, $public_competitions_ar);
 
 Process Tags structure for output with competition structure.
+TODO
 Structure consists from:
  {
          'id' => __COMPETITION_ID__ (required)
@@ -407,6 +409,12 @@ Structure consists from:
  }
 
 Returns undef.
+
+=head2 C<process_css>
+
+ $obj->process_css;
+
+TODO
 
 =head1 ERRORS
 
