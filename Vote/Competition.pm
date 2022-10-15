@@ -68,6 +68,7 @@ sub new {
 			'public_voting' => 'Public voting',
 			'public_voting_date_from' => 'Public voting date from',
 			'public_voting_date_to' => 'Public voting date to',
+			'view_competition_logs' => 'View logs',
 		},
 	};
 
@@ -123,6 +124,12 @@ sub _process {
 		['a', 'class', 'button'],
 		['a', 'href', '/load/'.$competition->id],
 		['d', text($self, 'load_competition')],
+		['e', 'a'],
+
+		['b', 'a'],
+		['a', 'class', 'button'],
+		['a', 'href', '/logs/'.$competition->id],
+		['d', text($self, 'view_competition_logs')],
 		['e', 'a'],
 		['e', 'div'],
 
