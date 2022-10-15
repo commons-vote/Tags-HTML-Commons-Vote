@@ -11,7 +11,7 @@ use Error::Pure qw(err);
 use Readonly;
 use Scalar::Util qw(blessed);
 use Tags::HTML::Commons::Vote::Utils qw(d_format dt_format text);
-use Tags::HTML::Commons::Vote::Utils::CSS qw(a_button float_right);
+use Tags::HTML::Commons::Vote::Utils::CSS qw(a_button button_list float_right);
 use Tags::HTML::Commons::Vote::Utils::Tags qw(tags_dl_item);
 use Unicode::UTF8 qw(decode_utf8);
 
@@ -59,6 +59,7 @@ sub new {
 			'jury_voting' => 'Jury voting',
 			'jury_voting_date_from' => 'Jury voting date from',
 			'jury_voting_date_to' => 'Jury voting date to',
+			'load_competition' => 'Load competition',
 			'number_of_votes' => 'Number of votes',
 			'organizer' => 'Organizer',
 			'organizer_logo' => 'Organizer logo',
@@ -110,11 +111,20 @@ sub _process {
 		['b', 'div'],
 		['a', 'class', $self->{'css_competition'}],
 
+		['b', 'div'],
+		['a', 'class', 'right button-list'],
 		['b', 'a'],
-		['a', 'class', 'button right'],
+		['a', 'class', 'button'],
 		['a', 'href', '/competition_form/'.$competition->id],
 		['d', text($self, 'edit_competition')],
 		['e', 'a'],
+
+		['b', 'a'],
+		['a', 'class', 'button'],
+		['a', 'href', '/load/'.$competition->id],
+		['d', text($self, 'load_competition')],
+		['e', 'a'],
+		['e', 'div'],
 
 		$competition_logo_url ? (
 			['b', 'figure'],
@@ -235,6 +245,7 @@ sub _process_css {
 		['e'],
 	);
 	a_button($self, '.button');
+	button_list($self, '.button-list');
 	float_right($self, '.right');
 
 	return;
