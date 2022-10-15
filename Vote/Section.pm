@@ -92,11 +92,13 @@ sub _process {
 		['d', text($self, 'remove_section')],
 		['e', 'a'],
 
-		['b', 'a'],
-		['a', 'class', 'button'],
-		['a', 'href', '/images/'.$section->id],
-		['d', text($self, 'view_images')],
-		['e', 'a'],
+		(defined $section->competition && defined $section->competition->dt_images_loaded) ? (
+			['b', 'a'],
+			['a', 'class', 'button'],
+			['a', 'href', '/images/'.$section->id],
+			['d', text($self, 'view_images')],
+			['e', 'a'],
+		) : (),
 		['e', 'div'],
 
 		$section_logo_url ? (
