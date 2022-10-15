@@ -9,7 +9,7 @@ use Commons::Link;
 use Error::Pure qw(err);
 use Readonly;
 use Tags::HTML::Commons::Vote::Utils qw(text value);
-use Tags::HTML::Commons::Vote::Utils::CSS qw(a_button float_right);
+use Tags::HTML::Commons::Vote::Utils::CSS qw(a_button button_list float_right);
 use Tags::HTML::Commons::Vote::Utils::Tags qw(tags_dl_item);
 use Unicode::UTF8 qw(decode_utf8);
 
@@ -79,7 +79,7 @@ sub _process {
 		['a', 'class', $self->{'css_section'}],
 
 		['b', 'div'],
-		['a', 'class', 'right'],
+		['a', 'class', 'right button-list'],
 		['b', 'a'],
 		['a', 'class', 'button'],
 		['a', 'href', '/section_form/'.$section->id],
@@ -193,6 +193,7 @@ sub _process_css {
 		['e'],
 	);
 	a_button($self, '.button');
+	button_list($self, '.button-list');
 	float_right($self, '.right');
 
 	return;

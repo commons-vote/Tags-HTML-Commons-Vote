@@ -6,7 +6,7 @@ use warnings;
 
 use Readonly;
 
-Readonly::Array our @EXPORT_OK => qw(a_button float_right);
+Readonly::Array our @EXPORT_OK => qw(a_button button_list float_right);
 
 our $VERSION = 0.01;
 
@@ -31,6 +31,19 @@ sub a_button {
 		['d', 'white-space', 'nowrap'],
 		['d', 'line-height', '1.42857143'],
 		['d', 'text-decoration', 'none'],
+		['e'],
+	);
+
+	return;
+}
+
+sub button_list {
+	my ($self, $selector) = @_;
+
+	$self->{'css'}->put(
+		['s', $selector],
+		['d', 'width', '1%'],
+		['d', 'padding-right', '150px'],
 		['e'],
 	);
 
