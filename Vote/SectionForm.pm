@@ -166,30 +166,31 @@ __END__
 
 =head1 NAME
 
-Tags::HTML::Commons::Vote::CompetitionForm - Tags helper for competition form.
+Tags::HTML::Commons::Vote::SectionForm - Tags helper for section form.
 
 =head1 SYNOPSIS
 
- use Tags::HTML::Commons::Vote::CompetitionForm;
+ use Tags::HTML::Commons::Vote::SectionForm;
 
- my $obj = Tags::HTML::Commons::Vote::CompetitionForm->new(%params);
- $obj->process($competition_hr);
+ my $obj = Tags::HTML::Commons::Vote::SectionForm->new(%params);
+ $obj->process($section, $competition);
+ $obj->process_css;
 
 =head1 METHODS
 
 =head2 C<new>
 
- my $obj = Tags::HTML::Commons::Vote::CompetitionForm->new(%params);
+ my $obj = Tags::HTML::Commons::Vote::SectionForm->new(%params);
 
 Constructor.
 
 =over 8
 
-=item * C<css_competition>
+=item * C<css_section>
 
 CSS class for root div element.
 
-Default value is 'competition'.
+Default value is 'section'.
 
 =item * C<TODO>
 
@@ -205,16 +206,19 @@ Default value is undef.
 
 =head2 C<process>
 
- $obj->process($competition_hr);
+ $obj->process($section, $competition);
 
-Process Tags structure for output with competition structure.
-Structure consists from:
- {
-         'id' => __COMPETITION_ID__ (required)
-         'name' => __NAME__ (required)
-         'date_from' => __DATE_FROM__ (required)
-         'date_to' => __DATE_TO__ (required)
- }
+Process Tags structure for HTML output with section and competition objects.
+C<$section> is L<Data::Commons::Vote::Section> object. C<$competition> is
+L<Data::Commons::Vote::Competition> object.
+
+Returns undef.
+
+=head2 C<process_css>
+
+ $obj->process_css;
+
+Process CSS::Struct for CSS output.
 
 Returns undef.
 
@@ -229,22 +233,17 @@ Returns undef.
  use strict;
  use warnings;
 
- use Tags::HTML::Commons::Vote::CompetitionForm;
+ use Tags::HTML::Commons::Vote::SectionForm;
  use Tags::Output::Indent;
 
  # Object.
  my $tags = Tags::Output::Indent->new;
- my $obj = Tags::HTML::Commons::Vote::CompetitionForm->new(
+ my $obj = Tags::HTML::Commons::Vote::SectionForm->new(
          'tags' => $tags,
  );
 
- # Process list of competitions.
- $obj->process({
-         'id' => 1,
-         'name' => 'Czech Wiki Photo',
-         'date_from' => '10.10.2021',
-         'date_to' => '20.11.2021',
- }]);
+ # Process section.
+ $obj->process($section);
 
  # Print out.
  print $tags->flush;
