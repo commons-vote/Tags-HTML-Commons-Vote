@@ -53,6 +53,7 @@ sub new {
 			'public_voting_date_to' => 'Public voting date to',
 			'submit' => 'Save',
 			'title' => 'Create competition',
+			'wd_qid' => 'Wikidata QID',
 		},
 	};
 
@@ -185,6 +186,12 @@ sub _process {
 			'type' => 'number',
 			'min' => 1,
 			value($self, $competition, 'jury_max_marking_number', undef, 1),
+		),
+		Data::HTML::Form::Input->new(
+			'id' => 'wd_qid',
+			'label' => text($self, 'wd_qid'),
+			'type' => 'text',
+			value($self, $competition, 'wd_qid'),
 		),
 	);
 
