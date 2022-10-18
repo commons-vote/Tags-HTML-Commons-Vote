@@ -69,6 +69,7 @@ sub new {
 			'public_voting_date_from' => 'Public voting date from',
 			'public_voting_date_to' => 'Public voting date to',
 			'view_competition_logs' => 'View logs',
+			'wd_qid' => 'Wikidata QID',
 		},
 	};
 
@@ -181,6 +182,7 @@ sub _process {
 		d_format($self, $competition->dt_public_voting_from));
 	tags_dl_item($self, 'public_voting_date_to',
 		d_format($self, $competition->dt_public_voting_to));
+	tags_dl_item($self, 'wd_qid', $competition->wd_qid);
 	$self->{'tags'}->put(
 		['b', 'dt'],
 		['d', text($self, 'sections')],
