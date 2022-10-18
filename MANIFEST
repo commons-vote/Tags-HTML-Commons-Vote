@@ -54,6 +54,8 @@ t/Tags-HTML-Commons-Vote-SectionForm/01-use.t
 t/Tags-HTML-Commons-Vote-SectionForm/02-version.t
 t/Tags-HTML-Commons-Vote-Setting/01-use.t
 t/Tags-HTML-Commons-Vote-Setting/02-version.t
+t/Tags-HTML-Commons-Vote-ThemeForm/01-use.t
+t/Tags-HTML-Commons-Vote-ThemeForm/02-version.t
 t/Tags-HTML-Commons-Vote-Utils-CSS/01-use.t
 t/Tags-HTML-Commons-Vote-Utils-CSS/02-version.t
 t/Tags-HTML-Commons-Vote-Utils-Tags/01-use.t
@@ -77,6 +79,7 @@ Vote/Result.pm
 Vote/Section.pm
 Vote/SectionForm.pm
 Vote/Setting.pm
+Vote/ThemeForm.pm
 Vote/Utils.pm
 Vote/Utils/CSS.pm
 Vote/Utils/Tags.pm
@@ -105,6 +108,8 @@ xt/Tags-HTML-Commons-Vote-SectionForm/01-pod_coverage.t
 xt/Tags-HTML-Commons-Vote-SectionForm/02-pod.t
 xt/Tags-HTML-Commons-Vote-Setting/01-pod_coverage.t
 xt/Tags-HTML-Commons-Vote-Setting/02-pod.t
+xt/Tags-HTML-Commons-Vote-ThemeForm/01-pod_coverage.t
+xt/Tags-HTML-Commons-Vote-ThemeForm/02-pod.t
 xt/Tags-HTML-Commons-Vote-Utils-CSS/01-pod_coverage.t
 xt/Tags-HTML-Commons-Vote-Utils-CSS/02-pod.t
 xt/Tags-HTML-Commons-Vote-Utils-Tags/01-pod_coverage.t
