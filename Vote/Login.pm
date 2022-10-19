@@ -5,8 +5,11 @@ use strict;
 use warnings;
 
 use Class::Utils qw(set_params split_params);
+use Commons::Link;
+use Error::Pure qw(err);
+use Scalar::Util qw(blessed);
 use Tags::HTML::Commons::Vote::Utils qw(text);
-use Tags::HTML::Login::Button;
+use Unicode::UTF8 qw(decode_utf8);
 
 our $VERSION = 0.01;
 
@@ -30,53 +33,189 @@ sub new {
 	# Language texts.
 	$self->{'text'} = {
 		'eng' => {
-			'login_button_title' => 'Login with OAuth2'
+			'login_button_title' => 'Login with OAuth2',
+			'welcome' => 'Welcome to Commons Vote',
 		},
 	};
 
 	# Process params.
 	set_params($self, @{$object_params_ar});
 
-	$self->{'_html_login'} = Tags::HTML::Login::Button->new(
-		'css' => $self->{'css'},
-		'link' => $self->{'login_link'},
-		'tags' => $self->{'tags'},
-		'title' => text($self, 'login_button_title'),
-	);
+	if (! defined $self->{'login_link'}) {
+		err "Parameter 'login_link' is required.";
+	}
+
+	$self->{'_commons_link'} = Commons::Link->new;
 
 	# Object.
 	return $self;
 }
 
+sub _license {
+	my ($self, $image) = @_;
+
+	if (defined $self->{'_image'}->license_obj) {
+		if (defined $self->{'_image'}->license_obj->short_name) {
+			return $self->{'_image'}->license_obj->short_name;
+		} elsif (defined $self->{'_image'}->license_obj->name) {
+			return $self->{'_image'}->license_obj->name;
+		}
+	} elsif (defined $self->{'_image'}->license) {
+		return $self->{'_image'}->license
+	}
+}
+
 # Process 'Tags'.
 sub _process {
-	my $self = shift;
+	my ($self, $theme) = @_;
 
-	# TODO Background.
-	# TODO Information about author to background.
-	# TODO Rectangle over login button
+	if (! blessed($theme) || ! $theme->isa('Data::Commons::Vote::Theme')) {
+		err "Theme object must be a 'Data::Commons::Vote::Theme'.";
+	}
+
+	my @bottom_right_text;
+	if (defined $self->{'_image'}) {
+		my $commons_link = $self->{'_commons_link'}->mw_file_link(
+			$self->{'_image'}->commons_name);
+		push @bottom_right_text, (
+			['b', 'a'],
+			['a', 'href', $commons_link],
+			['d', 'Image'],
+			['e', 'a'],
+		);
+		if (defined $self->{'_image'}->author) {
+			my $bottom_right_text;
+			if (@bottom_right_text) {
+				$bottom_right_text .= ' by';
+			}
+			$bottom_right_text .= decode_utf8('© ').
+				$self->{'_image'}->author;
+			push @bottom_right_text, ['d', $bottom_right_text];
+		}
+		my $license = $self->_license($self->{'_image'});
+		if (defined $license) {
+			my $bottom_right_text;
+			if (@bottom_right_text) {
+				$bottom_right_text .= ', ';
+			}
+			$bottom_right_text .= 'distributed under a ';
+			$bottom_right_text .= $license;
+			$bottom_right_text .= ' license';
+			push @bottom_right_text, ['d', $bottom_right_text];
+		}
+	}
 
 	$self->{'tags'}->put(
 		['b', 'div'],
-		['a', 'class', $self->{'css_login'}],
-	);
-	$self->{'_html_login'}->process;
-	$self->{'tags'}->put(
+		['a', 'class', 'box'],
+
+		['b', 'h1'],
+		['d', text($self, 'welcome')],
+		['e', 'h1'],
+
+		['b', 'div'],
+		['a', 'class', 'login'],
+
+		['b', 'a'],
+		['a', 'href', $self->{'login_link'}],
+		['d', text($self, 'login_button_title')],
+		['e', 'a'],
+
 		['e', 'div'],
+
+		['e', 'div'],
+
+		@bottom_right_text ? (
+			['b', 'div'],
+			['a', 'class', 'bottom-right'],
+			@bottom_right_text,
+			['e', 'div'],
+		) : (),
 	);
+
+	delete $self->{'_image'};
 
 	return;
 }
 
 sub _process_css {
-	my $self = shift;
+	my ($self, $theme) = @_;
+
+	if (! blessed($theme) || ! $theme->isa('Data::Commons::Vote::Theme')) {
+		err "Theme object must be a 'Data::Commons::Vote::Theme'.";
+	}
+
+	$self->{'_image'} = undef;
+	my $number_of_images = scalar @{$theme->images};
+	my $url;
+	if ($number_of_images) {
+		my $rand_index = int(rand($number_of_images));
+		$self->{'_image'} = $theme->images->[$rand_index];
+		if (defined $self->{'_image'}->url) {
+			$url = $self->{'_image'}->url;
+		} elsif (defined $self->{'_image'}->url_cb) {
+			$url = $self->{'_image'}->url_cb->();
+		} elsif (defined $self->{'_image'}->commons_name) {
+			$url = $self->{'_commons_link'}->link($self->{'_image'}->commons_name);
+		}
+	}
 
 	$self->{'css'}->put(
+		defined $url ? (
+			['s', 'body'],
+			['d', 'background-image', 'url('.$url.')'],
+			['d', 'background-size', 'cover'],
+			['e'],
+		) : (),
+
+		['s', '.box'],
+		['d', 'position', 'absolute'],
+		['d', 'top', 'calc(50% - 30px)'],
+		['d', 'left', '50%'],
+		['d', 'transform', 'translate(-50%, -50%)'],
+		['d', 'padding', '30px'],
+		['d', 'background', 'hsla(0,0%,100%,.8)'],
+		['e'],
+
+		['s', '.box h1'],
+		['d', 'font-family', 'sans-serif'],
+		['d', 'display', 'block'],
+		['d', 'margin', '0 0 10px 0'],
+		['e'],
+
 		['s', '.'.$self->{'css_login'}],
-		['d', 'margin', '1em'],
+		['d', 'text-align', 'center'],
+		['d', 'padding', '15px 40px'],
+		['e'],
+
+		['s', '.'.$self->{'css_login'}.' a'],
+		['d', 'text-decoration', 'none'],
+		['d', 'background-image', 'linear-gradient(to bottom,#fff 0,#e0e0e0 100%)'],
+		['d', 'background-repeat', 'repeat-x'],
+		['d', 'border', '1px solid #adadad'],
+		['d', 'border-radius', '4px'],
+		['d', 'color', 'black'],
+		['d', 'font-family', 'sans-serif!important'],
+		['d', 'padding', '15px 40px'],
+		['e'],
+
+		['s', '.'.$self->{'css_login'}.' a:hover'],
+		['d', 'background-color', '#e0e0e0'],
+		['d', 'background-image', 'none'],
+		['e'],
+
+		['s', '.bottom-right'],
+		['d', 'position', 'absolute'],
+		['d', 'bottom', '8px'],
+		['d', 'right', '16px'],
+		['d', 'color', 'white'],
+		['d', 'font-family', 'sans-serif'],
+		['e'],
+
+		['s', '.bottom-right a'],
+		['d', 'color', 'white'],
 		['e'],
 	);
-	$self->{'_html_login'}->process_css;
 
 	return;
 }
