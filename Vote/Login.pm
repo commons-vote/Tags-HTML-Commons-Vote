@@ -153,7 +153,8 @@ sub _process_css {
 			} elsif (defined $self->{'_image'}->url_cb) {
 				$url = $self->{'_image'}->url_cb->();
 			} elsif (defined $self->{'_image'}->commons_name) {
-				$url = $self->{'_commons_link'}->link($self->{'_image'}->commons_name);
+				$url = $self->{'_commons_link'}->thumb_link(
+					$self->{'_image'}->commons_name, 1630);
 			}
 		}
 	}
