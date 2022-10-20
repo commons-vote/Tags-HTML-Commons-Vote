@@ -82,10 +82,9 @@ sub _process {
 		if (defined $self->{'_image'}->author) {
 			my $bottom_right_text;
 			if (@bottom_right_text) {
-				$bottom_right_text .= ' by';
+				$bottom_right_text .= ' by ';
 			}
-			$bottom_right_text .= decode_utf8('© ').
-				$self->{'_image'}->author;
+			$bottom_right_text .= $self->{'_image'}->author;
 			push @bottom_right_text, ['d', $bottom_right_text];
 		}
 		my $license = $self->_license($self->{'_image'});
