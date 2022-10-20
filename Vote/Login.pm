@@ -67,11 +67,7 @@ sub _license {
 
 # Process 'Tags'.
 sub _process {
-	my ($self, $theme) = @_;
-
-	if (! blessed($theme) || ! $theme->isa('Data::Commons::Vote::Theme')) {
-		err "Theme object must be a 'Data::Commons::Vote::Theme'.";
-	}
+	my $self = shift;
 
 	my @bottom_right_text;
 	if (defined $self->{'_image'}) {
