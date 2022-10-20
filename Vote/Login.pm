@@ -137,22 +137,24 @@ sub _process {
 sub _process_css {
 	my ($self, $theme) = @_;
 
-	if (! blessed($theme) || ! $theme->isa('Data::Commons::Vote::Theme')) {
-		err "Theme object must be a 'Data::Commons::Vote::Theme'.";
-	}
-
 	$self->{'_image'} = undef;
-	my $number_of_images = scalar @{$theme->images};
 	my $url;
-	if ($number_of_images) {
-		my $rand_index = int(rand($number_of_images));
-		$self->{'_image'} = $theme->images->[$rand_index];
-		if (defined $self->{'_image'}->url) {
-			$url = $self->{'_image'}->url;
-		} elsif (defined $self->{'_image'}->url_cb) {
-			$url = $self->{'_image'}->url_cb->();
-		} elsif (defined $self->{'_image'}->commons_name) {
-			$url = $self->{'_commons_link'}->link($self->{'_image'}->commons_name);
+	if (defined $theme) {
+		if (! blessed($theme) || ! $theme->isa('Data::Commons::Vote::Theme')) {
+			err "Theme object must be a 'Data::Commons::Vote::Theme'.";
+		}
+
+		my $number_of_images = scalar @{$theme->images};
+		if ($number_of_images) {
+			my $rand_index = int(rand($number_of_images));
+			$self->{'_image'} = $theme->images->[$rand_index];
+			if (defined $self->{'_image'}->url) {
+				$url = $self->{'_image'}->url;
+			} elsif (defined $self->{'_image'}->url_cb) {
+				$url = $self->{'_image'}->url_cb->();
+			} elsif (defined $self->{'_image'}->commons_name) {
+				$url = $self->{'_commons_link'}->link($self->{'_image'}->commons_name);
+			}
 		}
 	}
 
