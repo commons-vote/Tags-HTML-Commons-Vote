@@ -19,7 +19,7 @@ sub new {
 
 	# Create object.
 	my ($object_params_ar, $other_params_ar) = split_params(
-		['css_login', 'lang', 'text'], @params);
+		['css_login', 'lang', 'login_link', 'text'], @params);
 	my $self = $class->SUPER::new(@{$other_params_ar});
 
 	$self->{'css_login'} = 'login';
