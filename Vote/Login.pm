@@ -206,12 +206,13 @@ sub _process_css {
 		['d', 'position', 'absolute'],
 		['d', 'bottom', '8px'],
 		['d', 'right', '16px'],
-		['d', 'color', 'white'],
+		['d', 'color', 'black'],
 		['d', 'font-family', 'sans-serif'],
+		['d', 'background', 'hsla(0,0%,100%,.8)'],
 		['e'],
 
 		['s', '.bottom-right a'],
-		['d', 'color', 'white'],
+		['d', 'color', 'black'],
 		['e'],
 	);
 
