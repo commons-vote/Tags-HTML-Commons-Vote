@@ -78,9 +78,20 @@ sub new {
 	return $self;
 }
 
-# Process 'Tags'.
-sub _process {
+sub _cleanup {
+	my $self = shift;
+
+	delete $self->{'_fields'};
+
+	return;
+}
+
+sub _init {
 	my ($self, $section, $competition) = @_;
+
+	if (exists $self->{'_fields'}) {
+		return $self->{'_fields'};
+	}
 
 	my ($competition_id, $competition_name);
 	if (defined $competition) {
@@ -92,7 +103,7 @@ sub _process {
 	} else {
 		err "Bad section form.";
 	}
-	my @fields = (
+	$self->{'_fields'} = [
 		Data::HTML::Form::Input->new(
 			'id' => 'section_id',
 			'type' => 'hidden',
@@ -141,9 +152,16 @@ sub _process {
 				return join "\r\n", map { $_->category } @{$categories_ar};
 			}),
 		),
-	);
+	];
 
-	$self->{'_tags_form'}->process(@fields);
+	return;
+}
+
+# Process 'Tags'.
+sub _process {
+	my $self = shift;
+
+	$self->{'_tags_form'}->process(@{$self->{'_fields'}});
 
 	return;
 }
@@ -151,7 +169,7 @@ sub _process {
 sub _process_css {
 	my $self = shift;
 
-	$self->{'_tags_form'}->process_css;
+	$self->{'_tags_form'}->process_css(@{$self->{'_fields'}});
 
 	return;
 }
