@@ -36,7 +36,7 @@ requires:
   Error::Pure: 0.07
   Readonly: 0
   Scalar::Util: 0
-  Tags::HTML: 0.02
+  Tags::HTML: 0.06
   Tags::HTML::Form: 0
   Tags::HTML::Image: 0
   Unicode::UTF8: 0
