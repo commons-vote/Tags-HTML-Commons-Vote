@@ -82,11 +82,18 @@ sub new {
 	return $self;
 }
 
-# Process 'Tags'.
-sub _process {
+sub _cleanup {
+	my $self = shift;
+
+	delete $self->{'_fields'};
+
+	return;
+}
+
+sub _init {
 	my ($self, $competition) = @_;
 
-	my @fields = (
+	$self->{'_fields'} = [
 		Data::HTML::Form::Input->new(
 			'id' => 'competition_id',
 			'type' => 'hidden',
@@ -193,9 +200,16 @@ sub _process {
 			'type' => 'text',
 			value($self, $competition, 'wd_qid'),
 		),
-	);
+	];
 
-	$self->{'_tags_form'}->process(@fields);
+	return;
+}
+
+# Process 'Tags'.
+sub _process {
+	my $self = shift;
+
+	$self->{'_tags_form'}->process(@{$self->{'_fields'}});
 
 	return;
 }
@@ -203,7 +217,7 @@ sub _process {
 sub _process_css {
 	my $self = shift;
 
-	$self->{'_tags_form'}->process_css;
+	$self->{'_tags_form'}->process_css(@{$self->{'_fields'}});
 
 	return;
 }
