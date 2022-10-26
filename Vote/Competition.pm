@@ -51,6 +51,7 @@ sub new {
 	$self->{'text'} = {
 		'eng' => {
 			'add_section' => 'Add section',
+			'add_validation' => 'Add validation',
 			'competition_logo' => 'Logo',
 			'date_from' => 'Date from',
 			'date_image_loaded' => 'Date and time of situation when images were downloaded',
@@ -64,6 +65,8 @@ sub new {
 			'organizer' => 'Organizer',
 			'organizer_logo' => 'Organizer logo',
 			'sections' => 'Sections',
+			'validate_competition' => 'Validate competition',
+			'validations' => 'Validations',
 			'competition_not_exists' => "Competition doesn't exist.",
 			'public_voting' => 'Public voting',
 			'public_voting_date_from' => 'Public voting date from',
@@ -125,6 +128,12 @@ sub _process {
 		['a', 'class', 'button'],
 		['a', 'href', '/load/'.$competition->id],
 		['d', text($self, 'load_competition')],
+		['e', 'a'],
+
+		['b', 'a'],
+		['a', 'class', 'button'],
+		['a', 'href', '/validate/'.$competition->id],
+		['d', text($self, 'validate_competition')],
 		['e', 'a'],
 
 		['b', 'a'],
@@ -217,6 +226,63 @@ sub _process {
 		['a', 'class', 'button'],
 		['a', 'href', '/section_form/?competition_id='.$competition->id],
 		['d', text($self, 'add_section')],
+		['e', 'a'],
+
+		['e', 'dd'],
+
+		['b', 'dt'],
+		['d', text($self, 'validations')],
+		['e', 'dt'],
+
+		['b', 'dd'],
+	);
+	$num = 0;
+	foreach my $validation (@{$competition->validations}) {
+		if (! $num) {
+			$self->{'tags'}->put(
+				['b', 'ul'],
+			);
+			$num = 1;
+		}
+		$self->{'tags'}->put(
+			['b', 'li'],
+			['b', 'a'],
+			['a', 'href', '/validation/'.$validation->id],
+			['d', $validation->validation_type->description],
+			['e', 'a'],
+		);
+		if (@{$validation->options}) {
+			$self->{'tags'}->put(
+				['b', 'ul'],
+			);
+		}
+		foreach my $validation_option (@{$validation->options}) {
+			$self->{'tags'}->put(
+				['b', 'li'],
+				['d', $validation_option->validation_option->description.': '.$validation_option->value],
+				['e', 'li'],
+			);
+		}
+		if (@{$validation->options}) {
+			$self->{'tags'}->put(
+				['e', 'ul'],
+			);
+		}
+		$self->{'tags'}->put(
+			['e', 'li'],
+		);
+	}
+	if ($num) {
+		$self->{'tags'}->put(
+			['e', 'ul'],
+		);
+	}
+
+	$self->{'tags'}->put(
+		['b', 'a'],
+		['a', 'class', 'button'],
+		['a', 'href', '/validation_form/?competition_id='.$competition->id],
+		['d', text($self, 'add_validation')],
 		['e', 'a'],
 
 		['e', 'dd'],
