@@ -117,7 +117,7 @@ sub _init {
 		push @options, Data::HTML::Form::Select::Option->new(
 			'data' => $validation_type->description,
 			'id' => $validation_type->id,
-			'value' => $validation_type->type,
+			'value' => $validation_type->id,
 			defined $selected_option_id && $selected_option_id == $validation_type->id ? (
 				'selected' => 1,
 			) : ()
@@ -126,11 +126,22 @@ sub _init {
 
 	my @specific_fields;
 	foreach my $validation_type_option (@{$validation_type_options_ar}) {
+		my $value;
+		if (defined $competition_validation && defined $competition_validation->options) {
+			foreach my $competition_validation_option (@{$competition_validation->options}) {
+				if ($competition_validation_option->validation_option->option
+					eq $validation_type_option->option) {
+
+					$value = $competition_validation_option->value;
+				}
+			}
+		}
 		push @specific_fields, Data::HTML::Form::Input->new(
 			'id' => $validation_type_option->option,
 			'label' => $validation_type_option->description,
 			'required' => 1,
 			'type' => $validation_type_option->option_type,
+			'value' => $value,
 		);
 	}
 
