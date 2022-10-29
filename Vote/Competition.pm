@@ -50,6 +50,7 @@ sub new {
 	# Language texts.
 	$self->{'text'} = {
 		'eng' => {
+			'add_role' => 'Add role',
 			'add_section' => 'Add section',
 			'add_validation' => 'Add validation',
 			'competition_logo' => 'Logo',
@@ -64,6 +65,7 @@ sub new {
 			'number_of_votes' => 'Number of votes',
 			'organizer' => 'Organizer',
 			'organizer_logo' => 'Organizer logo',
+			'roles' => 'Roles',
 			'sections' => 'Sections',
 			'validate_competition' => 'Validate competition',
 			'validations' => 'Validations',
@@ -196,12 +198,50 @@ sub _process {
 	tags_dl_item($self, 'wd_qid', $competition->wd_qid);
 	$self->{'tags'}->put(
 		['b', 'dt'],
-		['d', text($self, 'sections')],
+		['d', text($self, 'roles')],
 		['e', 'dt'],
 
 		['b', 'dd'],
 	);
 	my $num = 0;
+	foreach my $person_role (sort { $a->person->wm_username cmp $b->person->wm_username } @{$competition->person_roles}) {
+		if (! $num) {
+			$self->{'tags'}->put(
+				['b', 'ul'],
+			);
+			$num = 1;
+		}
+		$self->{'tags'}->put(
+			['b', 'li'],
+			['d', $person_role->person->wm_username.' '],
+			['b', 'a'],
+			['a', 'href', '/role/'.$person_role->id],
+			['d', $person_role->role->description],
+			['e', 'a'],
+			['e', 'li'],
+		);
+	}
+	if ($num) {
+		$self->{'tags'}->put(
+			['e', 'ul'],
+		);
+	}
+	$self->{'tags'}->put(
+		['b', 'a'],
+		['a', 'class', 'button'],
+		['a', 'href', '/role_form/?competition_id='.$competition->id],
+		['d', text($self, 'add_role')],
+		['e', 'a'],
+
+		['e', 'dd'],
+
+		['b', 'dt'],
+		['d', text($self, 'sections')],
+		['e', 'dt'],
+
+		['b', 'dd'],
+	);
+	$num = 0;
 	foreach my $section (@{$competition->sections}) {
 		if (! $num) {
 			$self->{'tags'}->put(
