@@ -6,13 +6,10 @@ use warnings;
 
 use Class::Utils qw(set_params split_params);
 use Error::Pure qw(err);
-use Readonly;
 use Tags::HTML::Commons::Vote::Utils qw(text value);
 use Tags::HTML::Commons::Vote::Utils::CSS qw(a_button button_list float_right);
 use Tags::HTML::Commons::Vote::Utils::Tags qw(tags_dl_item);
 use Unicode::UTF8 qw(decode_utf8);
-
-Readonly::Scalar our $PREVIEW_WIDTH => 250;
 
 our $VERSION = 0.01;
 
