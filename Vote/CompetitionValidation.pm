@@ -96,35 +96,38 @@ sub _process {
 		['e', 'a'],
 		['e', 'dd'],
 	);
-	$self->{'tags'}->put(
-		['b', 'dt'],
-		['d', text($self, 'options')],
-		['e', 'dt'],
+	if (@{$validation->options}) {
+		$self->{'tags'}->put(
+			['b', 'dt'],
+			['d', text($self, 'options')],
+			['e', 'dt'],
 
-		['b', 'dd'],
-	);
-	my $num = 0;
-	foreach my $option (@{$validation->options}) {
-		if (! $num) {
+			['b', 'dd'],
+		);
+		my $num = 0;
+		foreach my $option (@{$validation->options}) {
+			if (! $num) {
+				$self->{'tags'}->put(
+					['b', 'ul'],
+				);
+				$num = 1;
+			}
 			$self->{'tags'}->put(
-				['b', 'ul'],
+				['b', 'li'],
+				['d', $option->validation_option->description.': '.$option->value],
+				['e', 'li'],
 			);
-			$num = 1;
+		}
+		if ($num) {
+			$self->{'tags'}->put(
+				['e', 'ul'],
+			);
 		}
 		$self->{'tags'}->put(
-			['b', 'li'],
-			['d', $option->validation_option->description.': '.$option->value],
-			['e', 'li'],
-		);
-	}
-	if ($num) {
-		$self->{'tags'}->put(
-			['e', 'ul'],
+			['e', 'dd'],
 		);
 	}
 	$self->{'tags'}->put(
-		['e', 'dd'],
-
 		['e', 'dl'],
 		['e', 'div'],
 	);
