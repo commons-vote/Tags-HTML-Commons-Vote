@@ -31,6 +31,8 @@ requires:
   Commons::Link: 0
   Data::HTML::Form: 0
   Data::HTML::Form::Input: 0
+  Data::HTML::Form::Select: 0
+  Data::HTML::Form::Select::Option: 0
   Data::HTML::Textarea: 0
   DateTime::Format::Strptime: 0
   Error::Pure: 0.07
