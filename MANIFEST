@@ -53,6 +53,8 @@ t/Tags-HTML-Commons-Vote-Newcomers/01-use.t
 t/Tags-HTML-Commons-Vote-Newcomers/02-version.t
 t/Tags-HTML-Commons-Vote-PersonRole/01-use.t
 t/Tags-HTML-Commons-Vote-PersonRole/02-version.t
+t/Tags-HTML-Commons-Vote-PersonRoleForm/01-use.t
+t/Tags-HTML-Commons-Vote-PersonRoleForm/02-version.t
 t/Tags-HTML-Commons-Vote-Result/01-use.t
 t/Tags-HTML-Commons-Vote-Result/02-version.t
 t/Tags-HTML-Commons-Vote-Section/01-use.t
@@ -85,6 +87,7 @@ Vote/Main.pm
 Vote/Menu.pm
 Vote/Newcomers.pm
 Vote/PersonRole.pm
+Vote/PersonRoleForm.pm
 Vote/Result.pm
 Vote/Section.pm
 Vote/SectionForm.pm
@@ -116,6 +119,8 @@ xt/Tags-HTML-Commons-Vote-Newcomers/01-pod_coverage.t
 xt/Tags-HTML-Commons-Vote-Newcomers/02-pod.t
 xt/Tags-HTML-Commons-Vote-PersonRole/01-pod_coverage.t
 xt/Tags-HTML-Commons-Vote-PersonRole/02-pod.t
+xt/Tags-HTML-Commons-Vote-PersonRoleForm/01-pod_coverage.t
+xt/Tags-HTML-Commons-Vote-PersonRoleForm/02-pod.t
 xt/Tags-HTML-Commons-Vote-Result/01-pod_coverage.t
 xt/Tags-HTML-Commons-Vote-Result/02-pod.t
 xt/Tags-HTML-Commons-Vote-Section/01-pod_coverage.t
