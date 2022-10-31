@@ -126,11 +126,13 @@ sub _process {
 		['d', text($self, 'edit_competition')],
 		['e', 'a'],
 
-		['b', 'a'],
-		['a', 'class', 'button'],
-		['a', 'href', '/load/'.$competition->id],
-		['d', text($self, 'load_competition')],
-		['e', 'a'],
+		@{$competition->sections} ? (
+			['b', 'a'],
+			['a', 'class', 'button'],
+			['a', 'href', '/load/'.$competition->id],
+			['d', text($self, 'load_competition')],
+			['e', 'a'],
+		) : (),
 
 		defined $competition->dt_images_loaded && @{$competition->validations} ? (
 			['b', 'a'],
