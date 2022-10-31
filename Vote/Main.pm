@@ -46,7 +46,6 @@ sub new {
 			'competitions_for_public_voting' => 'Competitions for public voting',
 			'competitions_for_jury_voting' => 'Competitions for jury voting',
 			'create_competition' => 'Create competition',
-			'load_competition' => 'Load competition',
 			'my_competitions' => 'My competitions',
 			'text_competition_name' => 'Competition name',
 			'text_date_from' => 'Date from',
@@ -240,15 +239,6 @@ sub _process {
 		['b', 'th'],
 		['d', text($self, 'text_competition_name')],
 		['e', 'th'],
-		['b', 'th'],
-		['d', text($self, 'text_date_from')],
-		['e', 'th'],
-		['b', 'th'],
-		['d', text($self, 'text_date_to')],
-		['e', 'th'],
-		['b', 'th'],
-		['d', text($self, 'text_loaded')],
-		['e', 'th'],
 		['e', 'tr'],
 	);
 	if (! defined $competitions_ar || ! @{$competitions_ar}) {
@@ -270,15 +260,6 @@ sub _process {
 				['a', 'href', $uri],
 				['d', $c->name],
 				['e', 'a'],
-				['e', 'td'],
-				['b', 'td'],
-				['d', d_format($self, $c->dt_from)],
-				['e', 'td'],
-				['b', 'td'],
-				['d', d_format($self, $c->dt_to)],
-				['e', 'td'],
-				['b', 'td'],
-				$self->_tags_images_loaded($c),
 				['e', 'td'],
 				['e', 'tr'],
 			);
@@ -325,25 +306,6 @@ sub _process_css {
 	float_right($self, '.right');
 
 	return;
-}
-
-sub _tags_images_loaded {
-	my ($self, $competition) = @_;
-
-	my @tags;
-	if (defined $competition->dt_images_loaded) {
-		push @tags, ['d', dt_format($self, $competition->dt_images_loaded)];
-	} else {
-		push @tags, (
-			['b', 'a'],
-			['a', 'class', 'button right'],
-			['a', 'href', '/load/'.$competition->id],
-			['d', text($self, 'load_competition')],
-			['e', 'a'],
-		);
-	}
-
-	return @tags;
 }
 
 1;

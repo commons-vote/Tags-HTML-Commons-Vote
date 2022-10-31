@@ -7,8 +7,7 @@ use warnings;
 use Class::Utils qw(set_params split_params);
 use Data::HTML::Form;
 use Data::HTML::Form::Input;
-use Tags::HTML::Commons::Vote::Utils qw(dt_string text value);
-use Tags::HTML::Commons::Vote::Utils::Tags qw(tags_input);
+use Tags::HTML::Commons::Vote::Utils qw(text value);
 use Tags::HTML::Form;
 
 our $VERSION = 0.01;
@@ -38,19 +37,9 @@ sub new {
 	$self->{'text'} = {
 		'eng' => {
 			'competition_name' => 'Competition name',
-			'date_from' => 'Date from',
-			'date_to' => 'Date to',
-			'jury_voting' => 'Jury voting',
-			'jury_max_marking_number' => 'Jury maximum number for marking',
-			'jury_voting_date_from' => 'Jury voting date from',
-			'jury_voting_date_to' => 'Jury voting date to',
 			'logo' => 'Competition logo from Wikimedia Commons',
-			'number_of_votes' => 'Number of votes',
 			'organizer' => 'Organizer',
 			'organizer_logo' => 'Organizer logo from Wikimedia Commons',
-			'public_voting' => 'Public voting',
-			'public_voting_date_from' => 'Public voting date from',
-			'public_voting_date_to' => 'Public voting date to',
 			'submit' => 'Save',
 			'title' => 'Create competition',
 			'wd_qid' => 'Wikidata QID',
@@ -107,22 +96,6 @@ sub _init {
 			value($self, $competition, 'name'),
 		),
 		Data::HTML::Form::Input->new(
-			'id' => 'date_from',
-			'label' => text($self, 'date_from'),
-			'placeholder' => 'YYYY-MM-DD',
-			'required' => 1,
-			'type' => 'date',
-			value($self, $competition, 'dt_from', \&dt_string),
-		),
-		Data::HTML::Form::Input->new(
-			'id' => 'date_to',
-			'label' => text($self, 'date_to'),
-			'placeholder' => 'YYYY-MM-DD',
-			'required' => 1,
-			'type' => 'date',
-			value($self, $competition, 'dt_to', \&dt_string),
-		),
-		Data::HTML::Form::Input->new(
 			'id' => 'logo',
 			'label' => text($self, 'logo'),
 			'type' => 'text',
@@ -139,60 +112,6 @@ sub _init {
 			'label' => text($self, 'organizer_logo'),
 			'type' => 'text',
 			value($self, $competition, 'organizer_logo'),
-		),
-		Data::HTML::Form::Input->new(
-			defined $competition ? ('checked' => $competition->public_voting ? 1 : 0) : (),
-			'id' => 'public_voting',
-			'label' => text($self, 'public_voting'),
-			'type' => 'checkbox',
-		),
-		Data::HTML::Form::Input->new(
-			'id' => 'public_voting_date_from',
-			'label' => text($self, 'public_voting_date_from'),
-			'placeholder' => 'YYYY-MM-DD',
-			'type' => 'date',
-			value($self, $competition, 'dt_public_voting_from', \&dt_string),
-		),
-		Data::HTML::Form::Input->new(
-			'id' => 'public_voting_date_to',
-			'label' => text($self, 'public_voting_date_to'),
-			'placeholder' => 'YYYY-MM-DD',
-			'type' => 'date',
-			value($self, $competition, 'dt_public_voting_to', \&dt_string),
-		),
-		Data::HTML::Form::Input->new(
-			'id' => 'number_of_votes',
-			'label' => text($self, 'number_of_votes'),
-			'min' => 0,
-			'type' => 'number',
-			value($self, $competition, 'number_of_votes', undef, 0)
-		),
-		Data::HTML::Form::Input->new(
-			defined $competition ? ('checked' => $competition->jury_voting ? 1 : 0) : (),
-			'id' => 'jury_voting',
-			'label' => text($self, 'jury_voting'),
-			'type' => 'checkbox',
-		),
-		Data::HTML::Form::Input->new(
-			'id' => 'jury_voting_date_from',
-			'label' => text($self, 'jury_voting_date_from'),
-			'placeholder' => 'YYYY-MM-DD',
-			'type' => 'date',
-			value($self, $competition, 'dt_jury_voting_from', \&dt_string),
-		),
-		Data::HTML::Form::Input->new(
-			'id' => 'jury_voting_date_to',
-			'label' => text($self, 'jury_voting_date_to'),
-			'placeholder' => 'YYYY-MM-DD',
-			'type' => 'date',
-			value($self, $competition, 'dt_jury_voting_to', \&dt_string),
-		),
-		Data::HTML::Form::Input->new(
-			'id' => 'jury_max_marking_number',
-			'label' => text($self, 'jury_max_marking_number'),
-			'type' => 'number',
-			'min' => 1,
-			value($self, $competition, 'jury_max_marking_number', undef, 1),
 		),
 		Data::HTML::Form::Input->new(
 			'id' => 'wd_qid',

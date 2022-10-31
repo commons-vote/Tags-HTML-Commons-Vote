@@ -55,15 +55,9 @@ sub new {
 			'add_validation' => 'Add validation',
 			'add_voting_type' => 'Add voting type',
 			'competition_logo' => 'Logo',
-			'date_from' => 'Date from',
 			'date_image_loaded' => 'Date and time of situation when images were downloaded',
-			'date_to' => 'Date to',
 			'edit_competition' => 'Edit competition',
-			'jury_voting' => 'Jury voting',
-			'jury_voting_date_from' => 'Jury voting date from',
-			'jury_voting_date_to' => 'Jury voting date to',
 			'load_competition' => 'Load competition',
-			'number_of_votes' => 'Number of votes',
 			'organizer' => 'Organizer',
 			'organizer_logo' => 'Organizer logo',
 			'roles' => 'Roles',
@@ -71,9 +65,6 @@ sub new {
 			'validate_competition' => 'Validate competition',
 			'validations' => 'Validations',
 			'competition_not_exists' => "Competition doesn't exist.",
-			'public_voting' => 'Public voting',
-			'public_voting_date_from' => 'Public voting date from',
-			'public_voting_date_to' => 'Public voting date to',
 			'view_competition_logs' => 'View logs',
 			'view_images' => 'View images',
 			'voting_types' => 'Voting types',
@@ -191,24 +182,9 @@ sub _process {
 
 		['b', 'dl'],
 	);
-	tags_dl_item($self, 'date_from',
-		d_format($self, $competition->dt_from));
-	tags_dl_item($self, 'date_to',
-		d_format($self, $competition->dt_to));
 	tags_dl_item($self, 'organizer', $competition->organizer);
-	tags_dl_item($self, 'number_of_votes', $competition->number_of_votes);
 	tags_dl_item($self, 'date_image_loaded',
 		dt_format($self, $competition->dt_images_loaded));
-	tags_dl_item($self, 'jury_voting', $competition->jury_voting);
-	tags_dl_item($self, 'jury_voting_date_from',
-		d_format($self, $competition->dt_jury_voting_from));
-	tags_dl_item($self, 'jury_voting_date_to',
-		d_format($self, $competition->dt_jury_voting_to));
-	tags_dl_item($self, 'public_voting', $competition->public_voting);
-	tags_dl_item($self, 'public_voting_date_from',
-		d_format($self, $competition->dt_public_voting_from));
-	tags_dl_item($self, 'public_voting_date_to',
-		d_format($self, $competition->dt_public_voting_to));
 	tags_dl_item($self, 'wd_qid', $competition->wd_qid);
 	$self->{'tags'}->put(
 		['b', 'dt'],
