@@ -43,6 +43,8 @@ t/Tags-HTML-Commons-Vote-CompetitionValidation/01-use.t
 t/Tags-HTML-Commons-Vote-CompetitionValidation/02-version.t
 t/Tags-HTML-Commons-Vote-CompetitionValidationForm/01-use.t
 t/Tags-HTML-Commons-Vote-CompetitionValidationForm/02-version.t
+t/Tags-HTML-Commons-Vote-CompetitionVoting/01-use.t
+t/Tags-HTML-Commons-Vote-CompetitionVoting/02-version.t
 t/Tags-HTML-Commons-Vote-CompetitionVotingForm/01-use.t
 t/Tags-HTML-Commons-Vote-CompetitionVotingForm/02-version.t
 t/Tags-HTML-Commons-Vote-Login/01-use.t
@@ -84,6 +86,7 @@ Vote/CompetitionForm.pm
 Vote/Competitions.pm
 Vote/CompetitionValidation.pm
 Vote/CompetitionValidationForm.pm
+Vote/CompetitionVoting.pm
 Vote/CompetitionVotingForm.pm
 Vote/Login.pm
 Vote/Main.pm
@@ -112,6 +115,8 @@ xt/Tags-HTML-Commons-Vote-CompetitionValidation/01-pod_coverage.t
 xt/Tags-HTML-Commons-Vote-CompetitionValidation/02-pod.t
 xt/Tags-HTML-Commons-Vote-CompetitionValidationForm/01-pod_coverage.t
 xt/Tags-HTML-Commons-Vote-CompetitionValidationForm/02-pod.t
+xt/Tags-HTML-Commons-Vote-CompetitionVoting/01-pod_coverage.t
+xt/Tags-HTML-Commons-Vote-CompetitionVoting/02-pod.t
 xt/Tags-HTML-Commons-Vote-CompetitionVotingForm/01-pod_coverage.t
 xt/Tags-HTML-Commons-Vote-CompetitionVotingForm/02-pod.t
 xt/Tags-HTML-Commons-Vote-Login/01-pod_coverage.t
