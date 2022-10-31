@@ -206,7 +206,7 @@ sub _process {
 			['d', d_format($self, $competition_voting->dt_from).'-'.
 				d_format($self, $competition_voting->dt_to)],
 			['b', 'a'],
-			['a', 'href', '/voting_type/'.$competition_voting->id],
+			['a', 'href', '/voting/'.$competition_voting->id],
 			['d', $competition_voting->voting_type->description],
 			['e', 'a'],
 			['e', 'li'],
@@ -220,7 +220,7 @@ sub _process {
 	$self->{'tags'}->put(
 		['b', 'a'],
 		['a', 'class', 'button'],
-		['a', 'href', '/voting_type_form/?competition_id='.$competition->id],
+		['a', 'href', '/voting_form/?competition_id='.$competition->id],
 		['d', text($self, 'add_voting_type')],
 		['e', 'a'],
 
