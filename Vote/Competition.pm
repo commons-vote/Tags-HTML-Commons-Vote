@@ -74,6 +74,7 @@ sub new {
 			'public_voting_date_from' => 'Public voting date from',
 			'public_voting_date_to' => 'Public voting date to',
 			'view_competition_logs' => 'View logs',
+			'view_images' => 'View images',
 			'wd_qid' => 'Wikidata QID',
 		},
 	};
@@ -147,6 +148,15 @@ sub _process {
 		['a', 'href', '/logs/'.$competition->id],
 		['d', text($self, 'view_competition_logs')],
 		['e', 'a'],
+
+		(defined $competition->dt_images_loaded) ? (
+			['b', 'a'],
+			['a', 'class', 'button'],
+			['a', 'href', '/competition_images/'.$competition->id],
+			['d', text($self, 'view_images')],
+			['e', 'a'],
+		) : (),
+
 		['e', 'div'],
 
 		$competition_logo_url ? (
