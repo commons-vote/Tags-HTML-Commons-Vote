@@ -53,6 +53,7 @@ sub new {
 			'add_role' => 'Add role',
 			'add_section' => 'Add section',
 			'add_validation' => 'Add validation',
+			'add_voting_type' => 'Add voting type',
 			'competition_logo' => 'Logo',
 			'date_from' => 'Date from',
 			'date_image_loaded' => 'Date and time of situation when images were downloaded',
@@ -75,6 +76,7 @@ sub new {
 			'public_voting_date_to' => 'Public voting date to',
 			'view_competition_logs' => 'View logs',
 			'view_images' => 'View images',
+			'voting_types' => 'Voting types',
 			'wd_qid' => 'Wikidata QID',
 		},
 	};
@@ -210,12 +212,51 @@ sub _process {
 	tags_dl_item($self, 'wd_qid', $competition->wd_qid);
 	$self->{'tags'}->put(
 		['b', 'dt'],
-		['d', text($self, 'roles')],
+		['d', text($self, 'voting_types')],
 		['e', 'dt'],
 
 		['b', 'dd'],
 	);
 	my $num = 0;
+	foreach my $competition_voting (@{$competition->voting_types}) {
+		if (! $num) {
+			$self->{'tags'}->put(
+				['b', 'ul'],
+			);
+			$num = 1;
+		}
+		$self->{'tags'}->put(
+			['b', 'li'],
+			['d', d_format($self, $competition_voting->dt_from).'-'.
+				d_format($self, $competition_voting->dt_to)],
+			['b', 'a'],
+			['a', 'href', '/voting_type/'.$competition_voting->id],
+			['d', $competition_voting->voting_type->description],
+			['e', 'a'],
+			['e', 'li'],
+		);
+	}
+	if ($num) {
+		$self->{'tags'}->put(
+			['e', 'ul'],
+		);
+	}
+	$self->{'tags'}->put(
+		['b', 'a'],
+		['a', 'class', 'button'],
+		['a', 'href', '/voting_type_form/?competition_id='.$competition->id],
+		['d', text($self, 'add_voting_type')],
+		['e', 'a'],
+
+		['e', 'dd'],
+
+		['b', 'dt'],
+		['d', text($self, 'roles')],
+		['e', 'dt'],
+
+		['b', 'dd'],
+	);
+	$num = 0;
 	foreach my $person_role (sort { $a->person->wm_username cmp $b->person->wm_username } @{$competition->person_roles}) {
 		if (! $num) {
 			$self->{'tags'}->put(
