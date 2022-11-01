@@ -204,7 +204,7 @@ sub _process {
 		$self->{'tags'}->put(
 			['b', 'li'],
 			['d', d_format($self, $competition_voting->dt_from).'-'.
-				d_format($self, $competition_voting->dt_to)],
+				d_format($self, $competition_voting->dt_to).' '],
 			['b', 'a'],
 			['a', 'href', '/voting/'.$competition_voting->id],
 			['d', $competition_voting->voting_type->description],
