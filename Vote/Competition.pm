@@ -185,8 +185,18 @@ sub _process {
 	tags_dl_item($self, 'organizer', $competition->organizer);
 	tags_dl_item($self, 'date_image_loaded',
 		dt_format($self, $competition->dt_images_loaded));
-	tags_dl_item($self, 'wd_qid', $competition->wd_qid);
 	$self->{'tags'}->put(
+		['b', 'dt'],
+		['d', text($self, 'wd_qid')],
+		['e', 'dt'],
+
+		['b', 'dd'],
+		['b', 'a'],
+		['a', 'href', 'https://www.wikidata.org/wiki/'.$competition->wd_qid],
+		['d', $competition->wd_qid],
+		['e', 'a'],
+		['e', 'dd'],
+
 		['b', 'dt'],
 		['d', text($self, 'voting_types')],
 		['e', 'dt'],
