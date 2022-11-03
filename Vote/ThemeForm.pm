@@ -71,11 +71,22 @@ sub new {
 	return $self;
 }
 
-# Process 'Tags'.
-sub _process {
+sub _cleanup {
+	my $self = shift;
+
+	delete $self->{'_fields'};
+
+	return;
+}
+
+sub _init {
 	my ($self, $theme) = @_;
 
-	my @fields = (
+	if (exists $self->{'_fields'}) {
+		return;
+	}
+
+	$self->{'_fields'} = [
 		Data::HTML::Form::Input->new(
 			'id' => 'theme_id',
 			'type' => 'hidden',
@@ -105,9 +116,16 @@ sub _process {
 				return join "\r\n", map { $_->commons_name } @{$images_ar};
 			}),
 		),
-	);
+	];
 
-	$self->{'_tags_form'}->process(@fields);
+	return;
+}
+
+# Process 'Tags'.
+sub _process {
+	my $self = shift;
+
+	$self->{'_tags_form'}->process(@{$self->{'_fields'}});
 
 	return;
 }
@@ -115,7 +133,7 @@ sub _process {
 sub _process_css {
 	my $self = shift;
 
-	$self->{'_tags_form'}->process_css;
+	$self->{'_tags_form'}->process_css(@{$self->{'_fields'}});
 
 	return;
 }
