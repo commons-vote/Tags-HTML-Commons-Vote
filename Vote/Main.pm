@@ -9,7 +9,7 @@ use DateTime::Format::Strptime;
 use Error::Pure qw(err);
 use Scalar::Util qw(blessed);
 use Tags::HTML::Commons::Vote::Utils qw(d_format dt_format text);
-use Tags::HTML::Commons::Vote::Utils::CSS qw(a_button float_right);
+use Tags::HTML::Commons::Vote::Utils::CSS qw(a_button button_list float_right);
 
 our $VERSION = 0.01;
 
@@ -46,6 +46,7 @@ sub new {
 			'competitions_for_public_voting' => 'Competitions for public voting',
 			'competitions_for_jury_voting' => 'Competitions for jury voting',
 			'create_competition' => 'Create competition',
+			'create_competition_from_wd' => 'Competition from WD',
 			'my_competitions' => 'My competitions',
 			'text_competition_name' => 'Competition name',
 			'text_date_from' => 'Date from',
@@ -219,19 +220,25 @@ sub _process {
 		['a', 'class', $self->{'css_main'}],
 
 		['b', 'div'],
-		['a', 'class', 'page-header'],
+		['a', 'class', 'right button-list'],
 
 		['b', 'a'],
-		['a', 'class', 'button right'],
+		['a', 'class', 'button'],
 		['a', 'href', '/competition_form'],
 		['d', text($self, 'create_competition')],
 		['e', 'a'],
 
+		['b', 'a'],
+		['a', 'class', 'button'],
+		['a', 'href', '/wikidata_form'],
+		['d', text($self, 'create_competition_from_wd')],
+		['e', 'a'],
+
+		['e', 'div'],
+
 		['b', 'h1'],
 		['d', text($self, 'my_competitions')],
 		['e', 'h1'],
-
-		['e', 'div'],
 
 		['b', 'table'],
 
@@ -303,6 +310,7 @@ sub _process_css {
 		['e'],
 	);
 	a_button($self, '.button');
+	button_list($self, '.button-list');
 	float_right($self, '.right');
 
 	return;
