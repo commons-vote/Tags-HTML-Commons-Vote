@@ -77,6 +77,8 @@ t/Tags-HTML-Commons-Vote-Utils/01-use.t
 t/Tags-HTML-Commons-Vote-Utils/02-version.t
 t/Tags-HTML-Commons-Vote-Vote/01-use.t
 t/Tags-HTML-Commons-Vote-Vote/02-version.t
+t/Tags-HTML-Commons-Vote-WikidataForm/01-use.t
+t/Tags-HTML-Commons-Vote-WikidataForm/02-version.t
 t/Tags-HTML-Commons-Vote/01-use.t
 t/Tags-HTML-Commons-Vote/02-version.t
 Vote.pm
@@ -103,6 +105,7 @@ Vote/Utils.pm
 Vote/Utils/CSS.pm
 Vote/Utils/Tags.pm
 Vote/Vote.pm
+Vote/WikidataForm.pm
 xt/Tags-HTML-Commons-Vote-CheckAuthors/01-pod_coverage.t
 xt/Tags-HTML-Commons-Vote-CheckAuthors/02-pod.t
 xt/Tags-HTML-Commons-Vote-Competition/01-pod_coverage.t
@@ -149,5 +152,7 @@ xt/Tags-HTML-Commons-Vote-Utils/01-pod_coverage.t
 xt/Tags-HTML-Commons-Vote-Utils/02-pod.t
 xt/Tags-HTML-Commons-Vote-Vote/01-pod_coverage.t
 xt/Tags-HTML-Commons-Vote-Vote/02-pod.t
+xt/Tags-HTML-Commons-Vote-WikidataForm/01-pod_coverage.t
+xt/Tags-HTML-Commons-Vote-WikidataForm/02-pod.t
 xt/Tags-HTML-Commons-Vote/01-pod_coverage.t
 xt/Tags-HTML-Commons-Vote/02-pod.t
