@@ -114,6 +114,7 @@ sub _process {
 
 		['b', 'div'],
 		['a', 'class', 'right button-list'],
+
 		['b', 'a'],
 		['a', 'class', 'button'],
 		['a', 'href', '/competition_form/'.$competition->id],
