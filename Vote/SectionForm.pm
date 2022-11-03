@@ -90,7 +90,7 @@ sub _init {
 	my ($self, $section, $competition) = @_;
 
 	if (exists $self->{'_fields'}) {
-		return $self->{'_fields'};
+		return;
 	}
 
 	my ($competition_id, $competition_name);
