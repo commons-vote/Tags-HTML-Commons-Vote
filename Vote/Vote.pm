@@ -46,10 +46,15 @@ sub new {
 	# Language texts.
 	$self->{'text'} = {
 		'eng' => {
-			'submit' => 'Vote',
+			'submit_vote' => 'Vote',
+			'submit_unvote' => 'Unvote',
 			'title' => 'Vote',
+			'vote_not_exists' => 'Vote not exists.',
 			'voted_no' => 'Not voted',
 			'voted_yes' => 'Voted',
+			'voting_type_anonymous_voting' => 'Anonymous voting',
+			'voting_type_login_voting' => 'Voting after login',
+			'voting_type_jury_voting' => 'Jury voting',
 		},
 	};
 
@@ -59,22 +64,12 @@ sub new {
 	# Process params.
 	set_params($self, @{$object_params_ar});
 
-	my $form = Data::HTML::Form->new(
+	$self->{'_data_form'} = Data::HTML::Form->new(
 		'action' => $self->{'form_link'},
 		'css_class' => $self->{'css_voting'}.'-form',
 		'enctype' => 'application/x-www-form-urlencoded',
 		'method' => $self->{'form_method'},
 		'title' => text($self, 'title'),
-	);
-	my $submit = Data::HTML::Form::Input->new(
-		'value' => text($self, 'submit'),
-		'type' => 'submit',
-	);
-	$self->{'_tags_form'} = Tags::HTML::Form->new(
-		'css' => $self->{'css'},
-		'form' => $form,
-		'submit' => $submit,
-		'tags' => $self->{'tags'},
 	);
 
 	$self->{'_tags_image'} = Tags::HTML::Image->new(
@@ -93,23 +88,63 @@ sub new {
 	return $self;
 }
 
-# Process 'Tags'.
-sub _process {
-	my ($self, $vote) = @_;
+sub _cleanup {
+	my $self = shift;
 
-	if (! defined $vote) {
-		err 'Image object is required.';
+	delete $self->{'_fields'};
+	delete $self->{'_ip_address'};
+	delete $self->{'_vote'};
+
+	return;
+}
+
+sub _init {
+	my ($self, $vote, $ip_address) = @_;
+
+	if (exists $self->{'_fields'}) {
+		return;
 	}
+	if (! defined $vote) {
+		return;
+	}
+
 	if (! blessed($vote) || ! $vote->isa('Data::Commons::Vote::Vote')) {
 		err "Vote must be a 'Data::Commons::Vote::Vote' vote object.";
 	}
 
-	my @hidden = (
+	my $voting_type = $vote->competition_voting->voting_type->type;
+	my $vote_value = $vote->vote_value;
+
+	# Diables submit.
+	my $submit_disabled;
+	if ($voting_type eq 'anonymous_voting' && defined $vote->vote_value) {
+		$submit_disabled = 1;
+	}
+
+	my $submit = Data::HTML::Form::Input->new(
+		$submit_disabled ? ('disabled' => 1) : (),
+		$vote_value && $voting_type ne 'jury_voting' ? (
+			'value' => text($self, 'submit_unvote'),
+		) : (
+			'value' => text($self, 'submit_vote'),
+		),
+		'type' => 'submit',
+	);
+
+	$self->{'_tags_form'} = Tags::HTML::Form->new(
+		'css' => $self->{'css'},
+		'form' => $self->{'_data_form'},
+		'submit' => $submit,
+		'tags' => $self->{'tags'},
+	);
+
+	$self->{'_vote'} = $vote;
+	$self->{'_fields'} = [
 		Data::HTML::Form::Input->new(
-			'id' => 'competition_id',
+			'id' => 'competition_voting_id',
 			'required' => 1,
 			'type' => 'hidden',
-			value($self, $vote->competition, 'id'),
+			value($self, $vote->competition_voting, 'id'),
 		),
 		Data::HTML::Form::Input->new(
 			'id' => 'image_id',
@@ -117,42 +152,106 @@ sub _process {
 			'type' => 'hidden',
 			value($self, $vote->image, 'id'),
 		),
-		Data::HTML::Form::Input->new(
-			'id' => 'vote_type_id',
-			'required' => 1,
-			'type' => 'hidden',
-			value($self, $vote->vote_type, 'id'),
-		),
-	);
+	];
+	if ($voting_type eq 'jury_voting' && defined $vote->competition_voting->number_of_votes) {
+		foreach my $number (0 .. $vote->competition_voting->number_of_votes) {
+			push @{$self->{'_fields'}}, (
+				Data::HTML::Form::Input->new(
+					'id' => 'vote_value',
+					'label' => $number,
+					'type' => 'checkbox',
+					'value' => $number,
+					defined $vote_value && $vote_value == $number ? ('checked' => 1) : (),
+				),
+			);
+		}
+	} else {
+		if ($voting_type eq 'anonymous_voting') {
+			$vote_value = $ip_address;
+			$self->{'_ip_address'} = $ip_address;
+		} else {
+			$vote_value = defined $vote_value ? '' : 1;
+		}
+		push @{$self->{'_fields'}}, (
+			Data::HTML::Form::Input->new(
+				'id' => 'vote_value',
+				'type' => 'hidden',
+				'value' => $vote_value,
+			),
+		);
+	}
+
+	return;
+}
+
+# Process 'Tags'.
+sub _process {
+	my $self = shift;
+
+	if (! exists $self->{'_fields'}) {
+		$self->{'tags'}->put(
+			['d', text($self, 'vote_not_exists')],
+		);
+
+		return;
+	}
 
 	$self->{'tags'}->put(
 		['b', 'div'],
 		['a', 'class', $self->{'css_voting'}],
 	);
 
-	# Voting text.
-	my $voting_text;
-	if (defined $self->{'voting_text_cb'}) {
-		$voting_text = $self->{'voting_text_cb'}->($self, $vote);
-	} else {
-		if ($vote->vote_value) {
-			$voting_text = text($self, 'voted_yes');
-		} else {
-			$voting_text = text($self, 'voted_no');
-		};
+	my $voting_type = $self->{'_vote'}->competition_voting->voting_type->type;
+
+	# Print IP address.
+	my $ip_address;
+	if ($voting_type eq 'anonymous_voting') {
+		$ip_address = $self->{'_ip_address'};
 	}
 
 	# Information about voting.
+	my $voting_text;
+	if (defined $self->{'voting_text_cb'}) {
+		$voting_text = $self->{'voting_text_cb'}->($self, $self->{'_vote'});
+	} else {
+
+		# Jury voting with number.
+		if ($voting_type eq 'jury_voting'
+			&& defined $self->{'_vote'}->competition_voting->number_of_votes) {
+
+			$voting_text = $self->{'_vote'}->vote_value;
+
+		# Anonymous and login voting.
+		} else {
+			if (defined $self->{'_vote'}->vote_value) {
+				$voting_text = text($self, 'voted_yes');
+			} else {
+				$voting_text = text($self, 'voted_no');
+			};
+		}
+	}
+	my $voting_type_text;
 	$self->{'tags'}->put(
 		['b', 'div'],
 		['a', 'class', $self->{'css_voting'}.'-info'],
+		['b', 'span'],
+		['a', 'style', 'color: black'],
+		['d', text($self, 'voting_type_'.$voting_type)],
+		['e', 'span'],
+		['b', 'br'],
+		['e', 'br'],
+		defined $ip_address ? (
+			['d', $ip_address],
+			['b', 'br'],
+			['e', 'br'],
+		) : (),
 		['d', $voting_text],
 		['e', 'div'],
 	);
 
-	$self->{'_tags_image'}->process($vote->image);
+	$self->{'_tags_image'}->process($self->{'_vote'}->image);
 
-	$self->{'_tags_form'}->process(@hidden);
+	$self->{'_tags_form'}->process(@{$self->{'_fields'}});
 
 	$self->{'tags'}->put(
 		['e', 'div'],
@@ -163,6 +262,10 @@ sub _process {
 
 sub _process_css {
 	my $self = shift;
+
+	if (! exists $self->{'_fields'}) {
+		return;
+	}
 
 	$self->{'css'}->put(
 		['s', '.'.$self->{'css_voting'}.'-info'],
@@ -175,7 +278,7 @@ sub _process_css {
 
 	$self->{'_tags_image'}->process_css;
 
-	$self->{'_tags_form'}->process_css;
+	$self->{'_tags_form'}->process_css(@{$self->{'_fields'}});
 
 	return;
 }
@@ -319,7 +422,7 @@ Process CSS structure.
  use Data::Commons::Vote::Image;
  use Data::Commons::Vote::Person;
  use Data::Commons::Vote::Vote;
- use Data::Commons::Vote::VoteType;
+ use Data::Commons::Vote::VotingType;
  use DateTime;
  use Tags::HTML::Commons::Vote::Vote;
  use Tags::Output::Indent;
@@ -362,7 +465,7 @@ Process CSS structure.
          'image' => 'Michal from Czechia.jpg',
          'uploader' => $uploader,
  );
- my $vote_type = Data::Commons::Vote::VoteType->new(
+ my $voting_type = Data::Commons::Vote::VotingType->new(
          'created_by' => $db_creator,
          'type' => 'public_voting',
  );
@@ -370,7 +473,7 @@ Process CSS structure.
          'competition' => $competition,
          'image' => $image,
          'person' => $voter,
-         'vote_type' => $vote_type,
+         'voting_type' => $voting_type,
  );
 
  # Process vote.
