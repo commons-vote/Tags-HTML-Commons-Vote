@@ -7,7 +7,8 @@ TODO
 7. V Competitions a Main je stejny kod pro vykreslovani tabulky soutezi.
 8. Add endpoint for delete of competition.
 9. Vote: Add CSS.
-10.
+10. Tags::HTML for image metadata (used in Plack app)
+11.
 
 Applied
 =======
