@@ -141,7 +141,7 @@ sub _jury_voting {
 		);
 	} else {
 		foreach my $cv (@{$jury_competition_votings_ar}) {
-			my $competition_voting_uri = '/voting/'.$cv->id;
+			my $competition_uri = '/competition/'.$cv->id;
 			my $vote_uri = '/vote_images/'.$cv->id;
 			my $text_number_of_votes;
 			if (! defined $cv->number_of_votes) {
@@ -153,7 +153,7 @@ sub _jury_voting {
 				['b', 'tr'],
 				['b', 'td'],
 				['b', 'a'],
-				['a', 'href', $competition_voting_uri],
+				['a', 'href', $competition_uri],
 				['d', $cv->competition->name],
 				['e', 'a'],
 				['e', 'td'],
@@ -183,10 +183,10 @@ sub _jury_voting {
 	return;
 }
 
-sub _public_voting {
-	my ($self, $public_competitions_ar) = @_;
+sub _login_voting {
+	my ($self, $competition_votings_login_ar) = @_;
 
-	$self->_check_competitions($public_competitions_ar);
+	$self->_check_competition_votings($competition_votings_login_ar);
 
 	$self->{'tags'}->put(
 		['b', 'div'],
@@ -210,33 +210,55 @@ sub _public_voting {
 		['b', 'th'],
 		['d', text($self, 'text_date_to')],
 		['e', 'th'],
+		['b', 'th'],
+		['d', text($self, 'number_of_votes')],
+		['e', 'th'],
+		['b', 'th'],
+		['d', text($self, 'voting')],
+		['e', 'th'],
 		['e', 'tr'],
 	);
-	if (! defined $public_competitions_ar || ! @{$public_competitions_ar}) {
+	if (! defined $competition_votings_login_ar || ! @{$competition_votings_login_ar}) {
 		$self->{'tags'}->put(
 			['b', 'tr'],
 			['b', 'td'],
-			['a', 'colspan', 3],
+			['a', 'colspan', 5],
 			['d', text($self, 'text_no_competitions')],
 			['e', 'td'],
 			['e', 'tr'],
 		);
 	} else {
-		foreach my $c (@{$public_competitions_ar}) {
-			my $uri = '/competition/public_vote/'.$c->id;
+		foreach my $cv (@{$competition_votings_login_ar}) {
+			my $competition_uri = '/competition/'.$cv->id;
+			my $vote_uri = '/vote_images/'.$cv->id;
+			my $text_number_of_votes;
+			if (! defined $cv->number_of_votes) {
+				$text_number_of_votes = text($self, 'voting_yes_no');
+			} else {
+				$text_number_of_votes = $cv->number_of_votes;
+			}
 			$self->{'tags'}->put(
 				['b', 'tr'],
 				['b', 'td'],
 				['b', 'a'],
-				['a', 'href', $uri],
-				['d', $c->name],
+				['a', 'href', $competition_uri],
+				['d', $cv->competition->name],
 				['e', 'a'],
 				['e', 'td'],
 				['b', 'td'],
-				['d', d_format($self, $c->dt_public_voting_from)],
+				['d', d_format($self, $cv->dt_from)],
 				['e', 'td'],
 				['b', 'td'],
-				['d', d_format($self, $c->dt_public_voting_to)],
+				['d', d_format($self, $cv->dt_to)],
+				['e', 'td'],
+				['b', 'td'],
+				['d', $text_number_of_votes],
+				['e', 'td'],
+				['b', 'td'],
+				['b', 'a'],
+				['a', 'href', $vote_uri],
+				['d', text($self, 'vote')],
+				['e', 'a'],
 				['e', 'td'],
 				['e', 'tr'],
 			);
@@ -251,7 +273,7 @@ sub _public_voting {
 
 # Process 'Tags'.
 sub _process {
-	my ($self, $competitions_ar, $jury_competitions_ar, $public_competitions_ar) = @_;
+	my ($self, $competitions_ar, $competition_votings_jury_ar, $competition_votings_login_ar) = @_;
 
 	$self->_check_competitions($competitions_ar);
 
@@ -316,8 +338,8 @@ sub _process {
 		['e', 'table'],
 	);
 
-	$self->_jury_voting($jury_competitions_ar);
-	$self->_public_voting($public_competitions_ar);
+	$self->_jury_voting($competition_votings_jury_ar);
+	$self->_login_voting($competition_votings_login_ar);
 
 	$self->{'tags'}->put(
 		['e', 'div'],
