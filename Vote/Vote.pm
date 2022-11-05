@@ -46,6 +46,7 @@ sub new {
 	# Language texts.
 	$self->{'text'} = {
 		'eng' => {
+			'next_image' => 'Next image',
 			'submit_vote' => 'Vote',
 			'submit_unvote' => 'Unvote',
 			'title' => 'Vote',
@@ -99,7 +100,7 @@ sub _cleanup {
 }
 
 sub _init {
-	my ($self, $vote, $ip_address) = @_;
+	my ($self, $vote, $ip_address, $next_image_id) = @_;
 
 	if (exists $self->{'_fields'}) {
 		return;
@@ -159,6 +160,7 @@ sub _init {
 	];
 	if (($voting_type eq 'jury_voting' || $voting_type eq 'login_voting')
 		&& defined $vote->competition_voting->number_of_votes) {
+
 		foreach my $number (0 .. $vote->competition_voting->number_of_votes) {
 			push @{$self->{'_fields'}}, (
 				Data::HTML::Form::Input->new(
@@ -182,6 +184,21 @@ sub _init {
 				'id' => 'vote_value',
 				'type' => 'hidden',
 				'value' => $vote_value,
+			),
+		);
+	}
+	if (defined $next_image_id) {
+		push @{$self->{'_fields'}}, (
+			Data::HTML::Form::Input->new(
+				'id' => 'next_image_id',
+				'type' => 'hidden',
+				'value' => $next_image_id,
+			),
+			Data::HTML::Form::Input->new(
+				'css_class' => 'next-button',
+				'id' => 'next_image',
+				'type' => 'submit',
+				'value' => text($self, 'next_image'),
 			),
 		);
 	}
@@ -282,6 +299,14 @@ sub _process_css {
 		['d', 'color', 'green'],
 		['d', 'font-size', '2em'],
 		['d', 'margin', '1em'],
+		['e'],
+
+		['s', 'input[type=submit].next-button'],
+		['d', 'background-color', '#888888'],
+		['e'],
+
+		['s', 'input[type=submit].next-button:hover'],
+		['d', 'background-color', '#787878'],
 		['e'],
 	);
 
