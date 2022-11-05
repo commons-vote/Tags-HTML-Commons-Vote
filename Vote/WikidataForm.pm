@@ -84,6 +84,7 @@ sub _init {
 
 	$self->{'_fields'} = [
 		Data::HTML::Form::Input->new(
+			'autofocus' => 1,
 			'id' => 'competition_qid',
 			'label' => text($self, 'competition_qid'),
 			'type' => 'text',

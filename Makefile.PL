@@ -20,7 +20,7 @@ recursive_author_tests('xt');
 requires 'Class::Utils' => 0.02;
 requires 'Commons::Link' => 0;
 requires 'Data::HTML::Form' => 0;
-requires 'Data::HTML::Form::Input' => 0;
+requires 'Data::HTML::Form::Input' => 0.06;
 requires 'Data::HTML::Form::Select' => 0;
 requires 'Data::HTML::Form::Select::Option' => 0;
 requires 'Data::HTML::Textarea' => 0;
