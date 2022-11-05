@@ -164,7 +164,7 @@ sub _init {
 				Data::HTML::Form::Input->new(
 					'id' => 'vote_value',
 					'label' => $number,
-					'type' => 'checkbox',
+					'type' => 'radio',
 					'value' => $number,
 					defined $vote_value && $vote_value == $number ? ('checked' => 1) : (),
 				),
