@@ -81,9 +81,22 @@ sub new {
 	return $self;
 }
 
+sub _is_readonly {
+	my ($self, $opts_hr) = @_;
+
+	if (! defined $opts_hr) {
+		return 0;
+	}
+	if (! exists $opts_hr->{'readonly'}) {
+		return 0;
+	}
+
+	return $opts_hr->{'readonly'};
+}
+
 # Process 'Tags'.
 sub _process {
-	my ($self, $competition) = @_;
+	my ($self, $competition, $opts_hr) = @_;
 
 	if (! defined $competition) {
 		$self->{'tags'}->put(
@@ -112,46 +125,48 @@ sub _process {
 		['b', 'div'],
 		['a', 'class', $self->{'css_competition'}],
 
-		['b', 'div'],
-		['a', 'class', 'right button-list'],
+		! $self->_is_readonly($opts_hr) ? (
+			['b', 'div'],
+			['a', 'class', 'right button-list'],
 
-		['b', 'a'],
-		['a', 'class', 'button'],
-		['a', 'href', '/competition_form/'.$competition->id],
-		['d', text($self, 'edit_competition')],
-		['e', 'a'],
-
-		@{$competition->sections} ? (
 			['b', 'a'],
 			['a', 'class', 'button'],
-			['a', 'href', '/load/'.$competition->id],
-			['d', text($self, 'load_competition')],
+			['a', 'href', '/competition_form/'.$competition->id],
+			['d', text($self, 'edit_competition')],
 			['e', 'a'],
-		) : (),
 
-		defined $competition->dt_images_loaded && @{$competition->validations} ? (
+			@{$competition->sections} ? (
+				['b', 'a'],
+				['a', 'class', 'button'],
+				['a', 'href', '/load/'.$competition->id],
+				['d', text($self, 'load_competition')],
+				['e', 'a'],
+			) : (),
+
+			defined $competition->dt_images_loaded && @{$competition->validations} ? (
+				['b', 'a'],
+				['a', 'class', 'button'],
+				['a', 'href', '/validate/'.$competition->id],
+				['d', text($self, 'validate_competition')],
+				['e', 'a'],
+			) : (),
+
 			['b', 'a'],
 			['a', 'class', 'button'],
-			['a', 'href', '/validate/'.$competition->id],
-			['d', text($self, 'validate_competition')],
+			['a', 'href', '/logs/'.$competition->id],
+			['d', text($self, 'view_competition_logs')],
 			['e', 'a'],
+
+			(defined $competition->dt_images_loaded) ? (
+				['b', 'a'],
+				['a', 'class', 'button'],
+				['a', 'href', '/competition_images/'.$competition->id],
+				['d', text($self, 'view_images')],
+				['e', 'a'],
+			) : (),
+
+			['e', 'div'],
 		) : (),
-
-		['b', 'a'],
-		['a', 'class', 'button'],
-		['a', 'href', '/logs/'.$competition->id],
-		['d', text($self, 'view_competition_logs')],
-		['e', 'a'],
-
-		(defined $competition->dt_images_loaded) ? (
-			['b', 'a'],
-			['a', 'class', 'button'],
-			['a', 'href', '/competition_images/'.$competition->id],
-			['d', text($self, 'view_images')],
-			['e', 'a'],
-		) : (),
-
-		['e', 'div'],
 
 		$competition_logo_url ? (
 			['b', 'figure'],
@@ -233,11 +248,13 @@ sub _process {
 		);
 	}
 	$self->{'tags'}->put(
-		['b', 'a'],
-		['a', 'class', 'button'],
-		['a', 'href', '/voting_form/?competition_id='.$competition->id],
-		['d', text($self, 'add_voting_type')],
-		['e', 'a'],
+		! $self->_is_readonly($opts_hr) ? (
+			['b', 'a'],
+			['a', 'class', 'button'],
+			['a', 'href', '/voting_form/?competition_id='.$competition->id],
+			['d', text($self, 'add_voting_type')],
+			['e', 'a'],
+		) : (),
 
 		['e', 'dd'],
 
@@ -271,11 +288,13 @@ sub _process {
 		);
 	}
 	$self->{'tags'}->put(
-		['b', 'a'],
-		['a', 'class', 'button'],
-		['a', 'href', '/role_form/?competition_id='.$competition->id],
-		['d', text($self, 'add_role')],
-		['e', 'a'],
+		! $self->_is_readonly($opts_hr) ? (
+			['b', 'a'],
+			['a', 'class', 'button'],
+			['a', 'href', '/role_form/?competition_id='.$competition->id],
+			['d', text($self, 'add_role')],
+			['e', 'a'],
+		) : (),
 
 		['e', 'dd'],
 
@@ -308,11 +327,13 @@ sub _process {
 		);
 	}
 	$self->{'tags'}->put(
-		['b', 'a'],
-		['a', 'class', 'button'],
-		['a', 'href', '/section_form/?competition_id='.$competition->id],
-		['d', text($self, 'add_section')],
-		['e', 'a'],
+		! $self->_is_readonly($opts_hr) ? (
+			['b', 'a'],
+			['a', 'class', 'button'],
+			['a', 'href', '/section_form/?competition_id='.$competition->id],
+			['d', text($self, 'add_section')],
+			['e', 'a'],
+		) : (),
 
 		['e', 'dd'],
 
@@ -365,11 +386,13 @@ sub _process {
 	}
 
 	$self->{'tags'}->put(
-		['b', 'a'],
-		['a', 'class', 'button'],
-		['a', 'href', '/validation_form/?competition_id='.$competition->id],
-		['d', text($self, 'add_validation')],
-		['e', 'a'],
+		! $self->_is_readonly($opts_hr) ? (
+			['b', 'a'],
+			['a', 'class', 'button'],
+			['a', 'href', '/validation_form/?competition_id='.$competition->id],
+			['d', text($self, 'add_validation')],
+			['e', 'a'],
+		) : (),
 
 		['e', 'dd'],
 
