@@ -48,11 +48,15 @@ sub new {
 			'create_competition' => 'Create competition',
 			'create_competition_from_wd' => 'Competition from WD',
 			'my_competitions' => 'My competitions',
+			'number_of_votes' => 'Number of votes',
 			'text_competition_name' => 'Competition name',
 			'text_date_from' => 'Date from',
 			'text_date_to' => 'Date to',
 			'text_loaded' => 'Images loaded at',
 			'text_no_competitions' => 'There is no competitions.',
+			'vote' => 'Vote',
+			'voting' => 'Link to voting',
+			'voting_yes_no' => 'Voting yes/no',
 		},
 	};
 
@@ -77,10 +81,24 @@ sub _check_competitions {
 	return;
 }
 
-sub _jury_voting {
-	my ($self, $jury_competitions_ar) = @_;
+sub _check_competition_votings {
+	my ($self, $competition_votings_ar) = @_;
 
-	$self->_check_competitions($jury_competitions_ar);
+	foreach my $competition_voting (@{$competition_votings_ar}) {
+		if (! blessed($competition_voting)
+			&& ! $competition_voting->isa('Data::Commons::Vote::CompetitionVoting')) {
+
+			err 'Bad competition voting object.';
+		}
+	}
+
+	return;
+}
+
+sub _jury_voting {
+	my ($self, $jury_competition_votings_ar) = @_;
+
+	$self->_check_competition_votings($jury_competition_votings_ar);
 
 	$self->{'tags'}->put(
 		['b', 'div'],
@@ -104,33 +122,55 @@ sub _jury_voting {
 		['b', 'th'],
 		['d', text($self, 'text_date_to')],
 		['e', 'th'],
+		['b', 'th'],
+		['d', text($self, 'number_of_votes')],
+		['e', 'th'],
+		['b', 'th'],
+		['d', text($self, 'voting')],
+		['e', 'th'],
 		['e', 'tr'],
 	);
-	if (! defined $jury_competitions_ar || ! @{$jury_competitions_ar}) {
+	if (! defined $jury_competition_votings_ar || ! @{$jury_competition_votings_ar}) {
 		$self->{'tags'}->put(
 			['b', 'tr'],
 			['b', 'td'],
-			['a', 'colspan', 3],
+			['a', 'colspan', 5],
 			['d', text($self, 'text_no_competitions')],
 			['e', 'td'],
 			['e', 'tr'],
 		);
 	} else {
-		foreach my $c (@{$jury_competitions_ar}) {
-			my $uri = '/competition/jury_vote/'.$c->id;
+		foreach my $cv (@{$jury_competition_votings_ar}) {
+			my $competition_voting_uri = '/voting/'.$cv->id;
+			my $vote_uri = '/vote_images/'.$cv->id;
+			my $text_number_of_votes;
+			if (! defined $cv->number_of_votes) {
+				$text_number_of_votes = text($self, 'voting_yes_no');
+			} else {
+				$text_number_of_votes = $cv->number_of_votes;
+			}
 			$self->{'tags'}->put(
 				['b', 'tr'],
 				['b', 'td'],
 				['b', 'a'],
-				['a', 'href', $uri],
-				['d', $c->name],
+				['a', 'href', $competition_voting_uri],
+				['d', $cv->competition->name],
 				['e', 'a'],
 				['e', 'td'],
 				['b', 'td'],
-				['d', d_format($self, $c->dt_jury_voting_from)],
+				['d', d_format($self, $cv->dt_from)],
 				['e', 'td'],
 				['b', 'td'],
-				['d', d_format($self, $c->dt_jury_voting_to)],
+				['d', d_format($self, $cv->dt_to)],
+				['e', 'td'],
+				['b', 'td'],
+				['d', $text_number_of_votes],
+				['e', 'td'],
+				['b', 'td'],
+				['b', 'a'],
+				['a', 'href', $vote_uri],
+				['d', text($self, 'vote')],
+				['e', 'a'],
 				['e', 'td'],
 				['e', 'tr'],
 			);
