@@ -8,7 +8,8 @@ TODO
 8. Add endpoint for delete of competition.
 9. Vote: Add CSS.
 10. Tags::HTML for image metadata (used in Plack app)
-11.
+11. Main: Join jury and login voting to one helper.
+12.
 
 Applied
 =======
