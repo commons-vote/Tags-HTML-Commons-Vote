@@ -9,7 +9,8 @@ TODO
 9. Vote: Add CSS.
 10. Tags::HTML for image metadata (used in Plack app)
 11. Main: Join jury and login voting to one helper.
-12.
+12. Better readonly mode for competition (with information about no validations/roles/...)
+13.
 
 Applied
 =======
