@@ -89,6 +89,7 @@ sub _init {
 			value($self, $competition, 'id'),
 		),
 		Data::HTML::Form::Input->new(
+			'autofocus' => 1,
 			'id' => 'competition_name',
 			'label' => text($self, 'competition_name'),
 			'required' => 1,
