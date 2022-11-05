@@ -121,13 +121,17 @@ sub _init {
 		$submit_disabled = 1;
 	}
 
+	my $submit_value;
+	if ($vote_value && ! defined $vote->competition_voting->number_of_votes
+		&& ($voting_type eq 'jury_voting' || $voting_type eq 'login_voting')) {
+
+		$submit_value = text($self, 'submit_unvote');
+	} else {
+		$submit_value = text($self, 'submit_vote')
+	}
 	my $submit = Data::HTML::Form::Input->new(
 		$submit_disabled ? ('disabled' => 1) : (),
-		$vote_value && $voting_type ne 'jury_voting' ? (
-			'value' => text($self, 'submit_unvote'),
-		) : (
-			'value' => text($self, 'submit_vote'),
-		),
+		'value' => $submit_value,
 		'type' => 'submit',
 	);
 
@@ -153,7 +157,8 @@ sub _init {
 			value($self, $vote->image, 'id'),
 		),
 	];
-	if ($voting_type eq 'jury_voting' && defined $vote->competition_voting->number_of_votes) {
+	if (($voting_type eq 'jury_voting' || $voting_type eq 'login_voting')
+		&& defined $vote->competition_voting->number_of_votes) {
 		foreach my $number (0 .. $vote->competition_voting->number_of_votes) {
 			push @{$self->{'_fields'}}, (
 				Data::HTML::Form::Input->new(
@@ -215,13 +220,17 @@ sub _process {
 		$voting_text = $self->{'voting_text_cb'}->($self, $self->{'_vote'});
 	} else {
 
-		# Jury voting with number.
-		if ($voting_type eq 'jury_voting'
+		# Voting 0 .. X
+		if (($voting_type eq 'jury_voting' || $voting_type eq 'login_voting')
 			&& defined $self->{'_vote'}->competition_voting->number_of_votes) {
 
-			$voting_text = $self->{'_vote'}->vote_value;
+			if (defined $self->{'_vote'}->vote_value) {
+				$voting_text = $self->{'_vote'}->vote_value;
+			} else {
+				$voting_text = text($self, 'voted_no');
+			}
 
-		# Anonymous and login voting.
+		# Voting yes/no.
 		} else {
 			if (defined $self->{'_vote'}->vote_value) {
 				$voting_text = text($self, 'voted_yes');
