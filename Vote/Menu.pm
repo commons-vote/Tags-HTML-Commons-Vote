@@ -60,9 +60,29 @@ sub new {
 	return $self;
 }
 
+sub _cleanup {
+	my $self = shift;
+
+	delete $self->{'_data'};
+
+	return;
+}
+
+sub _init {
+	my ($self, $data_hr) = @_;
+
+	if (exists $self->{'_data'}) {
+		return;
+	}
+
+	$self->{'_data'} = $data_hr;
+
+	return;
+}
+
 # Process 'Tags'.
 sub _process {
-	my ($self, $data_hr) = @_;
+	my $self = shift;
 
 	$self->{'tags'}->put(
 		['b', 'header'],
@@ -89,25 +109,25 @@ sub _process {
 			['e', 'a'],
 		) : (),
 
-		# Actual section.
-		defined $data_hr->{'section'} ? (
+		# Actual title.
+		defined $self->{'_data'}->{'title'} ? (
 			['b', 'span'],
-			['a', 'id', 'section'],
-			['d', $data_hr->{'section'}],
+			['a', 'id', 'title'],
+			['d', $self->{'_data'}->{'title'}],
 			['e', 'span'],
 		) : (),
 
 		['e', 'span'],
 
 		# Right menu part.
-		defined $data_hr->{'login_name'} ? (
+		defined $self->{'_data'}->{'login_name'} ? (
 			['b', 'span'],
 			['a', 'id', 'menu-right'],
 
 			['b', 'span'],
 			['a', 'id', 'login'],
 			# Login name
-			['d', $data_hr->{'login_name'}],
+			['d', $self->{'_data'}->{'login_name'}],
 			['d', '&nbsp;'],
 			# Logout link
 			['d', '('],
@@ -142,9 +162,10 @@ sub _process_css {
 		['d', 'vertical-align', 'middle'],
 		['e'],
 
-		['s', '#menu-left #section'],
+		['s', '#menu-left #title'],
 		['d', 'vertical-align', 'middle'],
 		['d', 'padding-left', '10px'],
+		['d', 'font-size', '2em'],
 		['e'],
 
 		['s', '#menu-right'],
