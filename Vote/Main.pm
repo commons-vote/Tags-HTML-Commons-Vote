@@ -55,6 +55,7 @@ sub new {
 			'text_loaded' => 'Images loaded at',
 			'text_no_competitions' => 'There is no competitions.',
 			'vote' => 'Vote',
+			'vote_stats' => 'Vote statistics',
 			'voting' => 'Link to voting',
 			'voting_yes_no' => 'Voting yes/no',
 		},
@@ -273,7 +274,8 @@ sub _login_voting {
 
 # Process 'Tags'.
 sub _process {
-	my ($self, $competitions_ar, $competition_votings_jury_ar, $competition_votings_login_ar) = @_;
+	my ($self, $competitions_ar, $competition_votings_stats_hr,
+		$competition_votings_jury_ar, $competition_votings_login_ar) = @_;
 
 	$self->_check_competitions($competitions_ar);
 
@@ -308,6 +310,9 @@ sub _process {
 		['b', 'th'],
 		['d', text($self, 'text_competition_name')],
 		['e', 'th'],
+		['b', 'th'],
+		['d', text($self, 'vote_stats')],
+		['e', 'th'],
 		['e', 'tr'],
 	);
 	if (! defined $competitions_ar || ! @{$competitions_ar}) {
@@ -321,14 +326,37 @@ sub _process {
 		);
 	} else {
 		foreach my $c (@{$competitions_ar}) {
-			my $uri = '/competition/'.$c->id;
+			my $competition_uri = '/competition/'.$c->id;
+			my $competition_votings_ar = $competition_votings_stats_hr->{$c->id};
 			$self->{'tags'}->put(
 				['b', 'tr'],
 				['b', 'td'],
 				['b', 'a'],
-				['a', 'href', $uri],
+				['a', 'href', $competition_uri],
 				['d', $c->name],
 				['e', 'a'],
+				['e', 'td'],
+				['b', 'td'],
+			);
+			my @tags_stats;
+			foreach my $competition_voting (@{$competition_votings_ar}) {
+				my $stats_uri = '/vote_stats/'.$competition_voting->id;
+				if (@tags_stats) {
+					push @tags_stats, (
+						['b', 'br'],
+						['e', 'br'],
+					);
+				}
+				push @tags_stats, (
+					['b', 'a'],
+					['a', 'href', $stats_uri],
+					['d', $competition_voting->voting_type->description],
+					['e', 'a'],
+				);
+			}
+			$self->{'tags'}->put(
+				@tags_stats,
+
 				['e', 'td'],
 				['e', 'tr'],
 			);
