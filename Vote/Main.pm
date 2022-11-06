@@ -142,7 +142,7 @@ sub _jury_voting {
 		);
 	} else {
 		foreach my $cv (@{$jury_competition_votings_ar}) {
-			my $competition_uri = '/competition/'.$cv->id;
+			my $competition_uri = '/competition/'.$cv->competition->id;
 			my $vote_uri = '/vote_images/'.$cv->id;
 			my $text_number_of_votes;
 			if (! defined $cv->number_of_votes) {
