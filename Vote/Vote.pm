@@ -89,6 +89,8 @@ sub new {
 sub _cleanup {
 	my $self = shift;
 
+	$self->{'_tags_image'}->cleanup;
+
 	delete $self->{'_ip_address'};
 	delete $self->{'_vote'};
 	delete $self->{'_voting_text'};
