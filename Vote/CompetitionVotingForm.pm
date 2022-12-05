@@ -45,7 +45,7 @@ sub new {
 			'competition' => 'Competition',
 			'date_from' => 'Date from',
 			'date_to' => 'Date to',
-			'number_of_votes' => 'Number of votes',
+			'number_of_votes' => 'Number of votes (0-?)',
 			'submit' => 'Save',
 			'title' => 'Create competition voting',
 			'voting_type' => 'Voting type',
