@@ -18,9 +18,13 @@ sub new {
 
 	# Create object.
 	my ($object_params_ar, $other_params_ar) = split_params(
-		['css_voting', 'fit_minus', 'form_link', 'form_method', 'img_src_cb',
-		'img_width', 'lang', 'text', 'voting_text_cb'], @params);
+		['css_comment_height', 'css_voting', 'fit_minus', 'form_link',
+		'form_method', 'img_src_cb', 'img_width', 'lang', 'text', 'voting_text_cb'],
+		@params);
 	my $self = $class->SUPER::new(@{$other_params_ar});
+
+	# CSS comment height.
+	$self->{'css_comment_height'} = 50;
 
 	# CSS class.
 	$self->{'css_voting'} = 'voting';
@@ -67,6 +71,7 @@ sub new {
 
 	$self->{'_tags_image'} = Tags::HTML::Image->new(
 		'css' => $self->{'css'},
+		'css_comment_height' => $self->{'css_comment_height'},
 		'fit_minus' => $self->{'fit_minus'},
 		'img_comment_cb' => sub {
 			my ($image_self, $image, $vote_self, @params) = @_;
