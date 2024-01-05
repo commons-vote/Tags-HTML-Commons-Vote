@@ -5,11 +5,11 @@ use strict;
 use warnings;
 
 use Class::Utils qw(set_params split_params);
-use Data::HTML::Form;
-use Data::HTML::Form::Input;
-use Data::HTML::Textarea;
+use Data::HTML::Element::Form;
+use Data::HTML::Element::Input;
+use Data::HTML::Element::Textarea;
 use Tags::HTML::Commons::Vote::Utils qw(text value);
-use Tags::HTML::Form;
+use Tags::HTML::Element::Form;
 
 our $VERSION = 0.01;
 
@@ -49,18 +49,18 @@ sub new {
 	# Process params.
 	set_params($self, @{$object_params_ar});
 
-	my $form = Data::HTML::Form->new(
+	my $form = Data::HTML::Element::Form->new(
 		'action' => $self->{'form_link'},
 		'css_class' => $self->{'css_theme'},
 		'enctype' => 'application/x-www-form-urlencoded',
 		'method' => $self->{'form_method'},
 		'label' => text($self, 'title'),
 	);
-	my $submit = Data::HTML::Form::Input->new(
+	my $submit = Data::HTML::Element::Input->new(
 		'value' => text($self, 'submit'),
 		'type' => 'submit',
 	);
-	$self->{'_tags_form'} = Tags::HTML::Form->new(
+	$self->{'_tags_form'} = Tags::HTML::Element::Form->new(
 		'css' => $self->{'css'},
 		'form' => $form,
 		'submit' => $submit,
@@ -87,25 +87,25 @@ sub _init {
 	}
 
 	$self->{'_fields'} = [
-		Data::HTML::Form::Input->new(
+		Data::HTML::Element::Input->new(
 			'id' => 'theme_id',
 			'type' => 'hidden',
 			value($self, $theme, 'id'),
 		),
-		Data::HTML::Form::Input->new(
+		Data::HTML::Element::Input->new(
 			'id' => 'theme_name',
 			'label' => text($self, 'theme_name'),
 			'type' => 'text',
 			'required' => 1,
 			value($self, $theme, 'name'),
 		),
-		Data::HTML::Form::Input->new(
+		Data::HTML::Element::Input->new(
 			'id' => 'theme_shortcut',
 			'label' => text($self, 'theme_shortcut'),
 			'type' => 'text',
 			value($self, $theme, 'shortcut'),
 		),
-		Data::HTML::Textarea->new(
+		Data::HTML::Element::Textarea->new(
 			'id' => 'images',
 			'label' => text($self, 'images'),
 			'placeholder' => text($self, 'images_placeholder'),
@@ -242,11 +242,11 @@ Returns undef.
 =head1 DEPENDENCIES
 
 L<Class::Utils>,
-L<Data::HTML::Form>,
-L<Data::HTML::Form::Input>,
-L<Data::HTML::Textarea>,
+L<Data::HTML::Element::Form>,
+L<Data::HTML::Element::Input>,
+L<Data::HTML::Element::Textarea>,
 L<Tags::HTML>,
-L<Tags::HTML::Form>,
+L<Tags::HTML::Element::Form>,
 L<Tags::HTML::Commons::Vote::Utils>.
 
 =head1 SEE ALSO

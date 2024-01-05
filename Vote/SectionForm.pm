@@ -6,13 +6,13 @@ use warnings;
 
 use Class::Utils qw(set_params split_params);
 use Commons::Link;
-use Data::HTML::Form;
-use Data::HTML::Form::Input;
-use Data::HTML::Textarea;
+use Data::HTML::Element::Form;
+use Data::HTML::Element::Input;
+use Data::HTML::Element::Textarea;
 use Error::Pure qw(err);
 use Tags::HTML::Commons::Vote::Utils qw(text value);
 use Tags::HTML::Commons::Vote::Utils::Tags qw(tags_input tags_textarea);
-use Tags::HTML::Form;
+use Tags::HTML::Element::Form;
 
 our $VERSION = 0.01;
 
@@ -56,18 +56,18 @@ sub new {
 
 	$self->{'_commons_link'} = Commons::Link->new;
 
-	my $form = Data::HTML::Form->new(
+	my $form = Data::HTML::Element::Form->new(
 		'action' => $self->{'form_link'},
 		'css_class' => $self->{'css_section'},
 		'enctype' => 'application/x-www-form-urlencoded',
 		'method' => $self->{'form_method'},
 		'label' => text($self, 'title'),
 	);
-	my $submit = Data::HTML::Form::Input->new(
+	my $submit = Data::HTML::Element::Input->new(
 		'value' => text($self, 'submit'),
 		'type' => 'submit',
 	);
-	$self->{'_tags_form'} = Tags::HTML::Form->new(
+	$self->{'_tags_form'} = Tags::HTML::Element::Form->new(
 		'css' => $self->{'css'},
 		'form' => $form,
 		'submit' => $submit,
@@ -104,44 +104,44 @@ sub _init {
 		err "Bad section form.";
 	}
 	$self->{'_fields'} = [
-		Data::HTML::Form::Input->new(
+		Data::HTML::Element::Input->new(
 			'id' => 'section_id',
 			'type' => 'hidden',
 			value($self, $section, 'id'),
 		),
 		# TODO Rewrite to printable form. Add link to competition page.
-		Data::HTML::Form::Input->new(
+		Data::HTML::Element::Input->new(
 			'label' => text($self, 'competition'),
 			'disabled' => 1,
 			'type' => 'text',
 			'value' => $competition_name,
 		),
-		Data::HTML::Form::Input->new(
+		Data::HTML::Element::Input->new(
 			'id' => 'competition_id',
 			'type' => 'hidden',
 			'value' => $competition_id,
 		),
-		Data::HTML::Form::Input->new(
+		Data::HTML::Element::Input->new(
 			'id' => 'section_name',
 			'label' => text($self, 'section_name'),
 			'type' => 'text',
 			'required' => 1,
 			value($self, $section, 'name'),
 		),
-		Data::HTML::Form::Input->new(
+		Data::HTML::Element::Input->new(
 			'id' => 'logo',
 			'label' => text($self, 'logo'),
 			'type' => 'text',
 			value($self, $section, 'logo'),
 		),
-		Data::HTML::Form::Input->new(
+		Data::HTML::Element::Input->new(
 			'id' => 'number_of_votes',
 			'label' => text($self, 'number_of_votes'),
 			'min' => 0,
 			'type' => 'number',
 			value($self, $section, 'number_of_votes'),
 		),
-		Data::HTML::Textarea->new(
+		Data::HTML::Element::Textarea->new(
 			'id' => 'categories',
 			'label' => text($self, 'categories'),
 			'placeholder' => text($self, 'categories_placeholder'),
@@ -272,9 +272,9 @@ Returns undef.
 =head1 DEPENDENCIES
 
 L<Class::Utils>,
-L<Data::HTML::Form>,
-L<Data::HTML::Form::Input>,
-L<Data::HTML::Textarea>,
+L<Data::HTML::Element::Form>,
+L<Data::HTML::Element::Input>,
+L<Data::HTML::Element::Textarea>,
 L<Error::Pure>,
 L<Tags::HTML>.
 

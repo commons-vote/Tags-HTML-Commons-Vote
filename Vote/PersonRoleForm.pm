@@ -5,13 +5,13 @@ use strict;
 use warnings;
 
 use Class::Utils qw(set_params split_params);
-use Data::HTML::Form;
-use Data::HTML::Form::Input;
-use Data::HTML::Form::Select;
-use Data::HTML::Form::Select::Option;
+use Data::HTML::Element::Form;
+use Data::HTML::Element::Input;
+use Data::HTML::Element::Select;
+use Data::HTML::Element::Option;
 use Error::Pure qw(err);
 use Tags::HTML::Commons::Vote::Utils qw(text value);
-use Tags::HTML::Form;
+use Tags::HTML::Element::Form;
 
 our $VERSION = 0.01;
 
@@ -50,18 +50,18 @@ sub new {
 	# Process params.
 	set_params($self, @{$object_params_ar});
 
-	my $form = Data::HTML::Form->new(
+	my $form = Data::HTML::Element::Form->new(
 		'action' => $self->{'form_link'},
 		'css_class' => $self->{'css_person_role'},
 		'enctype' => 'application/x-www-form-urlencoded',
 		'method' => $self->{'form_method'},
 		'label' => text($self, 'title'),
 	);
-	my $submit = Data::HTML::Form::Input->new(
+	my $submit = Data::HTML::Element::Input->new(
 		'value' => text($self, 'submit'),
 		'type' => 'submit',
 	);
-	$self->{'_tags_form'} = Tags::HTML::Form->new(
+	$self->{'_tags_form'} = Tags::HTML::Element::Form->new(
 		'css' => $self->{'css'},
 		'form' => $form,
 		'submit' => $submit,
@@ -102,7 +102,7 @@ sub _init {
 	my @roles;
 	if (@{$roles_ar} > 1) {
 		push @roles, (
-			Data::HTML::Form::Select::Option->new(
+			Data::HTML::Element::Option->new(
 				'data' => '',
 				'value' => '',
 				! defined $selected_role_id ? ('selected' => 1) : (),
@@ -110,7 +110,7 @@ sub _init {
 		);
 	}
 	foreach my $role (@{$roles_ar}) {
-		push @roles, Data::HTML::Form::Select::Option->new(
+		push @roles, Data::HTML::Element::Option->new(
 			'data' => $role->description,
 			'id' => $role->id,
 			'value' => $role->id,
@@ -121,29 +121,29 @@ sub _init {
 	}
 
 	$self->{'_fields'} = [
-		Data::HTML::Form::Input->new(
+		Data::HTML::Element::Input->new(
 			'id' => 'person_role_id',
 			'type' => 'hidden',
 			value($self, $person_role, 'id'),
 		),
-		Data::HTML::Form::Input->new(
+		Data::HTML::Element::Input->new(
 			'label' => text($self, 'competition'),
 			'disabled' => 1,
 			'type' => 'text',
 			'value' => $competition_name,
 		),
-		Data::HTML::Form::Input->new(
+		Data::HTML::Element::Input->new(
 			'id' => 'competition_id',
 			'type' => 'hidden',
 			'value' => $competition_id,
 		),
-		Data::HTML::Form::Input->new(
+		Data::HTML::Element::Input->new(
 			'id' => 'wm_username',
 			'label' => text($self, 'wm_username'),
 			'required' => 1,
 			'type' => 'text',
 		),
-		Data::HTML::Form::Select->new(
+		Data::HTML::Element::Select->new(
 			'id' => 'role_id',
 			'label' => text($self, 'role'),
 			'options' => \@roles,
@@ -269,9 +269,9 @@ Returns undef.
 =head1 DEPENDENCIES
 
 L<Class::Utils>,
-L<Data::HTML::Form>,
-L<Data::HTML::Form::Input>,
-L<Data::HTML::Form::Select>,
+L<Data::HTML::Element::Form>,
+L<Data::HTML::Element::Input>,
+L<Data::HTML::Element::Select>,
 L<Error::Pure>,
 L<Tags::HTML>.
 

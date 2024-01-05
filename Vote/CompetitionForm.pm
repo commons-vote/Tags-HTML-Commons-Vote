@@ -5,10 +5,10 @@ use strict;
 use warnings;
 
 use Class::Utils qw(set_params split_params);
-use Data::HTML::Form;
-use Data::HTML::Form::Input;
+use Data::HTML::Element::Form;
+use Data::HTML::Element::Input;
 use Tags::HTML::Commons::Vote::Utils qw(text value);
-use Tags::HTML::Form;
+use Tags::HTML::Element::Form;
 
 our $VERSION = 0.01;
 
@@ -49,18 +49,18 @@ sub new {
 	# Process params.
 	set_params($self, @{$object_params_ar});
 
-	my $form = Data::HTML::Form->new(
+	my $form = Data::HTML::Element::Form->new(
 		'action' => $self->{'form_link'},
 		'css_class' => $self->{'css_competition'},
 		'enctype' => 'application/x-www-form-urlencoded',
 		'method' => $self->{'form_method'},
 		'title' => text($self, 'title'),
 	);
-	my $submit = Data::HTML::Form::Input->new(
+	my $submit = Data::HTML::Element::Input->new(
 		'value' => text($self, 'submit'),
 		'type' => 'submit',
 	);
-	$self->{'_tags_form'} = Tags::HTML::Form->new(
+	$self->{'_tags_form'} = Tags::HTML::Element::Form->new(
 		'css' => $self->{'css'},
 		'form' => $form,
 		'submit' => $submit,
@@ -83,12 +83,12 @@ sub _init {
 	my ($self, $competition) = @_;
 
 	$self->{'_fields'} = [
-		Data::HTML::Form::Input->new(
+		Data::HTML::Element::Input->new(
 			'id' => 'competition_id',
 			'type' => 'hidden',
 			value($self, $competition, 'id'),
 		),
-		Data::HTML::Form::Input->new(
+		Data::HTML::Element::Input->new(
 			'autofocus' => 1,
 			'id' => 'competition_name',
 			'label' => text($self, 'competition_name'),
@@ -96,25 +96,25 @@ sub _init {
 			'type' => 'text',
 			value($self, $competition, 'name'),
 		),
-		Data::HTML::Form::Input->new(
+		Data::HTML::Element::Input->new(
 			'id' => 'logo',
 			'label' => text($self, 'logo'),
 			'type' => 'text',
 			value($self, $competition, 'logo'),
 		),
-		Data::HTML::Form::Input->new(
+		Data::HTML::Element::Input->new(
 			'id' => 'organizer',
 			'label' => text($self, 'organizer'),
 			'type' => 'text',
 			value($self, $competition, 'organizer'),
 		),
-		Data::HTML::Form::Input->new(
+		Data::HTML::Element::Input->new(
 			'id' => 'organizer_logo',
 			'label' => text($self, 'organizer_logo'),
 			'type' => 'text',
 			value($self, $competition, 'organizer_logo'),
 		),
-		Data::HTML::Form::Input->new(
+		Data::HTML::Element::Input->new(
 			'id' => 'wd_qid',
 			'label' => text($self, 'wd_qid'),
 			'type' => 'text',
