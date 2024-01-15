@@ -171,6 +171,7 @@ sub _init {
 			value($self, $competition_voting, 'number_of_votes'),
 		),
 	];
+	$self->{'_tags_form'}->init(@{$self->{'_fields'}});
 
 	return;
 }
@@ -179,7 +180,7 @@ sub _init {
 sub _process {
 	my $self = shift;
 
-	$self->{'_tags_form'}->process(@{$self->{'_fields'}});
+	$self->{'_tags_form'}->process;
 
 	return;
 }
@@ -187,7 +188,7 @@ sub _process {
 sub _process_css {
 	my $self = shift;
 
-	$self->{'_tags_form'}->process_css(@{$self->{'_fields'}});
+	$self->{'_tags_form'}->process_css;
 
 	return;
 }
